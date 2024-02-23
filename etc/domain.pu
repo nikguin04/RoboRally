@@ -7,6 +7,7 @@ class Player {
     int checkpointTokens
     int energyCubes
     Vector2 location
+    int energyReserve 
 }
 
 class Board {
@@ -17,8 +18,15 @@ Board "1" -- "2..4" Player
 
 interface BoardTile { }
 
+interface EnergyBank {
+    int getEnergyNumber
+}
+Board o- EnergyBank
+
 class RebootToken implements BoardTile { }
-class PriorityAntenna implements BoardTile { }
+class PriorityAntenna implements BoardTile {
+    Vector2 location
+ }
 class Checkpoint implements BoardTile {
     int number
 }
