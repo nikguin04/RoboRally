@@ -23,12 +23,16 @@ interface EnergyBank {
 }
 Board o- EnergyBank
 
-class RebootToken implements BoardTile { }
+class RebootToken implements BoardTile {
+    int placeSpamCard
+    Vector2 location
+}
 class PriorityAntenna implements BoardTile {
     Vector2 location
  }
 class Checkpoint implements BoardTile {
     int number
+    boolean isFinal
 }
 class ConveyorBelt implements BoardTile {
     int spacesToMove
@@ -47,19 +51,27 @@ class BoardLaser implements BoardTile {
     int amount
     Direction direction
 }
-class Pit implements BoardTile {}
+class Pit implements BoardTile {
+    RebootToken sendToReboot
+}
 class EnergySpace implements BoardTile {
     int energyCubes
 }
 class Walls implements BoardTile {
-    
+    boolean IsCornerWall
 }
 
-class UpgradeShop { }
+class UpgradeShop { 
+    int payForUpgrade
+}
 UpgradeShop o- UpgradeCard
 
-interface ProgrammingCard { }
-interface DamageCard implements ProgrammingCard { }
+interface ProgrammingCard { 
+    string getProgrammingCard
+}
+interface DamageCard implements ProgrammingCard { 
+    string getDamageCardName
+}
 interface UpgradeCard { 
     boolean temporary
 }
