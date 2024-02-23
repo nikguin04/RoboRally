@@ -7,7 +7,8 @@ class Player {
     int checkpointTokens
     int energyCubes
     Vector2 location
-    int energyReserve 
+    int energyReserve
+    Vector2 facingDirection 
 }
 
 class Board {
