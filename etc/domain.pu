@@ -8,72 +8,79 @@ class Player {
     int energyCubes
     Vector2 location
     int energyReserve
-    Vector2 facingDirection 
+    Vector2 facingDirection
 }
 
 class Board {
-    BoardTile startTile
+    BoardTile BoardTiles
 }
 Board *- BoardTile
 Board "1" -- "2..4" Player
 
-interface BoardTile { }
-
-interface EnergyBank {
-    int getEnergyNumber
+interface BoardTile {
+    Vector2 location
 }
-Board o- EnergyBank
 
 class RebootToken implements BoardTile {
-    int placeSpamCard
     Vector2 location
+    int placeSpamCard
 }
 class PriorityAntenna implements BoardTile {
     Vector2 location
  }
 class Checkpoint implements BoardTile {
+    Vector2 location
     int number
     boolean isFinal
 }
 class ConveyorBelt implements BoardTile {
+    Vector2 location
     int spacesToMove
     Direction direction (N/S/E/W)
 }
 class PushPanel {
+    Vector2 location
     int register1
     int register2
     Direction direction
 }
 BoardTile <|.up. PushPanel
 class Gears implements BoardTile {
+    Vector2 location
     bool clockwise
 }
 class BoardLaser implements BoardTile {
+    Vector2 location
     int amount
     Direction direction
 }
 class Pit implements BoardTile {
+    Vector2 location
     RebootToken sendToReboot
 }
 class EnergySpace implements BoardTile {
+    Vector2 location
     int energyCubes
 }
 class Walls implements BoardTile {
-    boolean IsCornerWall
+    Vector2 location
+    Direction directions
 }
 
-class UpgradeShop { 
+class UpgradeShop {
     int payForUpgrade
 }
 UpgradeShop o- UpgradeCard
 
-interface ProgrammingCard { 
+interface ProgrammingCard {
     string getProgrammingCard
 }
-interface DamageCard implements ProgrammingCard { 
+
+interface DamageCard implements ProgrammingCard {
     string getDamageCardName
 }
-interface UpgradeCard { 
+
+interface UpgradeCard {
     boolean temporary
 }
 

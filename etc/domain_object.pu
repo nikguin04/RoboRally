@@ -1,0 +1,103 @@
+@startuml
+
+skinparam groupInheritance 2
+
+object Player {
+    String name
+    int checkpointTokens
+    int energyCubes
+    Vector2 location
+    int energyReserve
+    Vector2 facingDirection
+}
+note left : For keeping infomation of all players
+object Board
+note right : Central class for inferfacing with, and\ncontrolling all of our classes and objects
+Board "1" *-- "2..4" Player
+
+
+object Tile
+note right : Object representing any\nkind of board tile
+
+Board "1" *-down- "0..*" Tile
+
+object RebootToken {
+    Vector2 location
+    int placeSpamCard
+}
+Tile <|.down."1..*" RebootToken
+object PriorityAntenna {
+    Vector2 location
+}
+Tile <|.down."1" PriorityAntenna
+object Checkpoint {
+    Vector2 location
+    int number
+    boolean isFinal
+}
+Tile <|.down."1..6" Checkpoint
+object ConveyorBelt {
+    Vector2 location
+    int spacesToMove
+    Direction direction (N/S/E/W)
+}
+Tile <|.down."0..*" ConveyorBelt
+object PushPanel {
+    Vector2 location
+    int register1
+    int register2
+    Direction direction
+}
+Tile <|.down."0..*" PushPanel
+object Gears {
+    Vector2 location
+    bool clockwise
+}
+Tile <|.down."0..*" Gears
+object BoardLaser {
+    Vector2 location
+    int amount
+    Direction direction
+}
+Tile <|.down."0..*" BoardLaser
+object Pit {
+    Vector2 location
+    RebootToken sendToReboot
+}
+Tile <|.down."0..*" Pit
+object EnergySpace {
+    Vector2 location
+    int energyCubes
+}
+Tile <|.down."0..*" EnergySpace
+object Walls {
+    Vector2 location
+    Direction directions
+}
+Tile <|.down."0..*" Walls
+
+note "Specific card classes not included\nin domain model for brevity" as cardnote
+
+object ProgrammingCard
+cardnote .. ProgrammingCard
+ProgrammingCard --> Board
+Player "1" o-up- "0..*" ProgrammingCard : Main pile
+Player "1" o-up- "0..*" ProgrammingCard : Discard pile
+
+object DamageCard
+cardnote .. DamageCard
+ProgrammingCard <|- DamageCard
+
+object UpgradeShop {
+    int payForUpgrade
+}
+note bottom : Pile of cards available\nto draw during game
+
+object UpgradeCard {
+    boolean temporary
+}
+cardnote .. UpgradeCard
+
+UpgradeShop "1" o-- "0..5" UpgradeCard
+
+@enduml
