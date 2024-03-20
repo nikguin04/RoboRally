@@ -49,6 +49,8 @@ public class Board extends Subject {
 
 	private final List<Player> players = new ArrayList<>();
 
+	private int move_count = 0;
+
 	private Player current;
 
 	private Phase phase = INITIALISATION;
@@ -139,6 +141,14 @@ public class Board extends Subject {
 		}
 	}
 
+	public int getMoveCount() {
+		return move_count;
+	}
+
+	public void incMoveCount() {
+		move_count++;
+	}
+
 	public int getStep() {
 		return step;
 	}
@@ -167,6 +177,10 @@ public class Board extends Subject {
 		} else {
 			return -1;
 		}
+	}
+
+	public Player getNextPlayer() {
+		return this.getPlayer((this.getPlayerNumber(this.getCurrentPlayer()) + 1) % this.getPlayersNumber());
 	}
 
 	/**
@@ -213,11 +227,12 @@ public class Board extends Subject {
 		//      of the current move!
 		return "Phase: " + getPhase().name() +
 				", Player = " + getCurrentPlayer().getName() +
-				", Step: " + getStep();
+				", Step: " + getStep() +
+				", Move: " + getMoveCount();
 
 		// TODO Task1: add a counter along with a getter and a setter, so the
 		//      state of the board (game) contains the number of moves, which then can
-		//      be used to extend the status message 
+		//      be used to extend the status message
 	}
 
 }
