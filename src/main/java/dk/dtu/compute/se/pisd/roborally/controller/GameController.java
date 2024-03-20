@@ -39,7 +39,7 @@ public class GameController {
 	/**
 	 * This is just some dummy controller operation to make a simple move to see something
 	 * happening on the board. This method should eventually be deleted!
-	 * @param space the space to which the current player should move
+	 * @param space The space to which the current player should move
 	 */
 	public void moveCurrentPlayerToSpace(@NotNull Space space)  {
 		// TODO Task1: method should be implemented by the students:
@@ -103,7 +103,7 @@ public class GameController {
 
 	/**
 	 * Makes a given register visible for all players.
-	 * @param register The register to make visible.
+	 * @param register The register to make visible
 	 */
 	private void makeProgramFieldsVisible(int register) {
 		if (register >= 0 && register < Player.NO_REGISTERS) {
@@ -129,7 +129,7 @@ public class GameController {
 	}
 
 	/**
-	 * Turns off step mod and executes the rest of the activation phase.
+	 * Turns off step mode and executes the rest of the activation phase.
 	 */
 	public void executePrograms() {
 		board.setStepMode(false);
