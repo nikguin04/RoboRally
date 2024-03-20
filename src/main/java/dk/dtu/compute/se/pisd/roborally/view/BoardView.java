@@ -35,10 +35,9 @@ import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * ...
- *
+ * A component responsible for displaying the {@link Board} in its entirety,
+ * including all {@link Space}s and {@link Player}s.
  * @author Ekkart Kindler, ekki@dtu.dk
- *
  */
 public class BoardView extends VBox implements ViewObserver {
 
