@@ -224,6 +224,7 @@ public class Board extends Subject {
 	 * Prints general status information for the {@link Board}
 	 * @author Niklas Jensen, s235101@dtu.dk
 	 * @param
+	 * @returns general status information for the {@link Board}
 	 */
 	public String getStatusMessage() {
 		// This is actually a view aspect, but for making the first task easy for
