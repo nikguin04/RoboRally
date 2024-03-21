@@ -26,10 +26,10 @@ import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import javafx.application.Platform;
 
 /**
- * ...
- *
+ * An {@link Observer} specifically for the view, making sure all GUI updates
+ * happen on the JavaFX application thread and not the main thread.
+ * Expects the {@link #updateView} method to be implemented instead of the {@link #update} method.
  * @author Ekkart Kindler, ekki@dtu.dk
- *
  */
 public interface ViewObserver extends Observer {
 

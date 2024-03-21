@@ -33,10 +33,10 @@ import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * ...
- *
+ * The "control panel" for each player, containing buttons for interacting with the game,
+ * the programming registers, and the available cards from the deck.
+ * This is the component the player uses to actually play the game.
  * @author Ekkart Kindler, ekki@dtu.dk
- *
  */
 public class PlayerView extends Tab implements ViewObserver {
 

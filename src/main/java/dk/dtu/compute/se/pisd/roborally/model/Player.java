@@ -27,10 +27,9 @@ import org.jetbrains.annotations.NotNull;
 import static dk.dtu.compute.se.pisd.roborally.model.Heading.SOUTH;
 
 /**
- * ...
- *
+ * A specific player, containing the {@link Board} and {@link Space} it's on, a name and colour,
+ * which direction it's facing, the programming registers, and the deck of {@link CommandCard}s.
  * @author Ekkart Kindler, ekki@dtu.dk
- *
  */
 public class Player extends Subject {
 

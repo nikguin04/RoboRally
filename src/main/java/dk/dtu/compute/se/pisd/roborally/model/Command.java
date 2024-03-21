@@ -26,10 +26,8 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * ...
- *
+ * A specific command as seen on a {@link CommandCard} representing an action to be performed.
  * @author Ekkart Kindler, ekki@dtu.dk
- *
  */
 public enum Command {
 

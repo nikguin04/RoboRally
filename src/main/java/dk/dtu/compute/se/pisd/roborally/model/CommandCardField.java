@@ -24,10 +24,10 @@ package dk.dtu.compute.se.pisd.roborally.model;
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 
 /**
- * ...
- *
+ * A slot belonging to a specific {@link Player} for a {@link CommandCard}.
+ * The slot may be empty, meaning no card is present.
+ * Also supports being made invisible.
  * @author Ekkart Kindler, ekki@dtu.dk
- *
  */
 public class CommandCardField extends Subject {
 
