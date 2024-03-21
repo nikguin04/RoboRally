@@ -58,5 +58,33 @@ class GameControllerTest {
 		Assertions.assertEquals(Heading.SOUTH, current.getHeading(), "Player 0 should be heading SOUTH!");
 		Assertions.assertNull(board.getSpace(0, 0).getPlayer(), "Space (0,0) should be empty!");
 	}
+	@Test
+	void fastForward() {
+		Board board = gameController.board;
+		Player current = board.getCurrentPlayer();
 
+		gameController.fastForward(current);
+
+		Assertions.assertEquals(current, board.getSpace(0, 2).getPlayer(), "Player " + current.getName() + " should beSpace (0,2)!");
+		Assertions.assertEquals(Heading.SOUTH, current.getHeading(), "Player 0 should be heading SOUTH!");
+		Assertions.assertNull(board.getSpace(0, 0).getPlayer(), "Space (0,0) should be empty!");
+	}
+	@Test
+	void turnLeft() {
+		Board board = gameController.board;
+		Player current = board.getCurrentPlayer();
+
+		gameController.turnLeft(current);
+
+		Assertions.assertEquals(Heading.EAST, current.getHeading(), "Player 0 should be heading EAST!");
+	}
+	@Test
+	void turnRight() {
+		Board board = gameController.board;
+		Player current = board.getCurrentPlayer();
+
+		gameController.turnRight(current);
+
+		Assertions.assertEquals(Heading.WEST, current.getHeading(), "Player 0 should be heading WEST!");
+	}
 }
