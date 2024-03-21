@@ -40,6 +40,13 @@ public class GameController {
 	 * happening on the board. This method should eventually be deleted!
 	 * @param space The space to which the current player should move
 	 */
+	/**
+	 * ...
+	 *
+	 * Moves the current {@link Player} on the {@link Board} to the given {@link Space} param, increments the move count, and givers the turn to the next {@link Player}
+	 * @author Niklas Jensen, s235101@dtu.dk
+	 * @param space The space to move the current player to
+	 */
 	public void moveCurrentPlayerToSpace(@NotNull Space space)  {
 		// TODO Task1: method should be implemented by the students:
 		//   - the current player should be moved to the given space

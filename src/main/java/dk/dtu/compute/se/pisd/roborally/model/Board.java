@@ -217,6 +217,14 @@ public class Board extends Subject {
 		return getSpace(x, y);
 	}
 
+
+	/**
+	 * ...
+	 *
+	 * Prints general status information for the {@link Board}
+	 * @author Niklas Jensen, s235101@dtu.dk
+	 * @param
+	 */
 	public String getStatusMessage() {
 		// This is actually a view aspect, but for making the first task easy for
 		// the students, this method gives a string representation of the current
