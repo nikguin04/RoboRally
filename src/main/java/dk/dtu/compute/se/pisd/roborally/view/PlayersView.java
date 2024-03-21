@@ -28,10 +28,8 @@ import dk.dtu.compute.se.pisd.roborally.model.Player;
 import javafx.scene.control.TabPane;
 
 /**
- * ...
- *
+ * A component containing a tab for each {@link PlayerView}.
  * @author Ekkart Kindler, ekki@dtu.dk
- *
  */
 public class PlayersView extends TabPane implements ViewObserver {
 

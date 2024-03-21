@@ -24,10 +24,10 @@ package dk.dtu.compute.se.pisd.roborally.model;
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 
 /**
- * ...
- *
+ * A specific cell on the Game {@link Board}.
+ * Contains a reference to the board its on as well as the coordinates of where it is.
+ * A space can also contain a player.
  * @author Ekkart Kindler, ekki@dtu.dk
- *
  */
 public class Space extends Subject {
 

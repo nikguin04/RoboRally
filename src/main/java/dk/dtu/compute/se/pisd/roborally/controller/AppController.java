@@ -41,10 +41,10 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * ...
- *
+ * The class responsible for handling the application itself.
+ * Handles things like prompting the user for info and starting/stopping games with given parameters.
+ * Acts as the bridge between the UI and the {@link GameController}.
  * @author Ekkart Kindler, ekki@dtu.dk
- *
  */
 public class AppController implements Observer {
 
@@ -59,6 +59,11 @@ public class AppController implements Observer {
 		this.roboRally = roboRally;
 	}
 
+	/**
+	 * Creates a new game with a new {@link Board} and new {@link GameController},
+	 * prompting the user for how many players they want. Also starts the game in the programming phase
+	 * and creates a board view.
+	 */
 	public void newGame() {
 		ChoiceDialog<Integer> dialog = new ChoiceDialog<>(PLAYER_NUMBER_OPTIONS.get(0), PLAYER_NUMBER_OPTIONS);
 		dialog.setTitle("Player number");
@@ -127,6 +132,11 @@ public class AppController implements Observer {
 		return false;
 	}
 
+	/**
+	 * Prompts the user whether they want to exit the game, and if the user
+	 * confirms, stops the game with the option to save before quitting.
+	 * If the user cancels the prompt, simply returns without doing anything.
+	 */
 	public void exit() {
 		if (gameController != null) {
 			Alert alert = new Alert(AlertType.CONFIRMATION);

@@ -22,6 +22,7 @@
 package dk.dtu.compute.se.pisd.roborally.model;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
+import dk.dtu.compute.se.pisd.roborally.controller.GameController;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -30,10 +31,13 @@ import java.util.List;
 import static dk.dtu.compute.se.pisd.roborally.model.Phase.INITIALISATION;
 
 /**
- * ...
- *
+ * The game board itself, with a width and height, a name, and a game ID.
+ * Also contains a collection of all the {@link Space}s and the list of {@link Player}s.
+ * Finally, it contains game state information such as the {@link Player} whose turn it is,
+ * the current {@link Phase} of the game, the current step for the activation phase,
+ * and a variable indicating whether "step mode" is enabled
+ * (see the <code>continuePrograms</code> method in {@link GameController}).
  * @author Ekkart Kindler, ekki@dtu.dk
- *
  */
 public class Board extends Subject {
 
@@ -185,13 +189,12 @@ public class Board extends Subject {
 
 	/**
 	 * Returns the neighbour of the given space of the board in the given heading.
-	 * The neighbour is returned only, if it can be reached from the given space
+	 * The neighbour is returned only if it can be reached from the given space
 	 * (no walls or obstacles in either of the involved spaces); otherwise,
 	 * null will be returned.
-	 *
-	 * @param space the space for which the neighbour should be computed
-	 * @param heading the heading of the neighbour
-	 * @return the space in the given direction; null if there is no (reachable) neighbour
+	 * @param space The space for which the neighbour should be computed
+	 * @param heading The heading of the neighbour
+	 * @return The space in the given direction; null if there is no (reachable) neighbour
 	 */
 	public Space getNeighbour(@NotNull Space space, @NotNull Heading heading) {
 		int x = space.x;

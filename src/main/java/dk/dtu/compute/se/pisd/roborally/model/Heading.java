@@ -22,10 +22,8 @@
 package dk.dtu.compute.se.pisd.roborally.model;
 
 /**
- * ...
- *
+ * Represents an absolute direction on the board.
  * @author Ekkart Kindler, ekki@dtu.dk
- *
  */
 public enum Heading {
 
