@@ -202,28 +202,45 @@ public class GameController {
 		}
 	}
 
-	// TODO Task2
+	// DONE Task2
+
+	/**
+	 * Moveset for moving a player 1 step in the heading direction
+	 * @param player the player to move
+	 */
 	public void moveForward(@NotNull Player player) {
 		Space space = board.getNeighbour(player.getSpace(), player.getHeading());
 		moveCurrentPlayerToSpace(space);
-
 	}
 
-	// TODO Task2
+	// DONE Task2
+
+	/**
+	 * Moveset for moving a player 2 step in the heading direction
+	 * @param player the player to move
+	 */
 	public void fastForward(@NotNull Player player) {
 		Space space = board.getNeighbour(player.getSpace(), player.getHeading());
 		space = board.getNeighbour(space, player.getHeading());
 		moveCurrentPlayerToSpace(space);
 	}
 
-	// TODO Task2
+	/**
+	 * Change the direction of the robot from the robot perspective to the right
+	 * @param player the player that changes direction
+	 */
+	// DONE Task2
 	public void turnRight(@NotNull Player player) {
 		Heading playerTurn = player.getHeading();
 		playerTurn = playerTurn.next();
 		player.setHeading(playerTurn);
 	}
 
-	// TODO Task2
+	/**
+	 * Change the direction of the robot from the robot perspective to the left
+	 * @param player the player that changes direction
+	 */
+	//DONE Task2
 	public void turnLeft(@NotNull Player player) {
 		Heading playerTurn = player.getHeading();
 		playerTurn = playerTurn.prev();
