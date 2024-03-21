@@ -204,22 +204,27 @@ public class GameController {
 
 	// TODO Task2
 	public void moveForward(@NotNull Player player) {
+		Space space = new Space(board, 0, 1);
+		moveCurrentPlayerToSpace(space);
 
 	}
 
 	// TODO Task2
 	public void fastForward(@NotNull Player player) {
-
+		Space space = new Space(board, 0, 2);
+		moveCurrentPlayerToSpace(space);
 	}
 
 	// TODO Task2
 	public void turnRight(@NotNull Player player) {
-
+		Space space = new Space(board, 1, 0);
+		moveCurrentPlayerToSpace(space);
 	}
 
 	// TODO Task2
 	public void turnLeft(@NotNull Player player) {
-
+		Space space = new Space(board, -1, 0);
+		moveCurrentPlayerToSpace(space);
 	}
 
 	public boolean moveCards(@NotNull CommandCardField source, @NotNull CommandCardField target) {
