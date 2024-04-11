@@ -97,6 +97,11 @@ public class GameController {
 
     public void moveCurrentPlayerToSpace(Space space) {
         // TODO: Import or Implement this method. This method is only for debugging purposes. Not useful for the game.
+        if (space.getPlayer() == null) { // no player on space
+			board.getCurrentPlayer().setSpace(space);
+			board.incMoveCount(); // Increase move by one (ONLY IF MOVED)
+		} else { /*player on space*/ }
+		board.setCurrentPlayer(board.getNextPlayer());
     }
 
     private void makeProgramFieldsVisible(int register) {

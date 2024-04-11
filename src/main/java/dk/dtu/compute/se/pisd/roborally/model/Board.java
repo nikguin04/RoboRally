@@ -55,6 +55,8 @@ public class Board extends Subject {
 
     private boolean stepMode;
 
+    private int move_count = 0;
+
     public Board(int width, int height) {
         this.width = width;
         this.height = height;
@@ -162,6 +164,18 @@ public class Board extends Subject {
         }
     }
 
+    public int getMoveCount() {
+		return move_count;
+	}
+
+	public void incMoveCount() {
+		move_count++;
+	}
+
+    public Player getNextPlayer() {
+		return this.getPlayer((this.getPlayerNumber(this.getCurrentPlayer()) + 1) % this.getPlayersNumber());
+	}
+
     /**
      * Returns the neighbour of the given space of the board in the given heading.
      * The neighbour is returned only, if it can be reached from the given space
@@ -211,7 +225,9 @@ public class Board extends Subject {
     }
 
     public String getStatusMessage() {
-
-        return "";
+        return "Phase: " + getPhase().name() +
+        ", Player = " + getCurrentPlayer().getName() +
+        ", Step: " + getStep() +
+        ", Move: " + getMoveCount();
     }
 }
