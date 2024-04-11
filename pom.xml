@@ -52,6 +52,12 @@
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.4.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
             <version>5.4.2</version>
             <scope>test</scope>
@@ -67,7 +73,6 @@
             <version>${javafx.version}</version>
         </dependency>
     </dependencies>
-
 
     <build>
         <!-- we use default maven directory structure as indicated below
@@ -132,7 +137,7 @@
                 <configuration>
                     <jlinkImageName>roborally</jlinkImageName>
                     <launcher>launcher</launcher>
-                    <mainClass>dk.dtu.compute.se.pisd.roborally.RoboRally</mainClass>
+                    <mainClass>roborally/org.openjfx.App</mainClass>
                 </configuration>
             </plugin>
         </plugins>

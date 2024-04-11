@@ -41,129 +41,119 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * The class responsible for handling the application itself.
- * Handles things like prompting the user for info and starting/stopping games with given parameters.
- * Acts as the bridge between the UI and the {@link GameController}.
+ * ...
+ *
  * @author Ekkart Kindler, ekki@dtu.dk
+ *
  */
 public class AppController implements Observer {
 
-	final private List<Integer> PLAYER_NUMBER_OPTIONS = Arrays.asList(2, 3, 4, 5, 6);
-	final private List<String> PLAYER_COLORS = Arrays.asList("red", "green", "blue", "orange", "grey", "magenta");
+    final private List<Integer> PLAYER_NUMBER_OPTIONS = Arrays.asList(2, 3, 4, 5, 6);
+    final private List<String> PLAYER_COLORS = Arrays.asList("red", "green", "blue", "orange", "grey", "magenta");
 
-	final private RoboRally roboRally;
+    final private RoboRally roboRally;
 
-	private GameController gameController;
+    private GameController gameController;
 
-	public AppController(@NotNull RoboRally roboRally) {
-		this.roboRally = roboRally;
-	}
+    public AppController(@NotNull RoboRally roboRally) {
+        this.roboRally = roboRally;
+    }
 
-	/**
-	 * Creates a new game with a new {@link Board} and new {@link GameController},
-	 * prompting the user for how many players they want. Also starts the game in the programming phase
-	 * and creates a board view.
-	 */
-	public void newGame() {
-		ChoiceDialog<Integer> dialog = new ChoiceDialog<>(PLAYER_NUMBER_OPTIONS.get(0), PLAYER_NUMBER_OPTIONS);
-		dialog.setTitle("Player number");
-		dialog.setHeaderText("Select number of players");
-		Optional<Integer> result = dialog.showAndWait();
+    public void newGame() {
+        ChoiceDialog<Integer> dialog = new ChoiceDialog<>(PLAYER_NUMBER_OPTIONS.get(0), PLAYER_NUMBER_OPTIONS);
+        dialog.setTitle("Player number");
+        dialog.setHeaderText("Select number of players");
+        Optional<Integer> result = dialog.showAndWait();
 
-		if (result.isPresent()) {
-			if (gameController != null) {
-				// The UI should not allow this, but in case this happens anyway.
-				// give the user the option to save the game or abort this operation!
-				if (!stopGame()) {
-					return;
-				}
-			}
+        if (result.isPresent()) {
+            if (gameController != null) {
+                // The UI should not allow this, but in case this happens anyway.
+                // give the user the option to save the game or abort this operation!
+                if (!stopGame()) {
+                    return;
+                }
+            }
 
-			// XXX the board should eventually be created programmatically or loaded from a file
-			//     here we just create an empty board with the required number of players.
-			Board board = new Board(8,8);
-			gameController = new GameController(board);
-			int no = result.get();
-			for (int i = 0; i < no; i++) {
-				Player player = new Player(board, PLAYER_COLORS.get(i), "Player " + (i + 1));
-				board.addPlayer(player);
-				player.setSpace(board.getSpace(i % board.width, i));
-			}
+            // XXX the board should eventually be created programmatically or loaded from a file
+            //     here we just create an empty board with the required number of players.
+            Board board = new Board(8,8);
+            gameController = new GameController(board);
+            int no = result.get();
+            for (int i = 0; i < no; i++) {
+                Player player = new Player(board, PLAYER_COLORS.get(i), "Player " + (i + 1));
+                board.addPlayer(player);
+                player.setSpace(board.getSpace(i % board.width, i));
+            }
 
-			// XXX: the line below is commented out in the current version
-			// board.setCurrentPlayer(board.getPlayer(0));
-			gameController.startProgrammingPhase();
+            // XXX: V2
+            // board.setCurrentPlayer(board.getPlayer(0));
+            gameController.startProgrammingPhase();
 
-			roboRally.createBoardView(gameController);
-		}
-	}
+            roboRally.createBoardView(gameController);
+        }
+    }
 
-	public void saveGame() {
-		// XXX needs to be implemented eventually
-	}
+    public void saveGame() {
+        // XXX needs to be implemented eventually
+    }
 
-	public void loadGame() {
-		// XXX needs to be implemented eventually
-		// for now, we just create a new game
-		if (gameController == null) {
-			newGame();
-		}
-	}
+    public void loadGame() {
+        // XXX needs to be implemented eventually
+        // for now, we just create a new game
+        if (gameController == null) {
+            newGame();
+        }
+    }
 
-	/**
-	 * Stop playing the current game, giving the user the option to save
-	 * the game or to cancel stopping the game. The method returns true
-	 * if the game was successfully stopped (with or without saving the
-	 * game); returns false, if the current game was not stopped. In case
-	 * there is no current game, false is returned.
-	 *
-	 * @return true if the current game was stopped, false otherwise
-	 */
-	public boolean stopGame() {
-		if (gameController != null) {
+    /**
+     * Stop playing the current game, giving the user the option to save
+     * the game or to cancel stopping the game. The method returns true
+     * if the game was successfully stopped (with or without saving the
+     * game); returns false, if the current game was not stopped. In case
+     * there is no current game, false is returned.
+     *
+     * @return true if the current game was stopped, false otherwise
+     */
+    public boolean stopGame() {
+        if (gameController != null) {
 
-			// here we save the game (without asking the user).
-			saveGame();
+            // here we save the game (without asking the user).
+            saveGame();
 
-			gameController = null;
-			roboRally.createBoardView(null);
-			return true;
-		}
-		return false;
-	}
+            gameController = null;
+            roboRally.createBoardView(null);
+            return true;
+        }
+        return false;
+    }
 
-	/**
-	 * Prompts the user whether they want to exit the game, and if the user
-	 * confirms, stops the game with the option to save before quitting.
-	 * If the user cancels the prompt, simply returns without doing anything.
-	 */
-	public void exit() {
-		if (gameController != null) {
-			Alert alert = new Alert(AlertType.CONFIRMATION);
-			alert.setTitle("Exit RoboRally?");
-			alert.setContentText("Are you sure you want to exit RoboRally?");
-			Optional<ButtonType> result = alert.showAndWait();
+    public void exit() {
+        if (gameController != null) {
+            Alert alert = new Alert(AlertType.CONFIRMATION);
+            alert.setTitle("Exit RoboRally?");
+            alert.setContentText("Are you sure you want to exit RoboRally?");
+            Optional<ButtonType> result = alert.showAndWait();
 
-			if (!result.isPresent() || result.get() != ButtonType.OK) {
-				return; // return without exiting the application
-			}
-		}
+            if (!result.isPresent() || result.get() != ButtonType.OK) {
+                return; // return without exiting the application
+            }
+        }
 
-		// If the user did not cancel, the RoboRally application will exit
-		// after the option to save the game
-		if (gameController == null || stopGame()) {
-			Platform.exit();
-		}
-	}
+        // If the user did not cancel, the RoboRally application will exit
+        // after the option to save the game
+        if (gameController == null || stopGame()) {
+            Platform.exit();
+        }
+    }
 
-	public boolean isGameRunning() {
-		return gameController != null;
-	}
+    public boolean isGameRunning() {
+        return gameController != null;
+    }
 
 
-	@Override
-	public void update(Subject subject) {
-		// XXX do nothing for now
-	}
+    @Override
+    public void update(Subject subject) {
+        // XXX do nothing for now
+    }
 
 }

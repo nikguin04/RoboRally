@@ -34,66 +34,68 @@ import javafx.scene.shape.StrokeLineCap;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * A component displaying a single {@link Space}, including the {@link Player} if present.
+ * ...
+ *
  * @author Ekkart Kindler, ekki@dtu.dk
+ *
  */
 public class SpaceView extends StackPane implements ViewObserver {
 
-	final public static int SPACE_HEIGHT = 60; // 60; // 75;
-	final public static int SPACE_WIDTH = 60;  // 60; // 75;
+    final public static int SPACE_HEIGHT = 60; // 75;
+    final public static int SPACE_WIDTH = 60; // 75;
 
-	public final Space space;
+    public final Space space;
 
 
-	public SpaceView(@NotNull Space space) {
-		this.space = space;
+    public SpaceView(@NotNull Space space) {
+        this.space = space;
 
-		// XXX the following styling should better be done with styles
-		this.setPrefWidth(SPACE_WIDTH);
-		this.setMinWidth(SPACE_WIDTH);
-		this.setMaxWidth(SPACE_WIDTH);
+        // XXX the following styling should better be done with styles
+        this.setPrefWidth(SPACE_WIDTH);
+        this.setMinWidth(SPACE_WIDTH);
+        this.setMaxWidth(SPACE_WIDTH);
 
-		this.setPrefHeight(SPACE_HEIGHT);
-		this.setMinHeight(SPACE_HEIGHT);
-		this.setMaxHeight(SPACE_HEIGHT);
+        this.setPrefHeight(SPACE_HEIGHT);
+        this.setMinHeight(SPACE_HEIGHT);
+        this.setMaxHeight(SPACE_HEIGHT);
 
-		if ((space.x + space.y) % 2 == 0) {
-			this.setStyle("-fx-background-color: white;");
-		} else {
-			this.setStyle("-fx-background-color: black;");
-		}
+        if ((space.x + space.y) % 2 == 0) {
+            this.setStyle("-fx-background-color: white;");
+        } else {
+            this.setStyle("-fx-background-color: black;");
+        }
 
-		// updatePlayer();
+        // updatePlayer();
 
-		// This space view should listen to changes of the space
-		space.attach(this);
-		update(space);
-	}
+        // This space view should listen to changes of the space
+        space.attach(this);
+        update(space);
+    }
 
-	private void updatePlayer() {
-		this.getChildren().clear();
+    private void updatePlayer() {
+        this.getChildren().clear();
 
-		Player player = space.getPlayer();
-		if (player != null) {
-			Polygon arrow = new Polygon(0.0, 0.0,
-					10.0, 20.0,
-					20.0, 0.0 );
-			try {
-				arrow.setFill(Color.valueOf(player.getColor()));
-			} catch (Exception e) {
-				arrow.setFill(Color.MEDIUMPURPLE);
-			}
+        Player player = space.getPlayer();
+        if (player != null) {
+            Polygon arrow = new Polygon(0.0, 0.0,
+                    10.0, 20.0,
+                    20.0, 0.0 );
+            try {
+                arrow.setFill(Color.valueOf(player.getColor()));
+            } catch (Exception e) {
+                arrow.setFill(Color.MEDIUMPURPLE);
+            }
 
-			arrow.setRotate((90*player.getHeading().ordinal())%360);
-			this.getChildren().add(arrow);
-		}
-	}
+            arrow.setRotate((90*player.getHeading().ordinal())%360);
+            this.getChildren().add(arrow);
+        }
+    }
 
-	@Override
-	public void updateView(Subject subject) {
-		if (subject == this.space) {
-			updatePlayer();
-		}
-	}
+    @Override
+    public void updateView(Subject subject) {
+        if (subject == this.space) {
+            updatePlayer();
+        }
+    }
 
 }

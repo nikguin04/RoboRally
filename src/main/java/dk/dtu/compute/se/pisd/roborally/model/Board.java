@@ -22,7 +22,6 @@
 package dk.dtu.compute.se.pisd.roborally.model;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
-import dk.dtu.compute.se.pisd.roborally.controller.GameController;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -31,220 +30,188 @@ import java.util.List;
 import static dk.dtu.compute.se.pisd.roborally.model.Phase.INITIALISATION;
 
 /**
- * The game board itself, with a width and height, a name, and a game ID.
- * Also contains a collection of all the {@link Space}s and the list of {@link Player}s.
- * Finally, it contains game state information such as the {@link Player} whose turn it is,
- * the current {@link Phase} of the game, the current step for the activation phase,
- * and a variable indicating whether "step mode" is enabled
- * (see the <code>continuePrograms</code> method in {@link GameController}).
+ * ...
+ *
  * @author Ekkart Kindler, ekki@dtu.dk
+ *
  */
 public class Board extends Subject {
 
-	public final int width;
+    public final int width;
 
-	public final int height;
+    public final int height;
 
-	public final String boardName;
+    private Integer gameId;
 
-	private Integer gameId;
+    private final Space[][] spaces;
 
-	private final Space[][] spaces;
+    private final List<Player> players = new ArrayList<>();
 
-	private final List<Player> players = new ArrayList<>();
+    private Player current;
 
-	private int move_count = 0;
+    private Phase phase = INITIALISATION;
 
-	private Player current;
+    private int step = 0;
 
-	private Phase phase = INITIALISATION;
+    private boolean stepMode;
 
-	private int step = 0;
+    public Board(int width, int height) {
+        this.width = width;
+        this.height = height;
+        spaces = new Space[width][height];
+        for (int x = 0; x < width; x++) {
+            for(int y = 0; y < height; y++) {
+                Space space = new Space(this, x, y);
+                spaces[x][y] = space;
+            }
+        }
+        this.stepMode = false;
+    }
 
-	private boolean stepMode;
+    public Integer getGameId() {
+        return gameId;
+    }
 
-	public Board(int width, int height, @NotNull String boardName) {
-		this.boardName = boardName;
-		this.width = width;
-		this.height = height;
-		spaces = new Space[width][height];
-		for (int x = 0; x < width; x++) {
-			for(int y = 0; y < height; y++) {
-				Space space = new Space(this, x, y);
-				spaces[x][y] = space;
-			}
-		}
-		this.stepMode = false;
-	}
+    public void setGameId(int gameId) {
+        if (this.gameId == null) {
+            this.gameId = gameId;
+        } else {
+            if (!this.gameId.equals(gameId)) {
+                throw new IllegalStateException("A game with a set id may not be assigned a new id!");
+            }
+        }
+    }
 
-	public Board(int width, int height) {
-		this(width, height, "defaultboard");
-	}
+    public Space getSpace(int x, int y) {
+        if (x >= 0 && x < width &&
+                y >= 0 && y < height) {
+            return spaces[x][y];
+        } else {
+            return null;
+        }
+    }
 
-	public Integer getGameId() {
-		return gameId;
-	}
+    public int getPlayersNumber() {
+        return players.size();
+    }
 
-	public void setGameId(int gameId) {
-		if (this.gameId == null) {
-			this.gameId = gameId;
-		} else {
-			if (!this.gameId.equals(gameId)) {
-				throw new IllegalStateException("A game with a set id may not be assigned a new id!");
-			}
-		}
-	}
+    public void addPlayer(@NotNull Player player) {
+        if (player.board == this && !players.contains(player)) {
+            players.add(player);
+            notifyChange();
+        }
+    }
 
-	public Space getSpace(int x, int y) {
-		if (x >= 0 && x < width &&
-				y >= 0 && y < height) {
-			return spaces[x][y];
-		} else {
-			return null;
-		}
-	}
+    public Player getPlayer(int i) {
+        if (i >= 0 && i < players.size()) {
+            return players.get(i);
+        } else {
+            return null;
+        }
+    }
 
-	public int getPlayersNumber() {
-		return players.size();
-	}
+    public Player getCurrentPlayer() {
+        return current;
+    }
 
-	public void addPlayer(@NotNull Player player) {
-		if (player.board == this && !players.contains(player)) {
-			players.add(player);
-			notifyChange();
-		}
-	}
+    public void setCurrentPlayer(Player player) {
+        if (player != this.current && players.contains(player)) {
+            this.current = player;
+            notifyChange();
+        }
+    }
 
-	public Player getPlayer(int i) {
-		if (i >= 0 && i < players.size()) {
-			return players.get(i);
-		} else {
-			return null;
-		}
-	}
+    public Phase getPhase() {
+        return phase;
+    }
 
-	public Player getCurrentPlayer() {
-		return current;
-	}
+    public void setPhase(Phase phase) {
+        if (phase != this.phase) {
+            this.phase = phase;
+            notifyChange();
+        }
+    }
 
-	public void setCurrentPlayer(Player player) {
-		if (player != this.current && players.contains(player)) {
-			this.current = player;
-			notifyChange();
-		}
-	}
+    public int getStep() {
+        return step;
+    }
 
-	public Phase getPhase() {
-		return phase;
-	}
+    public void setStep(int step) {
+        if (step != this.step) {
+            this.step = step;
+            notifyChange();
+        }
+    }
 
-	public void setPhase(Phase phase) {
-		if (phase != this.phase) {
-			this.phase = phase;
-			notifyChange();
-		}
-	}
+    public boolean isStepMode() {
+        return stepMode;
+    }
 
-	public int getMoveCount() {
-		return move_count;
-	}
+    public void setStepMode(boolean stepMode) {
+        if (stepMode != this.stepMode) {
+            this.stepMode = stepMode;
+            notifyChange();
+        }
+    }
 
-	public void incMoveCount() {
-		move_count++;
-	}
+    public int getPlayerNumber(@NotNull Player player) {
+        if (player.board == this) {
+            return players.indexOf(player);
+        } else {
+            return -1;
+        }
+    }
 
-	public int getStep() {
-		return step;
-	}
+    /**
+     * Returns the neighbour of the given space of the board in the given heading.
+     * The neighbour is returned only, if it can be reached from the given space
+     * (no walls or obstacles in either of the involved spaces); otherwise,
+     * null will be returned.
+     *
+     * @param space the space for which the neighbour should be computed
+     * @param heading the heading of the neighbour
+     * @return the space in the given direction; null if there is no (reachable) neighbour
+     */
+    public Space getNeighbour(@NotNull Space space, @NotNull Heading heading) {
+        if (space.getWalls().contains(heading)) {
+            return null;
+        }
+        // TODO needs to be implemented based on the actual spaces
+        //      and obstacles and walls placed there. For now it,
+        //      just calculates the next space in the respective
+        //      direction in a cyclic way.
 
-	public void setStep(int step) {
-		if (step != this.step) {
-			this.step = step;
-			notifyChange();
-		}
-	}
+        // XXX an other option (not for now) would be that null represents a hole
+        //     or the edge of the board in which the players can fall
 
-	public boolean isStepMode() {
-		return stepMode;
-	}
+        int x = space.x;
+        int y = space.y;
+        switch (heading) {
+            case SOUTH:
+                y = (y + 1) % height;
+                break;
+            case WEST:
+                x = (x + width - 1) % width;
+                break;
+            case NORTH:
+                y = (y + height - 1) % height;
+                break;
+            case EAST:
+                x = (x + 1) % width;
+                break;
+        }
+        Heading reverse = Heading.values()[(heading.ordinal() + 2)% Heading.values().length];
+        Space result = getSpace(x, y);
+        if (result != null) {
+            if (result.getWalls().contains(reverse)) {
+                return null;
+            }
+        }
+        return result;
+    }
 
-	public void setStepMode(boolean stepMode) {
-		if (stepMode != this.stepMode) {
-			this.stepMode = stepMode;
-			notifyChange();
-		}
-	}
+    public String getStatusMessage() {
 
-	public int getPlayerNumber(@NotNull Player player) {
-		if (player.board == this) {
-			return players.indexOf(player);
-		} else {
-			return -1;
-		}
-	}
-
-	public Player getNextPlayer() {
-		return this.getPlayer((this.getPlayerNumber(this.getCurrentPlayer()) + 1) % this.getPlayersNumber());
-	}
-
-	/**
-	 * Returns the neighbour of the given space of the board in the given heading.
-	 * The neighbour is returned only if it can be reached from the given space
-	 * (no walls or obstacles in either of the involved spaces); otherwise,
-	 * null will be returned.
-	 * @param space The space for which the neighbour should be computed
-	 * @param heading The heading of the neighbour
-	 * @return The space in the given direction; null if there is no (reachable) neighbour
-	 */
-	public Space getNeighbour(@NotNull Space space, @NotNull Heading heading) {
-		int x = space.x;
-		int y = space.y;
-		switch (heading) {
-			case SOUTH:
-				y = (y + 1) % height;
-				break;
-			case WEST:
-				x = (x + width - 1) % width;
-				break;
-			case NORTH:
-				y = (y + height - 1) % height;
-				break;
-			case EAST:
-				x = (x + 1) % width;
-				break;
-		}
-
-		return getSpace(x, y);
-	}
-
-
-	/**
-	 * ...
-	 *
-	 * Prints general status information for the {@link Board}
-	 * @author Niklas Jensen, s235101@dtu.dk
-	 * @param
-	 * @returns general status information for the {@link Board}
-	 */
-	public String getStatusMessage() {
-		// This is actually a view aspect, but for making the first task easy for
-		// the students, this method gives a string representation of the current
-		// status of the game (specifically, it shows the phase, the player and the step)
-
-		// TODO Task1: this string could eventually be refined
-		//      The status line should show more information based on
-		//      situation; for now, introduce a counter to the Board,
-		//      which is counted up every time a player makes a move; the
-		//      status line should show the current player and the number
-		//      of the current move!
-		return "Phase: " + getPhase().name() +
-				", Player = " + getCurrentPlayer().getName() +
-				", Step: " + getStep() +
-				", Move: " + getMoveCount();
-
-		// TODO Task1: add a counter along with a getter and a setter, so the
-		//      state of the board (game) contains the number of moves, which then can
-		//      be used to extend the status message
-	}
-
+        return "";
+    }
 }

@@ -22,54 +22,69 @@
 package dk.dtu.compute.se.pisd.roborally.model;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
+import dk.dtu.compute.se.pisd.roborally.controller.FieldAction;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * A specific cell on the Game {@link Board}.
- * Contains a reference to the board its on as well as the coordinates of where it is.
- * A space can also contain a player.
+ * ...
+ *
  * @author Ekkart Kindler, ekki@dtu.dk
+ *
  */
 public class Space extends Subject {
 
-	public final Board board;
+    private Player player;
 
-	public final int x;
-	public final int y;
+    private List<Heading> walls = new ArrayList<>();
+    private List<FieldAction> actions = new ArrayList<>();
 
-	private Player player;
+    public final Board board;
 
-	public Space(Board board, int x, int y) {
-		this.board = board;
-		this.x = x;
-		this.y = y;
-		player = null;
-	}
+    public final int x;
+    public final int y;
 
-	public Player getPlayer() {
-		return player;
-	}
+    public Space(Board board, int x, int y) {
+        this.board = board;
+        this.x = x;
+        this.y = y;
+        player = null;
+    }
 
-	public void setPlayer(Player player) {
-		Player oldPlayer = this.player;
-		if (player != oldPlayer &&
-				(player == null || board == player.board)) {
-			this.player = player;
-			if (oldPlayer != null) {
-				// this should actually not happen
-				oldPlayer.setSpace(null);
-			}
-			if (player != null) {
-				player.setSpace(this);
-			}
-			notifyChange();
-		}
-	}
+    public Player getPlayer() {
+        return player;
+    }
 
-	void playerChanged() {
-		// This is a minor hack; since some views that are registered with the space
-		// also need to update when some player attributes change, the player can
-		// notify the space of these changes by calling this method.
-		notifyChange();
-	}
+    public void setPlayer(Player player) {
+        Player oldPlayer = this.player;
+        if (player != oldPlayer &&
+                (player == null || board == player.board)) {
+            this.player = player;
+            if (oldPlayer != null) {
+                // this should actually not happen
+                oldPlayer.setSpace(null);
+            }
+            if (player != null) {
+                player.setSpace(this);
+            }
+            notifyChange();
+        }
+    }
+
+    public List<Heading> getWalls() {
+        return walls;
+    }
+
+    public List<FieldAction> getActions() {
+        return actions;
+    }
+
+    void playerChanged() {
+        // This is a minor hack; since some views that are registered with the space
+        // also need to update when some player attributes change, the player can
+        // notify the space of these changes by calling this method.
+        notifyChange();
+    }
 
 }

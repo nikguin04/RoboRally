@@ -28,35 +28,37 @@ import dk.dtu.compute.se.pisd.roborally.model.Player;
 import javafx.scene.control.TabPane;
 
 /**
- * A component containing a tab for each {@link PlayerView}.
+ * ...
+ *
  * @author Ekkart Kindler, ekki@dtu.dk
+ *
  */
 public class PlayersView extends TabPane implements ViewObserver {
 
-	private Board board;
+    private Board board;
 
-	private PlayerView[] playerViews;
+    private PlayerView[] playerViews;
 
-	public PlayersView(GameController gameController) {
-		board = gameController.board;
+    public PlayersView(GameController gameController) {
+        board = gameController.board;
 
-		this.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
+        this.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
 
-		playerViews = new PlayerView[board.getPlayersNumber()];
-		for (int i = 0; i < board.getPlayersNumber();  i++) {
-			playerViews[i] = new PlayerView(gameController, board.getPlayer(i));
-			this.getTabs().add(playerViews[i]);
-		}
-		board.attach(this);
-		update(board);
-	}
+        playerViews = new PlayerView[board.getPlayersNumber()];
+        for (int i = 0; i < board.getPlayersNumber();  i++) {
+            playerViews[i] = new PlayerView(gameController, board.getPlayer(i));
+            this.getTabs().add(playerViews[i]);
+        }
+        board.attach(this);
+        update(board);
+    }
 
-	@Override
-	public void updateView(Subject subject) {
-		if (subject == board) {
-			Player current = board.getCurrentPlayer();
-			this.getSelectionModel().select(board.getPlayerNumber(current));
-		}
-	}
+    @Override
+    public void updateView(Subject subject) {
+        if (subject == board) {
+            Player current = board.getCurrentPlayer();
+            this.getSelectionModel().select(board.getPlayerNumber(current));
+        }
+    }
 
 }

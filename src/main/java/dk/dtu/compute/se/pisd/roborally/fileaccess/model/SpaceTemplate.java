@@ -19,25 +19,26 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package dk.dtu.compute.se.pisd.designpatterns.observer;
+package dk.dtu.compute.se.pisd.roborally.fileaccess.model;
+
+import dk.dtu.compute.se.pisd.roborally.controller.FieldAction;
+import dk.dtu.compute.se.pisd.roborally.model.Heading;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * This is the observer of the observer design pattern roughly following
- * the definition of the GoF.
- * 
+ * ...
+ *
  * @author Ekkart Kindler, ekki@dtu.dk
  *
  */
-public interface Observer {
-	
-	/**
-	 * The observer's update method, which is called, when the subject
-	 * changes. The subject is provided as a parameter in order to
-	 * use the same observer object as an observer for many different
-	 * subjects.
-	 * 
-	 * @param subject the subject which changed
-	 */
-	void update(Subject subject);
+public class SpaceTemplate {
+
+    public List<Heading> walls = new ArrayList<>();
+    public List<FieldAction> actions = new ArrayList<>();
+
+    public int x;
+    public int y;
 
 }

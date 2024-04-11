@@ -26,22 +26,37 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * A specific command as seen on a {@link CommandCard} representing an action to be performed.
+ * ...
+ *
  * @author Ekkart Kindler, ekki@dtu.dk
+ *
  */
 public enum Command {
 
-	// This is a very simplistic way of realizing different commands.
+    // This is a very simplistic way of realizing different commands.
 
-	FORWARD("Fwd"),
-	RIGHT("Turn Right"),
-	LEFT("Turn Left"),
-	FAST_FORWARD("Fast Fwd");
+    FORWARD("Fwd"),
+    RIGHT("Turn Right"),
+    LEFT("Turn Left"),
+    FAST_FORWARD("Fast Fwd"),
 
-	final public String displayName;
+    OPTION_LEFT_RIGHT("Left OR Right", LEFT, RIGHT);
 
-	Command(String displayName) {
-		this.displayName = displayName;
-	}
+    final public String displayName;
+
+    final private List<Command> options;
+
+    Command(String displayName, Command... options) {
+        this.displayName = displayName;
+        this.options = Collections.unmodifiableList(Arrays.asList(options));
+    }
+
+    public boolean isInteractive() {
+        return !options.isEmpty();
+    }
+
+    public List<Command> getOptions() {
+        return options;
+    }
 
 }
