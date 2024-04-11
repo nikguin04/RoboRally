@@ -41,11 +41,21 @@ public class GameController {
 
 
     public void moveForward(@NotNull Player player) {
+        moveAmt(player, 1);
+    }
+
+    // TODO Assignment A3
+    public void fastForward(@NotNull Player player) {
+        moveAmt(player, 2);
+    }
+
+    public void moveAmt(@NotNull Player player, int amount) {
         if (player.board == board) {
             Space space = player.getSpace();
             Heading heading = player.getHeading();
 
-            Space target = board.getNeighbour(space, heading);
+            Space target = space;
+            for (int i = 0; i < amount; i++) { target = board.getNeighbour(target, heading); }; // TODO: this could be changed to work inside of get neighbour instead of a for loop
             if (target != null) {
                 try {
                     moveToSpace(player, target, heading);
@@ -59,18 +69,13 @@ public class GameController {
     }
 
     // TODO Assignment A3
-    public void fastForward(@NotNull Player player) {
-
-    }
-
-    // TODO Assignment A3
     public void turnRight(@NotNull Player player) {
-
+        player.setHeading(player.getHeading().next());
     }
 
     // TODO Assignment A3
     public void turnLeft(@NotNull Player player) {
-
+        player.setHeading(player.getHeading().prev());
     }
 
     void moveToSpace(@NotNull Player player, @NotNull Space space, @NotNull Heading heading) throws ImpossibleMoveException {
