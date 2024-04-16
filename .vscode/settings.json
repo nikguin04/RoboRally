@@ -1,8 +1,0 @@
-{
-	// VSCode doesn't have native support for .editorconfig
-	"editor.insertSpaces": false,
-	"files.encoding": "utf8",
-	"files.insertFinalNewline": true,
-	"files.trimFinalNewlines": true,
-	"files.trimTrailingWhitespace": true
-}

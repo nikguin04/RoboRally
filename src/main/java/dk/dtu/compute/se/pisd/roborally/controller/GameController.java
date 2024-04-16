@@ -55,18 +55,16 @@ public class GameController {
 
     public void moveAmt(@NotNull Player player, int amount) {
         if (player.board == board) {
-            Space space = player.getSpace();
-            Heading heading = player.getHeading();
-
-            Space target = space;
-            for (int i = 0; i < amount; i++) { target = board.getNeighbour(target, heading); }; // TODO: this could be changed to work inside of get neighbour instead of a for loop
-            if (target != null) {
-                try {
-                    moveToSpace(player, target, heading);
-                } catch (ImpossibleMoveException e) {
-                    // we don't do anything here  for now; we just catch the
-                    // exception so that we do no pass it on to the caller
-                    // (which would be very bad style).
+            for (int i = 0; i < amount; i++) {
+                Space target = board.getNeighbour(player.getSpace(), player.getHeading());
+                if (target != null) {
+                    try {
+                        moveToSpace(player, target, player.getHeading());
+                    } catch (ImpossibleMoveException e) {
+                        // we don't do anything here  for now; we just catch the
+                        // exception so that we do no pass it on to the caller
+                        // (which would be very bad style).
+                    }
                 }
             }
         }
