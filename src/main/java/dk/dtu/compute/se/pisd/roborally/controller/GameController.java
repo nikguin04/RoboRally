@@ -49,6 +49,10 @@ public class GameController {
         moveAmt(player, 2);
     }
 
+    public void fastfastForward(@NotNull Player player) {
+        moveAmt(player, 3);
+    }
+
     public void moveAmt(@NotNull Player player, int amount) {
         if (player.board == board) {
             Space space = player.getSpace();
@@ -193,7 +197,7 @@ public class GameController {
             //     (this concerns the way cards are modelled as well as the way they are executed).
 
             switch (command) {
-                case FORWARD:
+                case FWD1:
                     this.moveForward(player);
                     break;
                 case RIGHT:
@@ -202,8 +206,11 @@ public class GameController {
                 case LEFT:
                     this.turnLeft(player);
                     break;
-                case FAST_FORWARD:
+                case FWD2:
                     this.fastForward(player);
+                    break;
+                case FWD3:
+                    this.fastfastForward(player);
                     break;
                 default:
                     // DO NOTHING (for now)
