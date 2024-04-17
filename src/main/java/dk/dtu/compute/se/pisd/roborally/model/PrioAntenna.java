@@ -27,6 +27,12 @@ public class PrioAntenna {
 		int prioPlayerManhattenDistance = Integer.MAX_VALUE;
 
 		for (Player p : listOfPlayers) {
+
+			if (p.getSpace() == null) {
+				System.out.println("Player not on the board");
+				continue;
+			}
+
 			int currentPlayerManhattenDistance = getManhattenDistance(this.x, this.y, p.getSpace().x, p.getSpace().y);
 			if (prioPlayer == null) {
 				prioPlayer = p;
