@@ -169,6 +169,14 @@ public class GameController {
                 if (nextPlayerNumber < board.getPlayersNumber()) {
                     board.setCurrentPlayer(board.getPlayer(nextPlayerNumber));
                 } else {
+					// For some reason, we can't just get a list of players???
+					for (int i = 0; i < board.getPlayersNumber(); i++) {
+						Space space = board.getPlayer(i).getSpace();
+						SpaceElement element = space.getElement();
+						if (element == null) continue;
+						// TODO We should probably handle activation order
+						element.doAction(this, space);
+					}
                     step++;
                     if (step < Player.NO_REGISTERS) {
                         makeProgramFieldsVisible(step);
