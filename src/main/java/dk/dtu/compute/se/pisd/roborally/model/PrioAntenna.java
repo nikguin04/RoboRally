@@ -51,6 +51,8 @@ public class PrioAntenna {
 		return prioPlayer;
 	}
 
+	// TO FIX:
+	// Does not take position of priority antenna into account. Treats (0,0) as origo, when it should be the position of antenna.
 	private Player prioTieBreak(Player player1, Player player2) {
 		Player prioPlayer = null;
 		Space p1Space = player1.getSpace();
