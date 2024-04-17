@@ -73,7 +73,7 @@ public class LoadBoard {
 			for (SpaceTemplate spaceTemplate: template.spaces) {
 			    Space space = result.getSpace(spaceTemplate.x, spaceTemplate.y);
 			    if (space != null) {
-                    space.getElements().addAll(spaceTemplate.elements);
+                    space.setElement(spaceTemplate.element);
                     space.getWalls().addAll(spaceTemplate.walls);
                 }
             }
@@ -103,11 +103,11 @@ public class LoadBoard {
         for (int i=0; i<board.width; i++) {
             for (int j=0; j<board.height; j++) {
                 Space space = board.getSpace(i,j);
-                if (!space.getWalls().isEmpty() || !space.getElements().isEmpty()) {
+                if (!space.getWalls().isEmpty() || space.getElement() != null) {
                     SpaceTemplate spaceTemplate = new SpaceTemplate();
                     spaceTemplate.x = space.x;
                     spaceTemplate.y = space.y;
-                    spaceTemplate.elements.addAll(space.getElements());
+                    spaceTemplate.element = space.getElement();
                     spaceTemplate.walls.addAll(space.getWalls());
                     template.spaces.add(spaceTemplate);
                 }

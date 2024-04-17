@@ -38,7 +38,7 @@ public class Space extends Subject {
     private Player player;
 
     private List<Heading> walls = new ArrayList<>();
-    private List<SpaceElement> elements = new ArrayList<>();
+    private SpaceElement element = null;
 
     public final Board board;
 
@@ -76,9 +76,13 @@ public class Space extends Subject {
         return walls;
     }
 
-    public List<SpaceElement> getElements() {
-        return elements;
+    public SpaceElement getElement() {
+        return element;
     }
+
+	public void setElement(SpaceElement element) {
+		this.element = element;
+	}
 
     void playerChanged() {
         // This is a minor hack; since some views that are registered with the space

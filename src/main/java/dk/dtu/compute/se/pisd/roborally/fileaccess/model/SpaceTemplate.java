@@ -36,7 +36,7 @@ import java.util.List;
 public class SpaceTemplate {
 
     public List<Heading> walls = new ArrayList<>();
-    public List<SpaceElement> elements = new ArrayList<>();
+    public SpaceElement element = null;
 
     public int x;
     public int y;
