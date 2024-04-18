@@ -51,16 +51,16 @@ public class PrioAntenna {
 		return prioPlayer;
 	}
 
-	// TO FIX:
-	// Does not take position of priority antenna into account. Treats (0,0) as origo, when it should be the position of antenna.
+
 	private Player prioTieBreak(Player player1, Player player2) {
 		Player prioPlayer = null;
 		Space p1Space = player1.getSpace();
 		Space p2Space = player2.getSpace();
 
 		// Calculate each players angle with positive x axis in radians in the interval (0, 2π]
-		double p1Angle = Math.atan2(p1Space.y, p1Space.x);
-		double p2Angle = Math.atan2(p2Space.y, p2Space.x);
+		// Players position is being adjusted to take the prio antennas position into account.
+		double p1Angle = Math.atan2(p1Space.y - this.y, p1Space.x - this.x);
+		double p2Angle = Math.atan2(p2Space.y - this.y, p2Space.x - this.x);
 		if (p1Angle < 0) {
 			p1Angle = p1Angle + 2 * Math.PI;
 		}
