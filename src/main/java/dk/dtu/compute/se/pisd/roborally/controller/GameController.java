@@ -82,6 +82,8 @@ public class GameController {
 
     void moveToSpace(@NotNull Player player, @NotNull Space space, @NotNull Heading heading) throws ImpossibleMoveException {
         assert board.getNeighbour(player.getSpace(), heading) == space; // make sure the move to here is possible in principle
+		if (player.getSpace().getWalls().contains(heading) || space.getWalls().contains(heading.opposite()))
+			throw new ImpossibleMoveException(player, space, heading);
         Player other = space.getPlayer();
         if (other != null){
             Space target = board.getNeighbour(space, heading);
