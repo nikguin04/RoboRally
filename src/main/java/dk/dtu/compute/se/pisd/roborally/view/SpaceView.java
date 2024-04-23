@@ -25,8 +25,11 @@ import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.model.Heading;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
+import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
@@ -41,11 +44,14 @@ import org.jetbrains.annotations.NotNull;
  */
 public class SpaceView extends StackPane implements ViewObserver {
 
+	final public static Image blankSquare = new Image(SpaceView.class.getClassLoader().getResourceAsStream("assets/empty.png"));
+
     final public static int SPACE_HEIGHT = 60; // 75;
     final public static int SPACE_WIDTH = 60; // 75;
 
     public final Space space;
 
+	Node playerNode = null;
 
     public SpaceView(@NotNull Space space) {
         this.space = space;
@@ -59,37 +65,37 @@ public class SpaceView extends StackPane implements ViewObserver {
         this.setMinHeight(SPACE_HEIGHT);
         this.setMaxHeight(SPACE_HEIGHT);
 
-        if ((space.x + space.y) % 2 == 0) {
-            this.setStyle("-fx-background-color: white;");
-        } else {
-            this.setStyle("-fx-background-color: black;");
-        }
+	    ImageView tile = new ImageView();
+		tile.setFitWidth(SPACE_WIDTH);
+		tile.setFitHeight(SPACE_HEIGHT);
+		this.getChildren().add(tile);
 
-        // updatePlayer();
+	    if (space.getElement() == null) {
+		    tile.setImage(blankSquare);
+	    }
 
         // This space view should listen to changes of the space
         space.attach(this);
         update(space);
     }
 
-    private void updatePlayer() {
-        this.getChildren().clear();
+	private void updatePlayer() {
+		Player player = space.getPlayer();
+		this.getChildren().remove(playerNode);
+		if (player == null) return;
+		Polygon arrow = new Polygon(0.0, 0.0,
+			10.0, 20.0,
+			20.0, 0.0);
+		try {
+			arrow.setFill(Color.valueOf(player.getColor()));
+		} catch (Exception e) {
+			arrow.setFill(Color.MEDIUMPURPLE);
+		}
 
-        Player player = space.getPlayer();
-        if (player != null) {
-            Polygon arrow = new Polygon(0.0, 0.0,
-                    10.0, 20.0,
-                    20.0, 0.0 );
-            try {
-                arrow.setFill(Color.valueOf(player.getColor()));
-            } catch (Exception e) {
-                arrow.setFill(Color.MEDIUMPURPLE);
-            }
-
-            arrow.setRotate((90*player.getHeading().ordinal())%360);
-            this.getChildren().add(arrow);
-        }
-    }
+		arrow.setRotate((90 * player.getHeading().ordinal()) % 360);
+		playerNode = arrow;
+		this.getChildren().add(arrow);
+	}
 
     @Override
     public void updateView(Subject subject) {
