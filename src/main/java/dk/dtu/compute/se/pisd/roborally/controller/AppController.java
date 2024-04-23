@@ -27,8 +27,9 @@ import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.RoboRally;
 
 import dk.dtu.compute.se.pisd.roborally.model.Board;
+import dk.dtu.compute.se.pisd.roborally.model.Command;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
-
+import dk.dtu.compute.se.pisd.roborally.model.Serializer;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -36,6 +37,12 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceDialog;
 import org.jetbrains.annotations.NotNull;
 
+import com.google.gson.GsonBuilder;
+import com.google.gson.Gson;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -80,7 +87,7 @@ public class AppController implements Observer {
             gameController = new GameController(board);
             int no = result.get();
             for (int i = 0; i < no; i++) {
-                Player player = new Player(board, PLAYER_COLORS.get(i), "Player " + (i + 1));
+                Player player = new Player(board, PLAYER_COLORS.get(i), "Player " + (i + 1), i);
                 board.addPlayer(player);
                 player.setSpace(board.getSpace(i % board.width, i));
             }
@@ -94,7 +101,25 @@ public class AppController implements Observer {
     }
 
     public void saveGame() {
-        // XXX needs to be implemented eventually
+        if (gameController != null) {
+            Board board = gameController.board;
+
+            GsonBuilder gsonBuilder = new GsonBuilder();
+            gsonBuilder.registerTypeAdapter(Board.class, new Serializer.BoardSerializer());
+            gsonBuilder.registerTypeAdapter(Player.class, new Serializer.PlayerSerializer());
+            gsonBuilder.registerTypeAdapter(Command.class, new Serializer.CommandSerializer());
+            Gson gson = gsonBuilder.setPrettyPrinting().create();
+
+            String json = gson.toJson(board);
+
+            try {
+                BufferedWriter writer = new BufferedWriter(new FileWriter("src\\main\\gamedata\\out.json"));
+                writer.write(json);
+                writer.close();
+            } catch (IOException e) {
+                System.out.println("FAILED TO WRITE SAVE FILE: "  + e.getMessage());
+            }
+        }
     }
 
     public void loadGame() {

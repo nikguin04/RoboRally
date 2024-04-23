@@ -1,0 +1,72 @@
+{
+  "spaces": "TODO",
+  "players": [
+    {
+      "name": "Player 1",
+      "color": "red",
+      "space": "0,0",
+      "heading": "SOUTH",
+      "command_cards": [
+        {
+          "command": "FWD3"
+        },
+        {
+          "command": "FWD1"
+        },
+        {
+          "command": "OPTION_LEFT_RIGHT"
+        },
+        {
+          "command": "FWD2"
+        },
+        {
+          "command": "RIGHT"
+        },
+        {
+          "command": "FWD3"
+        },
+        {
+          "command": "FWD1"
+        },
+        {
+          "command": "LEFT"
+        }
+      ]
+    },
+    {
+      "name": "Player 2",
+      "color": "green",
+      "space": "1,1",
+      "heading": "SOUTH",
+      "command_cards": [
+        {
+          "command": "LEFT"
+        },
+        {
+          "command": "OPTION_LEFT_RIGHT"
+        },
+        {
+          "command": "RIGHT"
+        },
+        {
+          "command": "FWD1"
+        },
+        {
+          "command": "FWD2"
+        },
+        {
+          "command": "OPTION_LEFT_RIGHT"
+        },
+        {
+          "command": "FWD3"
+        },
+        {
+          "command": "FWD1"
+        }
+      ]
+    }
+  ],
+  "current_playerindex": 0,
+  "phase": "PROGRAMMING",
+  "move_count": 0
+}
