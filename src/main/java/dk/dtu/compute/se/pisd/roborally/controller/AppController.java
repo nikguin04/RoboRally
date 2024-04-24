@@ -30,6 +30,7 @@ import dk.dtu.compute.se.pisd.roborally.model.Board;
 import dk.dtu.compute.se.pisd.roborally.model.Command;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.model.Serializer;
+import dk.dtu.compute.se.pisd.roborally.model.Space;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -84,6 +85,7 @@ public class AppController implements Observer {
             // XXX the board should eventually be created programmatically or loaded from a file
             //     here we just create an empty board with the required number of players.
             Board board = new Board(8,8);
+            board.getSpace(2,2).setElement(new ConveyorBelt()); // WARN: TODO: This is for debugging json temporaryly and might be helpful to debug other parts of our program, delete this before production release
             gameController = new GameController(board);
             int no = result.get();
             for (int i = 0; i < no; i++) {
@@ -108,6 +110,7 @@ public class AppController implements Observer {
             gsonBuilder.registerTypeAdapter(Board.class, new Serializer.BoardSerializer());
             gsonBuilder.registerTypeAdapter(Player.class, new Serializer.PlayerSerializer());
             gsonBuilder.registerTypeAdapter(Command.class, new Serializer.CommandSerializer());
+            gsonBuilder.registerTypeAdapter(Space.class, new Serializer.SpaceSerializer());
             Gson gson = gsonBuilder.setPrettyPrinting().create();
 
             String json = gson.toJson(board);

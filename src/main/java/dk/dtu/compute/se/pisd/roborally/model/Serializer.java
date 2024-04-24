@@ -1,5 +1,7 @@
 package dk.dtu.compute.se.pisd.roborally.model;
 
+import java.util.List;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -8,13 +10,16 @@ import com.google.gson.JsonSerializer;
 import com.mysql.cj.conf.ConnectionUrl.Type;
 import com.mysql.cj.xdevapi.Expression;
 
+import dk.dtu.compute.se.pisd.roborally.controller.SpaceElement;
+
 public class Serializer {
 	public static class BoardSerializer implements JsonSerializer<Board> {
         @Override
         public JsonElement serialize(Board board, java.lang.reflect.Type typeOfSrc, JsonSerializationContext context) {
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("gameId", board.getGameId());
-			jsonObject.addProperty("spaces", "TODO");
+
+
 			JsonArray players = new JsonArray();
 			for (int i = 0; i < board.getPlayersNumber(); i++) {
 				players.add(context.serialize(board.getPlayer(i)));
@@ -28,6 +33,16 @@ public class Serializer {
 			jsonObject.addProperty("move_count", board.getMoveCount());
 
             //jsonObject.add("instance", context.serialize(src));
+			JsonArray spacesX = new JsonArray();
+			for (int a = 0; a < board.width; a++) {
+				JsonArray spacesY = new JsonArray();
+				for (int b = 0; b < board.height; b++) {
+					spacesY.add(context.serialize(board.getSpace(a, b)));
+				}
+				spacesX.add(spacesY);
+			}
+
+			jsonObject.add("spaces", spacesX);
 
             return jsonObject;
         }
@@ -59,6 +74,24 @@ public class Serializer {
 			com_object.addProperty("command", com.name());
 			// Dont include stuff like program since saving during a move should not be allowed
             return com_object;
+        }
+	}
+
+	public static class SpaceSerializer implements JsonSerializer<Space> {
+        @Override
+        public JsonElement serialize(Space space, java.lang.reflect.Type typeOfSrc, JsonSerializationContext context) {
+			JsonObject space_object = new JsonObject();
+			JsonArray wallArr = new JsonArray();
+			List<Heading> walls = space.getWalls();
+			for (int i = 0; i < walls.size(); i++) {
+				wallArr.add(walls.get(i).name());
+			}
+			space_object.add("walls", wallArr);
+
+			SpaceElement elem = space.getElement();
+			space_object.addProperty("element", elem == null ? "" : elem.getClass().getSimpleName());
+
+			return space_object;
         }
 	}
 
