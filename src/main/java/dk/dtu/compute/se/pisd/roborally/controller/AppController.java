@@ -31,6 +31,7 @@ import dk.dtu.compute.se.pisd.roborally.model.Command;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.model.Serializer;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
+import dk.dtu.compute.se.pisd.roborally.view.LoadDialog;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -116,7 +117,7 @@ public class AppController implements Observer {
             String json = gson.toJson(board);
 
             try {
-                BufferedWriter writer = new BufferedWriter(new FileWriter("src\\main\\gamedata\\out.json"));
+                BufferedWriter writer = new BufferedWriter(new FileWriter("src/main/resources/gamedata/out.json"));
                 writer.write(json);
                 writer.close();
             } catch (IOException e) {
@@ -126,11 +127,27 @@ public class AppController implements Observer {
     }
 
     public void loadGame() {
-        // XXX needs to be implemented eventually
-        // for now, we just create a new game
-        if (gameController == null) {
-            newGame();
+        LoadDialog<Board> dialog = new LoadDialog<>();
+        dialog.setTitle("Load game");
+        dialog.setHeaderText("Select path to load game from");
+        Optional<Board> result = dialog.showAndWait();
+
+        if (result.isPresent()) {
+            if (gameController != null) {
+                // The UI should not allow this, but in case this happens anyway.
+                // give the user the option to save the game or abort this operation!
+                if (!stopGame()) {
+                    return;
+                }
+            }
+
+            Board board = result.get();
+            gameController = new GameController(board);
+
+            gameController.startProgrammingPhase();
+            roboRally.createBoardView(gameController);
         }
+
     }
 
     /**

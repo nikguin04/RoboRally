@@ -1,0 +1,345 @@
+{
+  "players": [
+    {
+      "name": "Player 1",
+      "color": "red",
+      "space": "6,1",
+      "heading": "SOUTH",
+      "command_cards": [
+        {
+          "command": "FWD2"
+        },
+        {
+          "command": "FWD1"
+        },
+        {
+          "command": "LEFT"
+        },
+        {
+          "command": "FWD1"
+        },
+        {
+          "command": "FWD1"
+        },
+        {
+          "command": "FWD2"
+        },
+        {
+          "command": "FWD1"
+        },
+        {
+          "command": "RIGHT"
+        }
+      ]
+    },
+    {
+      "name": "Player 2",
+      "color": "green",
+      "space": "2,2",
+      "heading": "SOUTH",
+      "command_cards": [
+        {
+          "command": "LEFT"
+        },
+        {
+          "command": "FWD2"
+        },
+        {
+          "command": "FWD1"
+        },
+        {
+          "command": "OPTION_LEFT_RIGHT"
+        },
+        {
+          "command": "OPTION_LEFT_RIGHT"
+        },
+        {
+          "command": "FWD2"
+        },
+        {
+          "command": "FWD1"
+        },
+        {
+          "command": "RIGHT"
+        }
+      ]
+    }
+  ],
+  "current_playerindex": 0,
+  "phase": "PROGRAMMING",
+  "move_count": 2,
+  "spaces": [
+    [
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      }
+    ],
+    [
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      }
+    ],
+    [
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": "ConveyorBelt"
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      }
+    ],
+    [
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      }
+    ],
+    [
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      }
+    ],
+    [
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      }
+    ],
+    [
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      }
+    ],
+    [
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      }
+    ]
+  ]
+}
