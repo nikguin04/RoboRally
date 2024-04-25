@@ -108,30 +108,34 @@ public class AppController implements Observer {
     }
 
     public void saveGame() {
-        SaveDialog saveDialog = new SaveDialog<>();
-        saveDialog.setTitle("Load Hej");
+        SaveDialog saveDialog = new SaveDialog();
+        saveDialog.setTitle("Save Game");
         saveDialog.setHeaderText("Select File Name To Save");
-        Optional<Board> result = saveDialog.showAndWait();
-        if (gameController != null) {
-            Board board = gameController.board;
-
-            GsonBuilder gsonBuilder = new GsonBuilder();
-            gsonBuilder.registerTypeAdapter(Board.class, new Serializer.BoardSerializer());
-            gsonBuilder.registerTypeAdapter(Player.class, new Serializer.PlayerSerializer());
-            gsonBuilder.registerTypeAdapter(Command.class, new Serializer.CommandSerializer());
-            gsonBuilder.registerTypeAdapter(Space.class, new Serializer.SpaceSerializer());
-            Gson gson = gsonBuilder.setPrettyPrinting().create();
-
-            String json = gson.toJson(board);
-
-            try {
-                BufferedWriter writer = new BufferedWriter(new FileWriter("src/main/resources/gamedata/out.json"));
-                writer.write(json);
-                writer.close();
-            } catch (IOException e) {
-                System.out.println("FAILED TO WRITE SAVE FILE: "  + e.getMessage());
+        Optional<String> result = saveDialog.showAndWait();
+        if(result.isPresent()){
+            String filename = result.get();
+            if (gameController != null) {
+                Board board = gameController.board;
+    
+                GsonBuilder gsonBuilder = new GsonBuilder();
+                gsonBuilder.registerTypeAdapter(Board.class, new Serializer.BoardSerializer());
+                gsonBuilder.registerTypeAdapter(Player.class, new Serializer.PlayerSerializer());
+                gsonBuilder.registerTypeAdapter(Command.class, new Serializer.CommandSerializer());
+                gsonBuilder.registerTypeAdapter(Space.class, new Serializer.SpaceSerializer());
+                Gson gson = gsonBuilder.setPrettyPrinting().create();
+    
+                String json = gson.toJson(board);
+    
+                try {
+                    BufferedWriter writer = new BufferedWriter(new FileWriter("src/main/resources/gamedata/" + filename + ".json"));
+                    writer.write(json);
+                    writer.close();
+                } catch (IOException e) {
+                    System.out.println("FAILED TO WRITE SAVE FILE: "  + e.getMessage());
+                }
             }
         }
+
     }
 
     public void loadGame() {
@@ -171,7 +175,7 @@ public class AppController implements Observer {
         if (gameController != null) {
 
             // here we save the game (without asking the user).
-            saveGame();
+            //saveGame();
 
             gameController = null;
             roboRally.createBoardView(null);

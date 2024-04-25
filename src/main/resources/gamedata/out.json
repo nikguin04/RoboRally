@@ -7,28 +7,28 @@
       "heading": "SOUTH",
       "command_cards": [
         {
+          "command": "LEFT"
+        },
+        {
           "command": "FWD3"
+        },
+        {
+          "command": "OPTION_LEFT_RIGHT"
         },
         {
           "command": "RIGHT"
         },
         {
-          "command": "FWD3"
+          "command": "FWD2"
         },
         {
-          "command": "FWD3"
+          "command": "FWD2"
         },
         {
-          "command": "RIGHT"
+          "command": "LEFT"
         },
         {
-          "command": "FWD3"
-        },
-        {
-          "command": "FWD3"
-        },
-        {
-          "command": "RIGHT"
+          "command": "FWD2"
         }
       ]
     },
@@ -42,25 +42,25 @@
           "command": "OPTION_LEFT_RIGHT"
         },
         {
-          "command": "RIGHT"
-        },
-        {
-          "command": "FWD3"
-        },
-        {
-          "command": "FWD3"
+          "command": "FWD1"
         },
         {
           "command": "RIGHT"
+        },
+        {
+          "command": "FWD2"
+        },
+        {
+          "command": "FWD1"
         },
         {
           "command": "OPTION_LEFT_RIGHT"
         },
         {
-          "command": "RIGHT"
+          "command": "FWD1"
         },
         {
-          "command": "RIGHT"
+          "command": "FWD2"
         }
       ]
     }

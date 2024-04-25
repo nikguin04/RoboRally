@@ -54,10 +54,12 @@ import javafx.scene.control.TextField;
  */
 
 
- public class SaveDialog<T> extends Dialog<Board> {
+ public class SaveDialog<T> extends Dialog<T> {
 
     private final GridPane grid;
     private final Label label;
+    private final TextField saveNameText;
+
 
     public SaveDialog() {
 
@@ -70,8 +72,6 @@ import javafx.scene.control.TextField;
         this.grid.setAlignment(Pos.CENTER_LEFT);
 
         // -- label
-
-        //label = DialogPane.createContentLabel(dialogPane.getContentText());
 		label = new Label(dialogPane.getContentText());
         label.setPrefWidth(Region.USE_COMPUTED_SIZE);
         label.textProperty().bind(dialogPane.contentTextProperty());
@@ -82,12 +82,26 @@ import javafx.scene.control.TextField;
         dialogPane.getStyleClass().add("choice-dialog");
         dialogPane.getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 
+        // TextField for filename input
+        saveNameText = new TextField();
+        saveNameText.setPromptText("Enter filename");
+        saveNameText.setMaxWidth(Double.MAX_VALUE);
+        GridPane.setHgrow(saveNameText, Priority.ALWAYS);
 
-        setResultConverter((dialogButton) -> {
-            ButtonData data = dialogButton == null ? null : dialogButton.getButtonData();
-			// TODO: RETURN PROPER BOARD HERE!
-			return current_board;
-            //return data == ButtonData.OK_DONE ? getSelectedItem() : null;
+        // Add components to the grid
+        grid.add(label, 0, 0);
+        grid.add(saveNameText, 0, 1);
+
+        // Set content of dialog pane
+        getDialogPane().setContent(grid);
+
+        // Set result converter to handle OK button click
+        setResultConverter(buttonType -> {
+            if (buttonType == ButtonType.OK) {
+                // Return the filename entered by the user
+                return (T) saveNameText.getText();
+            }
+            return null; // Return null if cancel button clicked
         });
     }
 
