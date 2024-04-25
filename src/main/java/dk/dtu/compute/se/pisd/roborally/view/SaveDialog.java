@@ -88,20 +88,17 @@ import javafx.scene.control.TextField;
         saveNameText.setMaxWidth(Double.MAX_VALUE);
         GridPane.setHgrow(saveNameText, Priority.ALWAYS);
 
-        // Add components to the grid
         grid.add(label, 0, 0);
         grid.add(saveNameText, 0, 1);
 
-        // Set content of dialog pane
         getDialogPane().setContent(grid);
 
-        // Set result converter to handle OK button click
         setResultConverter(buttonType -> {
             if (buttonType == ButtonType.OK) {
                 // Return the filename entered by the user
                 return (T) saveNameText.getText();
             }
-            return null; // Return null if cancel button clicked
+            return null;
         });
     }
 
