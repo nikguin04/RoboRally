@@ -33,6 +33,7 @@ import dk.dtu.compute.se.pisd.roborally.model.Serializer;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
 import dk.dtu.compute.se.pisd.roborally.view.LoadDialog;
 import dk.dtu.compute.se.pisd.roborally.view.SaveDialog;
+//import dk.dtu.compute.se.pisd.roborally.view.SaveDialog;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -107,9 +108,10 @@ public class AppController implements Observer {
     }
 
     public void saveGame() {
-        SaveDialog<Board> Hello = new SaveDialog();
-        Hello.setTitle("Save game");
-        Hello.setHeaderText("Enter a save name file");
+        SaveDialog saveDialog = new SaveDialog<>();
+        saveDialog.setTitle("Load Hej");
+        saveDialog.setHeaderText("Select File Name To Save");
+        Optional<Board> result = saveDialog.showAndWait();
         if (gameController != null) {
             Board board = gameController.board;
 
@@ -134,7 +136,7 @@ public class AppController implements Observer {
 
     public void loadGame() {
         LoadDialog<Board> dialog = new LoadDialog<>();
-        dialog.setTitle("Load game");
+        dialog.setTitle("Load Hej");
         dialog.setHeaderText("Select path to load game from");
         Optional<Board> result = dialog.showAndWait();
 
