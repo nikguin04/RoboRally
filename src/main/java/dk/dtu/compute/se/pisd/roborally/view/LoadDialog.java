@@ -22,6 +22,9 @@ import com.google.gson.stream.JsonReader;
 import com.sun.javafx.scene.control.skin.resources.ControlResources;
 
 import dk.dtu.compute.se.pisd.roborally.model.Board;
+import dk.dtu.compute.se.pisd.roborally.model.Command;
+import dk.dtu.compute.se.pisd.roborally.model.Deserializer;
+import dk.dtu.compute.se.pisd.roborally.model.Player;
 import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.collections.ObservableList;
@@ -183,11 +186,10 @@ public class LoadDialog<T> extends Dialog<Board> {
 		try {
         	file = fileutil.getFileFromResourceAsStream(fileName);
 			//FileResourceUtils.printFile(file);
-
-			current_board = new Board(0, 0);
-
 			GsonBuilder gsonBuilder = new GsonBuilder();
-			//gsonBuilder.registerTypeAdapter(Expression.class, new Serializer.ExpressionDeserializer());
+			gsonBuilder.registerTypeAdapter(Board.class, new Deserializer.BoardDeserializer());
+			gsonBuilder.registerTypeAdapter(Player.class, new Deserializer.PlayerDeserializer());
+			gsonBuilder.registerTypeAdapter(Command.class, new Deserializer.CommandDeserializer());
 			Gson gson = gsonBuilder.setPrettyPrinting().create();
 
 			Reader targetReader = new InputStreamReader(file);

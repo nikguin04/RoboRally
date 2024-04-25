@@ -50,6 +50,14 @@ public class Player extends Subject {
     private CommandCardField[] cards;
 
     public Player(@NotNull Board board, String color, @NotNull String name, @NotNull int player_index) {
+        this(board, color, name, player_index, null);
+        for (int i = 0; i < this.cards.length; i++) {
+            this.cards[i] = new CommandCardField(this);
+        }
+
+    }
+
+    public Player(@NotNull Board board, String color, @NotNull String name, @NotNull int player_index, Command[] Commands) {
         this.board = board;
         this.player_index = player_index;
         this.name = name;
@@ -61,11 +69,15 @@ public class Player extends Subject {
         for (int i = 0; i < program.length; i++) {
             program[i] = new CommandCardField(this);
         }
-
-        cards = new CommandCardField[NO_CARDS];
-        for (int i = 0; i < cards.length; i++) {
-            cards[i] = new CommandCardField(this);
+        this.cards = new CommandCardField[NO_CARDS];
+        if (Commands != null) {
+            for (int i = 0; i < Commands.length; i++) {
+                this.cards[i] = new CommandCardField(this);
+                this.cards[i].setCard(new CommandCard(Commands[0]));
+            }
         }
+
+        //this.cards = cards;
     }
 
     public int getPlayerIndex() {
