@@ -3,29 +3,29 @@
     {
       "name": "Player 1",
       "color": "red",
-      "space": "6,1",
+      "space": "0,0",
       "heading": "SOUTH",
       "command_cards": [
         {
-          "command": "FWD2"
-        },
-        {
-          "command": "FWD1"
+          "command": "FWD3"
         },
         {
           "command": "LEFT"
         },
         {
-          "command": "FWD1"
+          "command": "OPTION_LEFT_RIGHT"
         },
         {
-          "command": "FWD1"
+          "command": "RIGHT"
         },
         {
           "command": "FWD2"
         },
         {
           "command": "FWD1"
+        },
+        {
+          "command": "FWD3"
         },
         {
           "command": "RIGHT"
@@ -35,9 +35,15 @@
     {
       "name": "Player 2",
       "color": "green",
-      "space": "2,2",
+      "space": "1,1",
       "heading": "SOUTH",
       "command_cards": [
+        {
+          "command": "FWD3"
+        },
+        {
+          "command": "FWD2"
+        },
         {
           "command": "LEFT"
         },
@@ -45,29 +51,23 @@
           "command": "FWD2"
         },
         {
-          "command": "FWD1"
-        },
-        {
-          "command": "OPTION_LEFT_RIGHT"
-        },
-        {
-          "command": "OPTION_LEFT_RIGHT"
-        },
-        {
-          "command": "FWD2"
-        },
-        {
-          "command": "FWD1"
-        },
-        {
           "command": "RIGHT"
+        },
+        {
+          "command": "OPTION_LEFT_RIGHT"
+        },
+        {
+          "command": "OPTION_LEFT_RIGHT"
+        },
+        {
+          "command": "FWD3"
         }
       ]
     }
   ],
   "current_playerindex": 0,
   "phase": "PROGRAMMING",
-  "move_count": 2,
+  "move_count": 0,
   "spaces": [
     [
       {
