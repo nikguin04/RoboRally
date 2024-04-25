@@ -240,10 +240,13 @@ public class GameController {
 
 
     public void startProgrammingPhase() {
+        StartProgrammingPhase(true);
+    }
+
+    public void StartProgrammingPhase(Boolean RandomizeCards) {
         board.setPhase(Phase.PROGRAMMING);
         board.setCurrentPlayer(board.getPlayer(0));
         board.setStep(0);
-
         for (int i = 0; i < board.getPlayersNumber(); i++) {
             Player player = board.getPlayer(i);
             if (player != null) {
@@ -254,23 +257,7 @@ public class GameController {
                 }
                 for (int j = 0; j < Player.NO_CARDS; j++) {
                     CommandCardField field = player.getCardField(j);
-                    field.setCard(generateRandomCommandCard());
-                    field.setVisible(true);
-                }
-            }
-        }
-    }
-
-    public void postload_StartProgrammingPhase() {
-        board.setPhase(Phase.PROGRAMMING);
-        board.setCurrentPlayer(board.getPlayer(0));
-        board.setStep(0);
-        for (int i = 0; i < board.getPlayersNumber(); i++) {
-            Player player = board.getPlayer(i);
-            if (player != null) {
-                for (int j = 0; j < Player.NO_REGISTERS; j++) {
-                    CommandCardField field = player.getProgramField(j);
-                    field.setCard(null);
+                    if (RandomizeCards) field.setCard(generateRandomCommandCard());
                     field.setVisible(true);
                 }
             }
