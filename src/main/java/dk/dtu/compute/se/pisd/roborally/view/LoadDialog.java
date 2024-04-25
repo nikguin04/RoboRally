@@ -35,6 +35,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -67,7 +68,13 @@ public class LoadDialog<T> extends Dialog<Board> {
 	private Label board_info_label = new Label("placeholder");
 
 
-
+	/**
+	 * Opens a dialog in which the user can pick a save file from the gamedata folder
+	 * On selection of game save file, display data about the saved game on label in windows
+	 *
+	 * @return LoadDialog<Board>
+	 * @see Dialog
+	 */
     public LoadDialog() {
 		Set<String> files;
 		// UserDirectory = ""C:\Users\nikla\Desktop\Programmering\RoboRally""
@@ -92,6 +99,9 @@ public class LoadDialog<T> extends Dialog<Board> {
         this.grid.setHgap(10);
         this.grid.setMaxWidth(Double.MAX_VALUE);
         this.grid.setAlignment(Pos.CENTER_LEFT);
+        //grid.prefHeightProperty().bind(board_info_label.heightProperty());
+        //grid.setHgrow(board_info_label, Priority.ALWAYS);
+        //dialogPane.minHeight(board_info_label.getHeight()*10);
 
         // -- label
 
@@ -107,9 +117,14 @@ public class LoadDialog<T> extends Dialog<Board> {
         dialogPane.getStyleClass().add("choice-dialog");
         dialogPane.getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 
+
+
         final double MIN_WIDTH = 150;
 
         comboBox = new ComboBox<String>();
+        comboBox.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
+            updateGrid();
+        });
         comboBox.setMinWidth(MIN_WIDTH);
         if (files != null) {
 			String arr[] = new String[files.size()];
@@ -129,8 +144,6 @@ public class LoadDialog<T> extends Dialog<Board> {
         }
 
 
-        updateGrid();
-
         setResultConverter((dialogButton) -> {
             ButtonData data = dialogButton == null ? null : dialogButton.getButtonData();
 			// TODO: RETURN PROPER BOARD HERE!
@@ -148,22 +161,38 @@ public class LoadDialog<T> extends Dialog<Board> {
      *
      **************************************************************************/
 
+     /**
+	 * @return String, The relative filename of the currently selected file in the drop down menu
+	 */
     public final String getSelectedItem() {
         return comboBox.getSelectionModel().getSelectedItem();
     }
 
+    /**
+	 * @return ReadOnlyObjectProperty<String>, The object property (read only)
+     * @see ReadOnlyObjectProperty
+	 */
     public final ReadOnlyObjectProperty<String> selectedItemProperty() {
         return comboBox.getSelectionModel().selectedItemProperty();
     }
 
+    /**
+	 * @param item Set the selected item in the drop down menu
+	 */
     public final void setSelectedItem(String item) {
         comboBox.getSelectionModel().select(item);
     }
 
+    /**
+	 * @return ObservableList<String>, List of all items that are available to pick in the drop down meny
+	 */
     public final ObservableList<String> getItems() {
         return comboBox.getItems();
     }
 
+    /**
+	 * @return String, the default choice the user is presented with (usually alphabetically sorted or sorted by file's timestamp)
+	 */
     public final String getDefaultChoice() {
         return defaultChoice;
     }
@@ -176,11 +205,16 @@ public class LoadDialog<T> extends Dialog<Board> {
      *
      **************************************************************************/
 
+
+     /**
+	 * Updates the board variable of chosen save file
+     * Displays data about the board to the user in a label
+	 */
     private void updateGrid() {
         grid.getChildren().clear();
 
 		FileResourceUtils fileutil = new FileResourceUtils();
-		String fileName = "gamedata/out.json";
+		String fileName = "gamedata/" + getSelectedItem();
 		System.out.println("\ngetResource : " + fileName);
 		InputStream file;
 		try {
