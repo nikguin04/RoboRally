@@ -101,7 +101,8 @@ public class LoadDialog<T> extends Dialog<Board> {
         this.grid.setAlignment(Pos.CENTER_LEFT);
         //grid.prefHeightProperty().bind(board_info_label.heightProperty());
         //grid.setHgrow(board_info_label, Priority.ALWAYS);
-        //dialogPane.minHeight(board_info_label.getHeight()*10);
+        //dialogPane.prefHeightProperty().bind(board_info_label.heightProperty());
+        //dialogPane.height
 
         // -- label
 
@@ -238,6 +239,7 @@ public class LoadDialog<T> extends Dialog<Board> {
 		}
 
 
+
         grid.add(label, 0, 0);
         grid.add(comboBox, 0, 1);
 		grid.add(board_info_label, 0, 2);
@@ -247,6 +249,10 @@ public class LoadDialog<T> extends Dialog<Board> {
         Platform.runLater(() -> comboBox.requestFocus());
     }
 
+    /**
+	 * Updates the board_info_label to reflect new board about to be loaded
+     * Displays data such as players names and board size
+	 */
 	private void updateLabel() {
 
 		String info = "";
@@ -257,5 +263,7 @@ public class LoadDialog<T> extends Dialog<Board> {
 			info += String.format("\t%s\n", p.getName());
 		}
 		board_info_label = new Label(info);
+        board_info_label.setWrapText(true);
+        board_info_label.setMinHeight(200); // Hardcoded size because we are unsure how big it will be
 	}
 }
