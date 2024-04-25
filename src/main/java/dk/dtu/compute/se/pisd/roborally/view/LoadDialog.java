@@ -64,7 +64,7 @@ public class LoadDialog<T> extends Dialog<Board> {
     private final String defaultChoice;
 
 	Board current_board;
-	private Label board_info_label = new Label("placeholder\nhello");
+	private Label board_info_label = new Label("placeholder");
 
 
 
@@ -195,7 +195,8 @@ public class LoadDialog<T> extends Dialog<Board> {
 			Reader targetReader = new InputStreamReader(file);
 			JsonReader reader = new JsonReader(targetReader);
 			current_board = gson.fromJson(reader, Board.class);
-			// TODO: DO SOMETHING HERE
+
+			updateLabel();
 			targetReader.close();
 			reader.close();
 		} catch (IOException e) {
@@ -211,4 +212,16 @@ public class LoadDialog<T> extends Dialog<Board> {
 
         Platform.runLater(() -> comboBox.requestFocus());
     }
+
+	private void updateLabel() {
+
+		String info = "";
+		info += String.format("Board Size: %d,%d\n", current_board.height, current_board.width);
+		info += "Players:\n";
+		for (int i = 0; i < current_board.getPlayersNumber(); i++) {
+			Player p = current_board.getPlayer(i);
+			info += String.format("\t%s\n", p.getName());
+		}
+		board_info_label = new Label(info);
+	}
 }

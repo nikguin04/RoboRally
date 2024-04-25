@@ -144,7 +144,7 @@ public class AppController implements Observer {
             Board board = result.get();
             gameController = new GameController(board);
 
-            gameController.startProgrammingPhase();
+            gameController.postload_StartProgrammingPhase(); // TODO: Make sure to load the correct phase here
             roboRally.createBoardView(gameController);
         }
 

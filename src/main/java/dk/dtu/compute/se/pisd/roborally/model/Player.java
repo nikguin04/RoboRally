@@ -73,7 +73,7 @@ public class Player extends Subject {
         if (Commands != null) {
             for (int i = 0; i < Commands.length; i++) {
                 this.cards[i] = new CommandCardField(this);
-                this.cards[i].setCard(new CommandCard(Commands[0]));
+                this.cards[i].setCard(new CommandCard(Commands[i]));
             }
         }
 
