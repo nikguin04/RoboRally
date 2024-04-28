@@ -7,7 +7,7 @@ import java.util.List;
 
 import static dk.dtu.compute.se.pisd.roborally.model.Heading.*;
 
-public class PrioAntenna{
+public class PrioAntenna {
 	public final List<Heading> walls = new ArrayList<>(
 		Arrays.asList(SOUTH, WEST, NORTH, EAST));
 
@@ -49,13 +49,11 @@ public class PrioAntenna{
 			if (prioPlayer == null) {
 				prioPlayer = p;
 				prioPlayerManhattenDistance = currentPlayerManhattenDistance;
-			}
-			else {
+			} else {
 				if (currentPlayerManhattenDistance < prioPlayerManhattenDistance) {
 					prioPlayer = p;
 					prioPlayerManhattenDistance = currentPlayerManhattenDistance;
-				}
-				else if (currentPlayerManhattenDistance == prioPlayerManhattenDistance) {
+				} else if (currentPlayerManhattenDistance == prioPlayerManhattenDistance) {
 					prioPlayer = prioTieBreak(prioPlayer, p);
 				}
 			}
@@ -68,23 +66,23 @@ public class PrioAntenna{
 		Player prioPlayer = null;
 		Space p1Space = player1.getSpace();
 		Space p2Space = player2.getSpace();
-
 		// Calculate each players angle with positive x axis in radians in the interval (0, 2π]
 		// Players position is being adjusted to take the prio antennas position into account.
-		double p1Angle = Math.atan2(p1Space.y - this.y, p1Space.x - this.x);
-		double p2Angle = Math.atan2(p2Space.y - this.y, p2Space.x - this.x);
+		double p1Angle = Math.atan2(-(p1Space.y - this.y), p1Space.x - this.x);
+		double p2Angle = Math.atan2(-(p2Space.y - this.y), p2Space.x - this.x);
 		if (p1Angle < 0) {
 			p1Angle = p1Angle + 2 * Math.PI;
 		}
 		if (p2Angle < 0) {
 			p2Angle = p2Angle + 2 * Math.PI;
 		}
-
 		// Check which player has largest angle with positive x axis, and assign that player prio.
+		// An exception is if the players angle is 0, at which point that player has prio.
+		if (p1Angle == 0) return player1;
+		if (p2Angle == 0) return player2;
 		if (p1Angle > p2Angle) {
 			prioPlayer = player1;
-		}
-		else {
+		} else {
 			prioPlayer = player2;
 		}
 		return prioPlayer;
