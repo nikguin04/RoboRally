@@ -22,7 +22,19 @@ public class PrioAntenna {
 		this.board = board;
 	}
 
-	public Player getprioPlayer(List<Player> listOfPlayers) {
+	public List<Player> getPrioPlayerList(List<Player> listOfPlayers) {
+		List<Player> prioPlayerList = new ArrayList<>();
+
+		while (!listOfPlayers.isEmpty()) {
+			Player prioPlayer = getprioPlayer(listOfPlayers);
+			prioPlayerList.add(prioPlayer);
+			listOfPlayers.remove(prioPlayer);
+		}
+		return prioPlayerList;
+	}
+
+
+	private Player getprioPlayer(List<Player> listOfPlayers) {
 		Player prioPlayer = null;
 		int prioPlayerManhattenDistance = Integer.MAX_VALUE;
 
@@ -78,10 +90,8 @@ public class PrioAntenna {
 		return prioPlayer;
 	}
 
+
 	private int getManhattenDistance(int x1, int y1, int x2, int y2) {
 		return Math.abs(x1 - x2) + Math.abs(y1 - y2);
 	}
-
-
-
 }

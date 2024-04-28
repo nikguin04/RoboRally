@@ -132,9 +132,11 @@ public class GameController {
     }
 
     public void finishProgrammingPhase() {
-        makeProgramFieldsInvisible();
+		makeProgramFieldsInvisible();
         makeProgramFieldsVisible(0);
         board.setPhase(Phase.ACTIVATION);
+		// When entering activation phase, calculate priority of players.
+		board.setPlayers(board.getPrioAntenna().getPrioPlayerList(board.getPlayers()));
         board.setCurrentPlayer(board.getPlayer(0));
         board.setStep(0);
     }
@@ -156,7 +158,7 @@ public class GameController {
     }
 
     private void executeNextStep() {
-        Player currentPlayer = board.getCurrentPlayer();
+		Player currentPlayer = board.getCurrentPlayer();
         if (board.getPhase() == Phase.ACTIVATION && currentPlayer != null) {
             int step = board.getStep();
             if (step >= 0 && step < Player.NO_REGISTERS) {
@@ -170,6 +172,11 @@ public class GameController {
                     board.setCurrentPlayer(board.getPlayer(nextPlayerNumber));
                 } else {
                     step++;
+					// Each time all players have made a mode, recalculate priority
+					board.setPlayers(board.getPrioAntenna().getPrioPlayerList(board.getPlayers()));
+					for (Player player : board.getPlayers()) {
+						System.out.println("x: " + player.getSpace().x + " y: " + player.getSpace().y);
+					}
                     if (step < Player.NO_REGISTERS) {
                         makeProgramFieldsVisible(step);
                         board.setStep(step);

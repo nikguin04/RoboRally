@@ -45,7 +45,9 @@ public class Board extends Subject {
 
     private final Space[][] spaces;
 
-    private final List<Player> players = new ArrayList<>();
+	private final PrioAntenna prioAntenna = new PrioAntenna(5, 5, this);
+
+    private List<Player> players = new ArrayList<>();
 
     private Player current;
 
@@ -56,6 +58,18 @@ public class Board extends Subject {
     private boolean stepMode;
 
     private int move_count = 0;
+
+	public PrioAntenna getPrioAntenna() {
+		return this.prioAntenna;
+	}
+
+	public List<Player> getPlayers() {
+		return this.players;
+	}
+
+	public void setPlayers(List<Player> playerList) {
+		this.players = playerList;
+	}
 
     public Board(int width, int height) {
         this.width = width;
