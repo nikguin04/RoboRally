@@ -7,7 +7,7 @@ import java.util.List;
 
 import static dk.dtu.compute.se.pisd.roborally.model.Heading.*;
 
-public class PrioAntenna {
+public class PrioAntenna{
 	public final List<Heading> walls = new ArrayList<>(
 		Arrays.asList(SOUTH, WEST, NORTH, EAST));
 

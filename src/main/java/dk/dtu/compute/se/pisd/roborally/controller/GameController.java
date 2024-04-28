@@ -174,9 +174,6 @@ public class GameController {
                     step++;
 					// Each time all players have made a mode, recalculate priority
 					board.setPlayers(board.getPrioAntenna().getPrioPlayerList(board.getPlayers()));
-					for (Player player : board.getPlayers()) {
-						System.out.println("x: " + player.getSpace().x + " y: " + player.getSpace().y);
-					}
                     if (step < Player.NO_REGISTERS) {
                         makeProgramFieldsVisible(step);
                         board.setStep(step);
