@@ -72,9 +72,21 @@ public class Player extends Subject {
         }
     }
 
+	/**
+	 * Retrieves players checkpoint counter.
+	 * @author Anders Greve Sørensen, s235093@dtu.dk
+	 * @return Checkpoint counter of the player.
+	 */
 	public int getCheckPointCounter() {
 		return this.checkPointCounter;
 	}
+
+	/**
+	 * Sets players checkpoint counter to given value.
+	 * @author Anders Greve Sørensen, s235093@dtu.dk
+	 * @param checkPointCounter The checkpoint number of the last checkpoint player has passed. 0 if none have
+	 *                          been passed yet.
+	 */
 	public void setCheckPointCounter(int checkPointCounter) {
 		this.checkPointCounter = checkPointCounter;
 	}

@@ -168,7 +168,7 @@ public class GameController {
                     executeCommand(currentPlayer, command);
                 }
 
-				// After any player move, check space of all players, if checkpoint, activate element.
+				// After any player move, check space of all players, if checkpoint, activate checkpoint.
 				for (Player p : board.getPlayers()) {
 					if (p.getSpace().getElement() instanceof CheckPoint) {
 						p.getSpace().getElement().doAction(this, p.getSpace());

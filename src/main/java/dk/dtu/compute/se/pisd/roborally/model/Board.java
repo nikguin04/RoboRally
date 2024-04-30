@@ -90,6 +90,11 @@ public class Board extends Subject {
         }
     }
 
+	/**
+	 * Retrieves list of all players.
+	 * @author Anders Greve Sørensen, s235093@dtu.dk
+	 * @return list of Player objects.
+	 */
 	public List<Player> getPlayers() {
 		return this.players;
 	}
