@@ -58,13 +58,19 @@ public class Board extends Subject {
     private int move_count = 0;
 
     public Board(int width, int height) {
-        this.width = width;
+		this.width = width;
         this.height = height;
         spaces = new Space[width][height];
         for (int x = 0; x < width; x++) {
             for(int y = 0; y < height; y++) {
                 Space space = new Space(this, x, y);
                 spaces[x][y] = space;
+
+				// Add checkpoint to board for testing
+				//TODO Find alternative way to add checkpoints to board. Probably when loading map.
+				if (x == 3 && y == 3) {
+					spaces[x][y].setElement(new CheckPoint(1));
+				}
             }
         }
         this.stepMode = false;
@@ -83,6 +89,10 @@ public class Board extends Subject {
             }
         }
     }
+
+	public List<Player> getPlayers() {
+		return this.players;
+	}
 
     public Space getSpace(int x, int y) {
         if (x >= 0 && x < width &&

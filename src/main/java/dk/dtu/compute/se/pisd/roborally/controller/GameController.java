@@ -167,6 +167,14 @@ public class GameController {
                     Command command = card.command;
                     executeCommand(currentPlayer, command);
                 }
+
+				// After any player move, check space of all players, if checkpoint, activate space.
+				for (Player p : board.getPlayers()) {
+					if (p.getSpace().getElement() instanceof CheckPoint) {
+						p.getSpace().getElement().doAction(this, currentPlayer.getSpace());
+					}
+				}
+
                 int nextPlayerNumber = board.getPlayerNumber(currentPlayer) + 1;
                 if (nextPlayerNumber < board.getPlayersNumber()) {
                     board.setCurrentPlayer(board.getPlayer(nextPlayerNumber));
