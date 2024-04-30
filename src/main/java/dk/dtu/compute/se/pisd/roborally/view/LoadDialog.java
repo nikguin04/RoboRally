@@ -76,21 +76,28 @@ public class LoadDialog<T> extends Dialog<Board> {
 	 * @see Dialog
 	 */
     public LoadDialog() {
-		Set<String> files;
+		Set<String> files_json;
+        Set<String> files;
 		// UserDirectory = ""C:\Users\nikla\Desktop\Programmering\RoboRally""
 		// TODO: This should be changed so it also works at release, this currently only works when debugging (point to proper resource path)
 		try (Stream<Path> stream = Files.list(Paths.get("target/classes/gamedata"))) {
-			files = stream
+			files_json = stream
 			  .filter(file -> !Files.isDirectory(file))
 			  .map(Path::getFileName)
 			  .map(Path::toString)
 			  .collect(Collectors.toSet());
+
+            files = new HashSet<String>();
+            for (String s: files_json) {
+                if (s.endsWith(".json"))
+                    { files.add(s.substring(0, s.length() - ".json".length())); }
+            }
 		} catch (Exception e) {
 			System.out.println("Load error, cant find gamedata/save path");
 			files = new HashSet<String>();
-			files.add("ERROR");
+			//files.add("ERROR");
 		}
-		String defaultChoice = files.stream().findFirst().get();
+		String defaultChoice = files.stream().findFirst().get(); // This might crash if above exception is caught
 
 		final DialogPane dialogPane = getDialogPane();
 
@@ -215,7 +222,7 @@ public class LoadDialog<T> extends Dialog<Board> {
         grid.getChildren().clear();
 
 		FileResourceUtils fileutil = new FileResourceUtils();
-		String fileName = "gamedata/" + getSelectedItem();
+		String fileName = "gamedata/" + getSelectedItem() + ".json";
 		System.out.println("\ngetResource : " + fileName);
 		InputStream file;
 		try {
