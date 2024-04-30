@@ -3,9 +3,19 @@ package dk.dtu.compute.se.pisd.roborally.model;
 import dk.dtu.compute.se.pisd.roborally.controller.GameController;
 import dk.dtu.compute.se.pisd.roborally.controller.SpaceElement;
 
+
+/**
+ * @author Anders Greve Sørensen, s235093@dtu.dk
+ */
 public class CheckPoint extends SpaceElement {
 	public final int checkPointNr;
 
+	/**
+	 * Class constructor.
+	 *
+	 * @author Anders Greve Sørensen, s235093@dtu.dk
+	 * @param checkPointNr the checkpoint ID to be assigned
+	 */
 	public CheckPoint(int checkPointNr) {
 		this.checkPointNr = checkPointNr;
 	}
