@@ -45,6 +45,7 @@ import org.jetbrains.annotations.NotNull;
 public class SpaceView extends StackPane implements ViewObserver {
 
 	final public static Image blankSquare = new Image(SpaceView.class.getClassLoader().getResourceAsStream("assets/empty.png"));
+	final public static Image wallTexture = new Image(SpaceView.class.getClassLoader().getResourceAsStream("assets/wall.png"));
 
     final public static int SPACE_HEIGHT = 60; // 75;
     final public static int SPACE_WIDTH = 60; // 75;
@@ -65,14 +66,23 @@ public class SpaceView extends StackPane implements ViewObserver {
         this.setMinHeight(SPACE_HEIGHT);
         this.setMaxHeight(SPACE_HEIGHT);
 
-	    ImageView tile = new ImageView();
+		ImageView tile = new ImageView();
 		tile.setFitWidth(SPACE_WIDTH);
 		tile.setFitHeight(SPACE_HEIGHT);
 		this.getChildren().add(tile);
 
-	    if (space.getElement() == null) {
-		    tile.setImage(blankSquare);
-	    }
+		if (space.getElement() == null) {
+			tile.setImage(blankSquare);
+		}
+
+		for (Heading heading : space.getWalls()) {
+			ImageView wall = new ImageView();
+			wall.setImage(wallTexture);
+			wall.setFitWidth(SPACE_WIDTH);
+			wall.setFitHeight(SPACE_HEIGHT);
+			wall.setRotate(90 * (heading.ordinal() + 1));
+			this.getChildren().add(wall);
+		}
 
         // This space view should listen to changes of the space
         space.attach(this);
