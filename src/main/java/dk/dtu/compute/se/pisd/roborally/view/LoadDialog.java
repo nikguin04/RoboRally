@@ -25,6 +25,7 @@ import dk.dtu.compute.se.pisd.roborally.model.Board;
 import dk.dtu.compute.se.pisd.roborally.model.Command;
 import dk.dtu.compute.se.pisd.roborally.model.Deserializer;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
+import dk.dtu.compute.se.pisd.roborally.model.Space;
 import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.collections.ObservableList;
@@ -232,6 +233,7 @@ public class LoadDialog<T> extends Dialog<Board> {
 			gsonBuilder.registerTypeAdapter(Board.class, new Deserializer.BoardDeserializer());
 			gsonBuilder.registerTypeAdapter(Player.class, new Deserializer.PlayerDeserializer());
 			gsonBuilder.registerTypeAdapter(Command.class, new Deserializer.CommandDeserializer());
+            gsonBuilder.registerTypeAdapter(Space.class, new Deserializer.SpaceDeserializer());
 			Gson gson = gsonBuilder.setPrettyPrinting().create();
 
 			Reader targetReader = new InputStreamReader(file);
@@ -267,7 +269,8 @@ public class LoadDialog<T> extends Dialog<Board> {
 		info += "Players:\n";
 		for (int i = 0; i < current_board.getPlayersNumber(); i++) {
 			Player p = current_board.getPlayer(i);
-			info += String.format("\t%s\n", p.getName());
+            String loc = p.getSpace().x + "," + p.getSpace().y;
+			info += String.format("\t%s @ %s\n", p.getName(), loc);
 		}
 		board_info_label = new Label(info);
         board_info_label.setWrapText(true);
