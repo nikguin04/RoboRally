@@ -38,8 +38,6 @@ public class GameController {
         this.board = board;
     }
 
-
-
     public void moveForward(@NotNull Player player) {
         moveAmt(player, 1);
     }
@@ -166,6 +164,7 @@ public class GameController {
                 if (card != null) {
                     Command command = card.command;
                     executeCommand(currentPlayer, command);
+                    currentPlayer.setLastCardPlayed(card);
                 }
 
 				// After any player move, check space of all players, if checkpoint, activate checkpoint.
@@ -211,16 +210,20 @@ public class GameController {
             // XXX This is a very simplistic way of dealing with some basic cards and
             //     their execution. This should eventually be done in a more elegant way
             //     (this concerns the way cards are modelled as well as the way they are executed).
-
+            CommandCard currentCard = new CommandCard(command);
             switch (command) {
                 case FWD1:
                     this.moveForward(player);
+                    player.setLastCardPlayed(currentCard);
+
                     break;
                 case RIGHT:
                     this.turnRight(player);
+                    player.setLastCardPlayed(currentCard);
                     break;
                 case LEFT:
                     this.turnLeft(player);
+                    player.setLastCardPlayed(currentCard);
                     break;
                 case FWD2:
                     this.fastForward(player);
@@ -228,7 +231,28 @@ public class GameController {
                 case FWD3:
                     this.fastfastForward(player);
                     break;
-                default:
+                case Back:
+                    this.turnLeft(player);
+                    this.turnLeft(player);
+                    this.moveForward(player);
+                    this.turnLeft(player);
+                    this.turnLeft(player);
+                    player.setLastCardPlayed(currentCard);
+                    break;
+                case UTRN:
+                    this.turnLeft(player);
+                    this.turnLeft(player);
+                    player.setLastCardPlayed(currentCard);
+                    break;
+                case AGAN:
+                    CommandCard lastCard = player.getLastCardPlayed();
+                    if (lastCard != null && lastCard.command != Command.AGAN) {
+                        executeCommand(player, lastCard.command);
+                        
+                    }
+                    player.setLastCardPlayed(currentCard);
+                    break;
+                    default:
                     // DO NOTHING (for now)
             }
         }
