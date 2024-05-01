@@ -49,6 +49,15 @@ public class Player extends Subject {
     private CommandCardField[] program;
     private CommandCardField[] cards;
 
+    /**
+     * {@inheritDoc}
+     * @param board         Board on which player is located and interacts with
+     * @param color         Color {@link String}, needs to comply with css colors, <a href="https://www.w3schools.com/cssref/css_colors.php">css colors (w3schools)</a>
+     * @param name          Given name for a player, which will be used for identification during game
+     * @param player_index  Index number of player in {@link Board#players}
+     *
+     * @see Player#Player(Board, String, String, int, Command[])  Player() - For creating a player with predefined commands
+     */
     public Player(@NotNull Board board, String color, @NotNull String name, @NotNull int player_index) {
         this(board, color, name, player_index, null);
         for (int i = 0; i < this.cards.length; i++) {
@@ -57,6 +66,16 @@ public class Player extends Subject {
 
     }
 
+    /**
+     * Creates player
+     * @param board asdasd
+     * @param color
+     * @param name
+     * @param player_index
+     * @param Commands given predefined commands
+     *
+     * @see Player#Player(Board, String, String, int)  Player() - For creating a player with blank commands
+     */
     public Player(@NotNull Board board, String color, @NotNull String name, @NotNull int player_index, Command[] Commands) {
         this.board = board;
         this.player_index = player_index;

@@ -185,7 +185,7 @@ public class GameController {
                         board.setStep(step);
                         board.setCurrentPlayer(board.getPlayer(0));
                     } else {
-                        startProgrammingPhase();
+                        StartProgrammingPhase(true);
                     }
                 }
             } else {
@@ -239,11 +239,18 @@ public class GameController {
     }
 
 
-    public void startProgrammingPhase() {
+
+    /**
+     * <p>Starts the {@link Phase#PROGRAMMING} Phase</p>
+     * <p>If cards are NOT randomized, they have to be provided to the player before calling this function, since no cards will be loaded into the {@link Player} otherwise</p>
+     * <p>TODO: Make current player to start align with priority antenna (currently always picking player 0 to begin)</p>
+     * @param RandomizeCards    Determintes whether or not to randomize cards
+     * @see CommandCardField
+     */
+    public void StartProgrammingPhase(Boolean RandomizeCards) {
         board.setPhase(Phase.PROGRAMMING);
         board.setCurrentPlayer(board.getPlayer(0));
         board.setStep(0);
-
         for (int i = 0; i < board.getPlayersNumber(); i++) {
             Player player = board.getPlayer(i);
             if (player != null) {
@@ -254,23 +261,7 @@ public class GameController {
                 }
                 for (int j = 0; j < Player.NO_CARDS; j++) {
                     CommandCardField field = player.getCardField(j);
-                    field.setCard(generateRandomCommandCard());
-                    field.setVisible(true);
-                }
-            }
-        }
-    }
-
-    public void postload_StartProgrammingPhase() {
-        board.setPhase(Phase.PROGRAMMING);
-        board.setCurrentPlayer(board.getPlayer(0));
-        board.setStep(0);
-        for (int i = 0; i < board.getPlayersNumber(); i++) {
-            Player player = board.getPlayer(i);
-            if (player != null) {
-                for (int j = 0; j < Player.NO_REGISTERS; j++) {
-                    CommandCardField field = player.getProgramField(j);
-                    field.setCard(null);
+                    if (RandomizeCards) field.setCard(generateRandomCommandCard());
                     field.setVisible(true);
                 }
             }

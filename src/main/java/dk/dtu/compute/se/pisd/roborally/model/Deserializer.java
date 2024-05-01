@@ -6,11 +6,23 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+
+import dk.dtu.compute.se.pisd.roborally.controller.SpaceElement;
+
 import java.lang.reflect.Type;
 
 public class Deserializer {
+	/**
+	 * <p>JSON deserializer for type {@link Board}</p>
+	 * <p>DESERIALIZING VARIABLES:</p>
+	 * <p>Deserializes {@link Player} array with {@link PlayerDeserializer}</p>
+	 * <p>Deserializes {@link Space} 2d array with {@link SpaceDeserializer} and sets board size accordingly</p>
+	 *
+	 * <p>TODO: Deserialize "move_count"</p>
+	 * <p>TODO: Deserialize "current_playerindex"</p>
+	 * <p>TODO: Deserialize "phase" (Currently always starts in PROGRAMMING)</p>
+	 */
 	public static class BoardDeserializer implements JsonDeserializer<Board>	{
-
         @Override
         public Board deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {
@@ -18,7 +30,19 @@ public class Deserializer {
             JsonObject obj = json.getAsJsonObject();
 			JsonArray spaces = obj.get("spaces").getAsJsonArray();
 
-            Board b = new Board(spaces.size(), spaces.get(0).getAsJsonArray().size());
+			int x = spaces.size(), y = spaces.get(0).getAsJsonArray().size();
+            Board b = new Board(x, y);
+
+			for (int ix = 0; ix < spaces.size(); ix++) {
+				JsonArray xarr = spaces.get(ix).getAsJsonArray();
+				for (int iy = 0; iy < spaces.size(); iy++) {
+					Space new_s = context.deserialize(xarr.get(iy), Space.class);
+					b.getSpace(ix, iy).copyAttributesFrom(new_s);;
+				}
+			}
+
+
+
 			PlayerDeserializer.board = b;
 
 			JsonArray players = obj.get("players").getAsJsonArray();
@@ -48,6 +72,17 @@ public class Deserializer {
         }
     }
 
+	/**
+	 * <p>JSON deserializer for type {@link Player}</p>
+	 * <p>DESERIALIZING VARIABLES:</p>
+	 * <p>Deserializes {@link Player#name} as {@link String}</p>
+	 * <p>Deserializes {@link Player#color} as {@link String}, needs to comply with css colors, <a href="https://www.w3schools.com/cssref/css_colors.php">css colors (w3schools)</a></p>
+	 * <p>Deserializes {@link Player#space} as 2d coordinate in string "x,y"</p>
+	 * <p>Deserializes {@link Player#heading} as {@link Heading} by enum string name</p>
+	 *
+	 * <p>Deserializes {@link Player#cards} array with {@link CommandDeserializer} which is converted to {@link CommandCardField} array by player</p>
+	 *
+	 */
 	public static class PlayerDeserializer implements JsonDeserializer<Player>	{
 		public static Board board;
 		public static int player_index;
@@ -75,7 +110,11 @@ public class Deserializer {
 			return p;
 		}
 	}
-
+	/**
+	 * <p>JSON deserializer for type {@link Command}</p>
+	 * <p>DESERIALIZING VARIABLES:</p>
+	 * <p>Deserializes {@link Command} by enum string name</p>
+	 */
 	public static class CommandDeserializer implements JsonDeserializer<Command>	{
 		@Override
 		public Command deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
@@ -83,6 +122,43 @@ public class Deserializer {
 			JsonObject obj = json.getAsJsonObject();
 			Command c = Command.valueOf(obj.get("command").getAsString());
 			return c;
+		}
+	}
+
+	/**
+	 * <p>JSON deserializer for type {@link Space}</p>
+	 * <p>DESERIALIZING VARIABLES:</p>
+	 * <p>Deserializes {@link Space#walls} by enum string name from {@link Heading}</p>
+	 * <p>Deserializes {@link Space#element} by class name string (hardcoded relative to "dk.dtu.compute.se.pisd.roborally.controller.").
+	 * Basic exceptions are implemented for wrong class or invalid classes</p>
+	 */
+	public static class SpaceDeserializer implements JsonDeserializer<Space>	{
+		@Override
+		public Space deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+			throws JsonParseException {
+			JsonObject obj = json.getAsJsonObject();
+			Space s = new Space(null, 0, 0);
+			JsonArray walls = obj.get("walls").getAsJsonArray();
+			for (int i = 0; i < walls.size(); i++) {
+				s.getWalls().add(Heading.valueOf(walls.get(i).getAsString()));
+			}
+			String cl = obj.get("element").getAsString();
+			if (!cl.isEmpty()) {
+				try {
+
+					Class elemClass = Class.forName("dk.dtu.compute.se.pisd.roborally.controller." + cl);
+					boolean properclass = SpaceElement.class.isAssignableFrom(elemClass);
+					if (properclass) {
+						SpaceElement se = (SpaceElement) elemClass.getDeclaredConstructor().newInstance();
+						s.setElement(se);
+					}
+				} catch (Exception e) {
+					System.out.println("space element class not found");
+					return null;
+				}
+			}
+
+			return s;
 		}
 	}
 
