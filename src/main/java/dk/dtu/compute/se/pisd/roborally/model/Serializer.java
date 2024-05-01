@@ -13,6 +13,14 @@ import com.mysql.cj.xdevapi.Expression;
 import dk.dtu.compute.se.pisd.roborally.controller.SpaceElement;
 
 public class Serializer {
+	/**
+	 * <p>JSON serializer for type {@link Board}</p>
+	 * <p>SERIALIZING VARIABLES:</p>
+	 * <p>Serializes {@link Board#gameId}, {@link Board#phase}, {@link Board#move_count}</p>
+	 * <p>Serializes {@link Board#players} array with {@link PlayerSerializer} for each player</p>
+	 * <p>Serializes current player number (index) in {@link Board#players} with {@link Player#player_index} from {@link Board#current}</p>
+	 * <p>Serializes {@link Board#spaces} 2darray with {@link SpaceSerializer} for each space, stored as a 2d array in json</p>
+	 */
 	public static class BoardSerializer implements JsonSerializer<Board> {
         @Override
         public JsonElement serialize(Board board, java.lang.reflect.Type typeOfSrc, JsonSerializationContext context) {
@@ -48,7 +56,14 @@ public class Serializer {
             return jsonObject;
         }
     }
-
+	/**
+	 *
+	 * <p>JSON serializer for type {@link Player}</p>
+	 * <p>SERIALIZING VARIABLES:</p>
+	 * <p>Serializes {@link Player#name}, {@link Player#color}, {@link Player#heading}</p>
+	 * <p>Serialized {@link Player#space} as a {@link String} coordinate with two numbers comma seperated, ex: "3,5"</p>
+	 * <p>Serializes {@link Player#cards} array with {@link CommandSerializer}. The {@link CommandCardField} types, gets converted to {@link Command} types, to avoid storing unnecessary variables from {@link CommandCardField}</p>
+	 */
 	public static class PlayerSerializer implements JsonSerializer<Player> {
         @Override
         public JsonElement serialize(Player p, java.lang.reflect.Type typeOfSrc, JsonSerializationContext context) {
@@ -68,6 +83,12 @@ public class Serializer {
         }
     }
 
+	/**
+	 *
+	 * <p>JSON serializer for type {@link Command}</p>
+	 * <p>SERIALIZING VARIABLES:</p>
+	 * <p>Serializes {@link Command} enum name as {@link String}</p>
+	 */
 	public static class CommandSerializer implements JsonSerializer<Command> {
         @Override
         public JsonElement serialize(Command com, java.lang.reflect.Type typeOfSrc, JsonSerializationContext context) {
@@ -78,6 +99,13 @@ public class Serializer {
         }
 	}
 
+	/**
+	 *
+	 * <p>JSON serializer for type {@link Space}</p>
+	 * <p>SERIALIZING VARIABLES:</p>
+	 * <p>Serializes {@link Space#walls} as array with enum name derived from {@link Heading}</p>
+	 * <p>Serializes {@link Space#element}'s abstract class {@link SpaceElement}'s simple class name as {@link String}</p>
+	 */
 	public static class SpaceSerializer implements JsonSerializer<Space> {
         @Override
         public JsonElement serialize(Space space, java.lang.reflect.Type typeOfSrc, JsonSerializationContext context) {

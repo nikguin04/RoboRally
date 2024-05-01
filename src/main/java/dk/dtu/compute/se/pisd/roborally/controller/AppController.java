@@ -68,6 +68,19 @@ public class AppController implements Observer {
         this.roboRally = roboRally;
     }
 
+    /**
+     * <p>Start a new game with players in default positions,
+     * the user gets a popup dialog where they can select amount of players in new game.
+     * This can only be called when there is not a game already being played.</p>
+     *
+     * <p>Modifies following variables in Roborally class: {@link Board}, {@link GameController}</p>
+     * <p>The dialog box suspends all other use of the Roborally application.
+     * It is a syncronous function which awaits a result from the dialog box on close</p>
+     * <p>Uses variable {@link #PLAYER_NUMBER_OPTIONS} as {@link List} to choose player number from</p>
+     *
+     * @see ChoiceDialog
+     * @see javafx.scene.control.Dialog
+     */
     public void newGame() {
         ChoiceDialog<Integer> dialog = new ChoiceDialog<>(PLAYER_NUMBER_OPTIONS.get(0), PLAYER_NUMBER_OPTIONS);
         dialog.setTitle("Player number");
@@ -97,12 +110,16 @@ public class AppController implements Observer {
 
             // XXX: V2
             // board.setCurrentPlayer(board.getPlayer(0));
-            gameController.startProgrammingPhase();
+            gameController.StartProgrammingPhase(true);
 
             roboRally.createBoardView(gameController);
         }
     }
 
+    /**
+     * TODO: JAVADOC.
+     * This javadoc will be implemented finally when "Simon Olsen" finishes save function
+     */
     public void saveGame() {
         if (gameController != null) {
             Board board = gameController.board;
@@ -126,6 +143,18 @@ public class AppController implements Observer {
         }
     }
 
+    /**
+     * <p>Load and start a previously saved game,
+     * the user gets a popup dialog where they can select any save file to load.
+     * This can only be called when there is not a game already being played.</p>
+     *
+     * <p>Modifies following variables in Roborally class: {@link Board}, {@link GameController}</p>
+     * <p>The dialog box suspends all other use of the Roborally application.
+     * It is a syncronous function which awaits a result from the dialog box on close</p>
+     *
+     * @see LoadDialog
+     * @see javafx.scene.control.Dialog
+     */
     public void loadGame() {
         LoadDialog<Board> dialog = new LoadDialog<>();
         dialog.setTitle("Load game");

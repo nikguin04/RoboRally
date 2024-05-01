@@ -9,8 +9,17 @@ import com.google.gson.JsonParseException;
 import java.lang.reflect.Type;
 
 public class Deserializer {
+	/**
+	 * <p>JSON deserializer for type {@link Board}</p>
+	 * <p>DESERIALIZING VARIABLES:</p>
+	 * <p>Deserializes {@link Player} array with {@link PlayerDeserializer}</p>
+	 *
+	 * <p>TODO: Deserialize "space" (Currently just initializes size)</p>
+	 * <p>TODO: Deserialize "move_count"</p>
+	 * <p>TODO: Deserialize "current_playerindex"</p>
+	 * <p>TODO: Deserialize "phase" (Currently always starts in PROGRAMMING)</p>
+	 */
 	public static class BoardDeserializer implements JsonDeserializer<Board>	{
-
         @Override
         public Board deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {
@@ -48,6 +57,17 @@ public class Deserializer {
         }
     }
 
+	/**
+	 * <p>JSON deserializer for type {@link Player}</p>
+	 * <p>DESERIALIZING VARIABLES:</p>
+	 * <p>Deserializes {@link Player#name} as {@link String}</p>
+	 * <p>Deserializes {@link Player#color} as {@link String}, needs to comply with css colors, <a href="https://www.w3schools.com/cssref/css_colors.php">css colors (w3schools)</a></p>
+	 * <p>Deserializes {@link Player#space} as 2d coordinate in string "x,y"</p>
+	 * <p>Deserializes {@link Player#heading} as {@link Heading} by enum string name</p>
+	 *
+	 * <p>Deserializes {@link Player#cards} array with {@link CommandDeserializer} which is converted to {@link CommandCardField} array by player</p>
+	 *
+	 */
 	public static class PlayerDeserializer implements JsonDeserializer<Player>	{
 		public static Board board;
 		public static int player_index;
@@ -75,7 +95,11 @@ public class Deserializer {
 			return p;
 		}
 	}
-
+	/**
+	 * <p>JSON deserializer for type {@link Command}</p>
+	 * <p>DESERIALIZING VARIABLES:</p>
+	 * <p>Deserializes {@link Command} by enum string name</p>
+	 */
 	public static class CommandDeserializer implements JsonDeserializer<Command>	{
 		@Override
 		public Command deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
