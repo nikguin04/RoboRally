@@ -63,6 +63,11 @@ public class Board extends Subject {
 		return this.prioAntenna;
 	}
 
+	/**
+	 * Retrieves list of all players.
+	 * @author Anders Greve Sørensen, s235093@dtu.dk
+	 * @return list of Player objects.
+	 */
 	public List<Player> getPlayers() {
 		return this.players;
 	}
@@ -104,14 +109,6 @@ public class Board extends Subject {
         }
     }
 
-	/**
-	 * Retrieves list of all players.
-	 * @author Anders Greve Sørensen, s235093@dtu.dk
-	 * @return list of Player objects.
-	 */
-	public List<Player> getPlayers() {
-		return this.players;
-	}
 
     public Space getSpace(int x, int y) {
         if (x >= 0 && x < width &&
