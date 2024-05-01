@@ -29,8 +29,8 @@ import dk.dtu.compute.se.pisd.roborally.model.Space;
  * @author Ekkart Kindler, ekki@dtu.dk
  *
  */
-public abstract class FieldAction {
+public abstract class SpaceElement {
 
     public abstract boolean doAction(GameController gameController, Space space);
-    
+
 }

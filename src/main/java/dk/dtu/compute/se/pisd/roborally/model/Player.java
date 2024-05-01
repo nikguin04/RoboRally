@@ -24,7 +24,11 @@ package dk.dtu.compute.se.pisd.roborally.model;
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static dk.dtu.compute.se.pisd.roborally.model.Heading.SOUTH;
+import dk.dtu.compute.se.pisd.roborally.model.CheckPoint;
 
 /**
  * ...
@@ -47,6 +51,7 @@ public class Player extends Subject {
 
     private CommandCardField[] program;
     private CommandCardField[] cards;
+	private int checkPointCounter;
 
     public Player(@NotNull Board board, String color, @NotNull String name) {
         this.board = board;
@@ -54,6 +59,7 @@ public class Player extends Subject {
         this.color = color;
 
         this.space = null;
+		checkPointCounter = 0;
 
         program = new CommandCardField[NO_REGISTERS];
         for (int i = 0; i < program.length; i++) {
@@ -66,7 +72,25 @@ public class Player extends Subject {
         }
     }
 
-    public String getName() {
+	/**
+	 * Retrieves players checkpoint counter.
+	 * @author Anders Greve Sørensen, s235093@dtu.dk
+	 * @return Checkpoint counter of the player.
+	 */
+	public int getCheckPointCounter() {
+		return this.checkPointCounter;
+	}
+
+	/**
+	 * Sets players checkpoint counter to given value.
+	 * @author Anders Greve Sørensen, s235093@dtu.dk
+	 * @param checkPointCounter The checkpoint number of the last checkpoint player has passed. 0 if none have
+	 *                          been passed yet.
+	 */
+	public void setCheckPointCounter(int checkPointCounter) {
+		this.checkPointCounter = checkPointCounter;
+	}
+	public String getName() {
         return name;
     }
 

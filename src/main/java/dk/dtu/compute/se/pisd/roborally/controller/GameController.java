@@ -82,6 +82,8 @@ public class GameController {
 
     void moveToSpace(@NotNull Player player, @NotNull Space space, @NotNull Heading heading) throws ImpossibleMoveException {
         assert board.getNeighbour(player.getSpace(), heading) == space; // make sure the move to here is possible in principle
+		if (player.getSpace().getWalls().contains(heading) || space.getWalls().contains(heading.opposite()))
+			throw new ImpossibleMoveException(player, space, heading);
         Player other = space.getPlayer();
         if (other != null){
             Space target = board.getNeighbour(space, heading);
@@ -167,10 +169,26 @@ public class GameController {
                     Command command = card.command;
                     executeCommand(currentPlayer, command);
                 }
+
+				// After any player move, check space of all players, if checkpoint, activate checkpoint.
+				for (Player p : board.getPlayers()) {
+					if (p.getSpace().getElement() instanceof CheckPoint) {
+						p.getSpace().getElement().doAction(this, p.getSpace());
+					}
+				}
+
                 int nextPlayerNumber = board.getPlayerNumber(currentPlayer) + 1;
                 if (nextPlayerNumber < board.getPlayersNumber()) {
                     board.setCurrentPlayer(board.getPlayer(nextPlayerNumber));
                 } else {
+					// For some reason, we can't just get a list of players???
+					for (int i = 0; i < board.getPlayersNumber(); i++) {
+						Space space = board.getPlayer(i).getSpace();
+						SpaceElement element = space.getElement();
+						if (element == null) continue;
+						// TODO We should probably handle activation order
+						element.doAction(this, space);
+					}
                     step++;
 					// Each time all players have made a mode, recalculate priority
 					board.setPlayers(board.getPrioAntenna().getPrioPlayerList(board.getPlayers()));
