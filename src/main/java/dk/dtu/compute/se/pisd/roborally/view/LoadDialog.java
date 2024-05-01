@@ -177,10 +177,12 @@ public class LoadDialog<T> extends Dialog<Board> {
      **************************************************************************/
 
     private void updateGrid() {
+        SaveDialog<T> saveFileName = new SaveDialog<>();
         grid.getChildren().clear();
 
 		FileResourceUtils fileutil = new FileResourceUtils();
-		String fileName = "gamedata/out.json";
+		String fileName = "gamedata/Tester"+".json";
+        System.out.println("\n" + saveFileName.saveNameText.getText());
 		System.out.println("\ngetResource : " + fileName);
 		InputStream file;
 		try {

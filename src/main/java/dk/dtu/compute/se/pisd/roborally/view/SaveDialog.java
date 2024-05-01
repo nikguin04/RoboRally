@@ -58,7 +58,7 @@ import javafx.scene.control.TextField;
 
     private final GridPane grid;
     private final Label label;
-    private final TextField saveNameText;
+    public final TextField saveNameText;
 
 
     public SaveDialog() {
@@ -96,7 +96,9 @@ import javafx.scene.control.TextField;
         setResultConverter(buttonType -> {
             if (buttonType == ButtonType.OK) {
                 // Return the filename entered by the user
+                System.out.println(saveNameText.getText());
                 return (T) saveNameText.getText();
+
             }
             return null;
         });

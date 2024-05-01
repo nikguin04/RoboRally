@@ -3,7 +3,7 @@
     {
       "name": "Player 1",
       "color": "red",
-      "space": "0,0",
+      "space": "4,6",
       "heading": "SOUTH",
       "command_cards": [
         {
@@ -35,7 +35,7 @@
     {
       "name": "Player 2",
       "color": "green",
-      "space": "1,1",
+      "space": "3,5",
       "heading": "SOUTH",
       "command_cards": [
         {
@@ -65,9 +65,9 @@
       ]
     }
   ],
-  "current_playerindex": 0,
+  "current_playerindex": 1,
   "phase": "PROGRAMMING",
-  "move_count": 0,
+  "move_count": 3,
   "spaces": [
     [
       {
@@ -148,7 +148,7 @@
       },
       {
         "walls": [],
-        "element": "ConveyorBelt"
+        "element": ""
       },
       {
         "walls": [],
