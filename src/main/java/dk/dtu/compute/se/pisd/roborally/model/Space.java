@@ -96,4 +96,17 @@ public class Space extends Subject {
         notifyChange();
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Space) {
+            Space comp = ((Space)obj);
+            boolean same = true;
+            same = (!same) ? false : this.element.getClass() == comp.element.getClass();
+            same = (!same) ? false : this.walls.equals(comp.walls);
+            same = (!same) ? false : this.x == comp.x;
+            same = (!same) ? false : this.y == comp.y;
+        }
+        return false;
+    }
+
 }
