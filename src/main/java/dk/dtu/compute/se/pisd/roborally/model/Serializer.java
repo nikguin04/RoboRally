@@ -36,7 +36,7 @@ public class Serializer {
 			jsonObject.add("players", players);
 			//jsonObject.addProperty("players", context.serialize(board);
 			// maybe dont save current player, we should only let player save at start/end of a phase
-			jsonObject.addProperty("current_playerindex", board.getCurrentPlayer().getPlayerIndex());
+			jsonObject.addProperty("current_playerindex", board.getPlayerNumber(board.getCurrentPlayer()));
 			jsonObject.addProperty("phase", board.getPhase().name());
 			//jsonObject.addProperty("step", "null"); // dont save step, we should only let player save at start/end of a phase
 			jsonObject.addProperty("move_count", board.getMoveCount());

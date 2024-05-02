@@ -43,7 +43,6 @@ public class Player extends Subject {
 
     final public Board board;
 
-    private int player_index;
     private String name;
     private String color;
 
@@ -54,18 +53,17 @@ public class Player extends Subject {
     private CommandCardField[] cards;
 	private int checkPointCounter;
 	private CommandCard lastCardPlayed;
-	
+
     /**
      * {@inheritDoc}
      * @param board         Board on which player is located and interacts with
      * @param color         Color {@link String}, needs to comply with css colors, <a href="https://www.w3schools.com/cssref/css_colors.php">css colors (w3schools)</a>
      * @param name          Given name for a player, which will be used for identification during game
-     * @param player_index  Index number of player in {@link Board#players}
      *
-     * @see Player#Player(Board, String, String, int, Command[])  Player() - For creating a player with predefined commands
+     * @see Player#Player(Board, String, String, Command[])  Player() - For creating a player with predefined commands
      */
-    public Player(@NotNull Board board, String color, @NotNull String name, @NotNull int player_index) {
-        this(board, color, name, player_index, null);
+    public Player(@NotNull Board board, String color, @NotNull String name) {
+        this(board, color, name, null);
         for (int i = 0; i < this.cards.length; i++) {
             this.cards[i] = new CommandCardField(this);
         }
@@ -77,14 +75,12 @@ public class Player extends Subject {
      * @param board asdasd
      * @param color
      * @param name
-     * @param player_index
      * @param Commands given predefined commands
      *
-     * @see Player#Player(Board, String, String, int)  Player() - For creating a player with blank commands
+     * @see Player#Player(Board, String, String)  Player() - For creating a player with blank commands
      */
-    public Player(@NotNull Board board, String color, @NotNull String name, @NotNull int player_index, Command[] Commands) {
+    public Player(@NotNull Board board, String color, @NotNull String name, Command[] Commands) {
         this.board = board;
-        this.player_index = player_index;
         this.name = name;
         this.color = color;
 
@@ -104,10 +100,6 @@ public class Player extends Subject {
         }
 
         //this.cards = cards;
-    }
-
-    public int getPlayerIndex() {
-        return player_index;
     }
 
 	/**
@@ -194,7 +186,7 @@ public class Player extends Subject {
     public CommandCardField getCardField(int i) {
         return cards[i];
     }
-    
+
     public CommandCard getLastCardPlayed() {
         return lastCardPlayed;
     }

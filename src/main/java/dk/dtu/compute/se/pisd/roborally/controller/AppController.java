@@ -107,7 +107,7 @@ public class AppController implements Observer {
             gameController = new GameController(board);
             int no = result.get();
             for (int i = 0; i < no; i++) {
-                Player player = new Player(board, PLAYER_COLORS.get(i), "Player " + (i + 1), i);
+                Player player = new Player(board, PLAYER_COLORS.get(i), "Player " + (i + 1));
                 board.addPlayer(player);
                 player.setSpace(board.getSpace(i % board.width, i));
             }
@@ -133,16 +133,16 @@ public class AppController implements Observer {
             String filename = result.get();
             if (gameController != null) {
                 Board board = gameController.board;
-    
+
                 GsonBuilder gsonBuilder = new GsonBuilder();
                 gsonBuilder.registerTypeAdapter(Board.class, new Serializer.BoardSerializer());
                 gsonBuilder.registerTypeAdapter(Player.class, new Serializer.PlayerSerializer());
                 gsonBuilder.registerTypeAdapter(Command.class, new Serializer.CommandSerializer());
                 gsonBuilder.registerTypeAdapter(Space.class, new Serializer.SpaceSerializer());
                 Gson gson = gsonBuilder.setPrettyPrinting().create();
-    
+
                 String json = gson.toJson(board);
-    
+
                 try {
                     BufferedWriter writer = new BufferedWriter(new FileWriter("src/main/resources/gamedata/" + filename + ".json"));
                     writer.write(json);
