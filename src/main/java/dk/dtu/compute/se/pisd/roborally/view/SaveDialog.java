@@ -60,7 +60,13 @@ import javafx.scene.control.TextField;
     private final Label label;
     public final TextField saveNameText;
 
-
+	/**
+	 * This method makes a grid, for the save,
+	 * to make sure the user can save the file correctly,
+	 * while also could name the file, the person wants to save.
+	 * Example save name: Hello.
+	 * Then there would be made a file, with the name Hello.
+	 */
     public SaveDialog() {
 
 		final DialogPane dialogPane = getDialogPane();
