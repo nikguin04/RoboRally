@@ -101,10 +101,14 @@ public class Space extends Subject {
         if (obj instanceof Space) {
             Space comp = ((Space)obj);
             boolean same = true;
-            same = (!same) ? false : this.element.getClass() == comp.element.getClass();
+            if (this.element != null && comp.element != null)
+                same = (!same) ? false : this.element.getClass() == comp.element.getClass();
+            else if (this.element == null || comp.element == null)
+                same = (!same) ? false : this.element == null && comp.element == null;
             same = (!same) ? false : this.walls.equals(comp.walls);
             same = (!same) ? false : this.x == comp.x;
             same = (!same) ? false : this.y == comp.y;
+            return same;
         }
         return false;
     }

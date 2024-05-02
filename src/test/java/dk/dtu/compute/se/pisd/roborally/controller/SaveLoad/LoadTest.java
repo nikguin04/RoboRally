@@ -11,6 +11,7 @@ import java.util.concurrent.Executors;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import dk.dtu.compute.se.pisd.roborally.controller.ConveyorBelt;
 import dk.dtu.compute.se.pisd.roborally.model.Board;
 import dk.dtu.compute.se.pisd.roborally.view.LoadDialog;
 import javafx.application.Platform;
@@ -51,6 +52,7 @@ public class LoadTest {
 		Board defaultBoard = new Board(4,4);
 
 		Board b = new Board(4,4); // initialize totally blank board
+		b.getSpace(1, 1).setElement(new ConveyorBelt());
 
 		// invalidate all variables
 		Field[] board_fields = Board.class.getDeclaredFields();
@@ -92,21 +94,23 @@ public class LoadTest {
 		if (def.getClass().isArray() && comp.getClass().isArray()) {
 			Object[] defarray = (Object[])def;
 			Object[] comparray = (Object[])comp;
-			defarray.getClass().isArray();
+			if (defarray.length != comparray.length) { return false; }
 			if (defarray[0].getClass().isArray() && comparray[0].getClass().isArray()) { // check for nested array
-				if (defarray.length != comparray.length) { return false; }
 				for (int i = 0; i < defarray.length; i++) {
-					compareArray(defarray[i], comparray[i]);
+					if (!compareArray(defarray[i], comparray[i])) return false;
 				}
 
 				System.out.println("her1123e");
 			} else {
-				System.out.println("here not");
-
+				for (int i = 0; i < defarray.length; i++) {
+					boolean single_object_comparison = defarray[i].equals(comparray[i]);
+					System.out.println("Comp result" + i + ": " + single_object_comparison);
+					if (!single_object_comparison) return false;
+				}
+				return true;
 			}
-
 			System.out.println("here");
-
+			return true;
 		}
 		return false;
 	}
