@@ -183,12 +183,16 @@ public class AppController implements Observer {
             }
 
             Board board = result.get();
-            gameController = new GameController(board);
-
-            gameController.StartProgrammingPhase(false); // TODO: Make sure to load the correct phase here
-            roboRally.createBoardView(gameController);
+            loadBoardIntoGame(board);
         }
+    }
 
+    private void loadBoardIntoGame(Board board) {
+
+        gameController = new GameController(board);
+
+        gameController.StartProgrammingPhase(false); // TODO: Make sure to load the correct phase here
+        roboRally.createBoardView(gameController);
     }
 
     /**
