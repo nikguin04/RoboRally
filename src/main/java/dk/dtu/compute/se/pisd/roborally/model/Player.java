@@ -24,7 +24,11 @@ package dk.dtu.compute.se.pisd.roborally.model;
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static dk.dtu.compute.se.pisd.roborally.model.Heading.SOUTH;
+import dk.dtu.compute.se.pisd.roborally.model.CheckPoint;
 
 /**
  * ...
@@ -48,7 +52,9 @@ public class Player extends Subject {
 
     private CommandCardField[] program;
     private CommandCardField[] cards;
-
+	private int checkPointCounter;
+	private CommandCard lastCardPlayed;
+	
     /**
      * {@inheritDoc}
      * @param board         Board on which player is located and interacts with
@@ -83,6 +89,7 @@ public class Player extends Subject {
         this.color = color;
 
         this.space = null;
+		checkPointCounter = 0;
 
         program = new CommandCardField[NO_REGISTERS];
         for (int i = 0; i < program.length; i++) {
@@ -103,7 +110,25 @@ public class Player extends Subject {
         return player_index;
     }
 
-    public String getName() {
+	/**
+	 * Retrieves players checkpoint counter.
+	 * @author Anders Greve Sørensen, s235093@dtu.dk
+	 * @return Checkpoint counter of the player.
+	 */
+	public int getCheckPointCounter() {
+		return this.checkPointCounter;
+	}
+
+	/**
+	 * Sets players checkpoint counter to given value.
+	 * @author Anders Greve Sørensen, s235093@dtu.dk
+	 * @param checkPointCounter The checkpoint number of the last checkpoint player has passed. 0 if none have
+	 *                          been passed yet.
+	 */
+	public void setCheckPointCounter(int checkPointCounter) {
+		this.checkPointCounter = checkPointCounter;
+	}
+	public String getName() {
         return name;
     }
 
@@ -169,5 +194,12 @@ public class Player extends Subject {
     public CommandCardField getCardField(int i) {
         return cards[i];
     }
+    
+    public CommandCard getLastCardPlayed() {
+        return lastCardPlayed;
+    }
 
+    public void setLastCardPlayed(CommandCard card) {
+        this.lastCardPlayed = card;
+    }
 }
