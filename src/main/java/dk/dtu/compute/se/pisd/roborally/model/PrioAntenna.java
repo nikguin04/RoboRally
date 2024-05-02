@@ -11,22 +11,36 @@ import java.util.List;
 import static dk.dtu.compute.se.pisd.roborally.model.Heading.*;
 
 
+/**
+ * @Author Anders Greve Sørensen, s235093@dtu.dk
+ */
 public class PrioAntenna {
 	public final int x;
 	public final int y;
 
 	public final Board board;
 
+	/**
+	 * Create an instance of the PrioAntenna
+	 * @Author Anders Greve Sørensen, s235093@dtu.dk
+	 * @param x The x coordinate of the prioAntenna
+	 * @param y The y coordinate of the prioAntenna
+	 * @param board The board the prioAntenna is associated with
+	 */
 	PrioAntenna(int x, int y, Board board) {
 		this.x = x;
 		this.y = y;
 		this.board = board;
 	}
 
-
+	/**
+	 * Updates player priority for the associated board
+	 * @Author Anders Greve Sørensen, s235093@dtu.dk
+	 */
 	public void updatePlayerPrio() {
 		this.board.setPlayers(getPrioPlayerList(this.board.getPlayers()));
 	}
+
 
 	public List<Player> getPrioPlayerList(List<Player> listOfPlayers) {
 		List<Player> prioPlayerList = new ArrayList<>();
