@@ -13,6 +13,8 @@ import org.junit.jupiter.api.Test;
 
 import dk.dtu.compute.se.pisd.roborally.controller.ConveyorBelt;
 import dk.dtu.compute.se.pisd.roborally.model.Board;
+import dk.dtu.compute.se.pisd.roborally.model.Phase;
+import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.view.LoadDialog;
 import javafx.application.Platform;
 
@@ -56,11 +58,20 @@ public class LoadTest {
 		Board defaultBoard = new Board(4,4);
 
 		Board b = new Board(4,4); // initialize totally blank board
-		//b.getSpace(1, 1).setElement(new ConveyorBelt()); // This will make the assertion fail
-		//assertTrue(compareBoard(b, defaultBoard));
+		// add variables to board for saving and loading sucessfully
+		Player p = new Player(b, "red", "test player 1");
+		b.addPlayer(p);
+		b.setCurrentPlayer(p);
+		b.setGameId(1);
+		b.getSpace(2, 2).setElement(new ConveyorBelt());
+		b.setPhase(Phase.ACTIVATION);
+		b.setStep(1);
+		b.setStepMode(true);
+		b.incMoveCount();
+
+
 		compareBoardSimilarity(b, defaultBoard);
 
-		System.out.println("Breakpoint");
 		return b;
 	}
 
@@ -98,6 +109,7 @@ public class LoadTest {
 	 * Very similar to compare board, but returns false is any variable inside board is similar
 	 * Note: This does not check all nested array variables, but only if one of the checks for them fail.
 	 * This essentailly fails if a variable is similar to between b_one and b_two
+	 * Ignores width and height integers, which gets checked by the spaces variable
 	 * @param b_one
 	 * @param b_two
 	 * @return
@@ -106,6 +118,8 @@ public class LoadTest {
 		Field[] board_fields = Board.class.getDeclaredFields();
 
 		for (int i = 0; i < board_fields.length; i++) {
+			// Ignore height and width so our other functions can test it
+			if (board_fields[i].getName().startsWith("width") || board_fields[i].getName().startsWith("height")) { continue; }
 			if (board_fields[i].getName().startsWith("$SWITCH_TABLE")) { continue; } // ignore switch tables which is counted with fields
 			System.out.print("Checking: " + board_fields[i].getName() + " - ");
 			try {
