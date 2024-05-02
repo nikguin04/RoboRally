@@ -49,6 +49,8 @@ public class Board extends Subject {
 
     private List<Player> players = new ArrayList<>();
 
+	private List<Player> priotizedPlayers = new ArrayList<>();
+
     private Player current;
 
     private Phase phase = INITIALISATION;
@@ -89,17 +91,21 @@ public class Board extends Subject {
 				if (x == this.prioAntenna.x && y == this.prioAntenna.y) {
 					this.getSpace(this.prioAntenna.x, this.prioAntenna.y).getWalls().addAll(List.of(Heading.NORTH, Heading.SOUTH, Heading.EAST, Heading.WEST));
 				}
-				// Add checkpoint to board for testing
-				//TODO Find alternative way to add checkpoints to board. Probably when loading map.
-				if (x == 3 && y == 3) {
-					spaces[x][y].setElement(new CheckPoint(1));
-				}
             }
         }
         this.stepMode = false;
     }
 
-    public Integer getGameId() {
+	public List<Player> getPriotizedPlayers() {
+		return priotizedPlayers;
+	}
+
+	public void setPriotizedPlayers(List<Player> prioPlayerList) {
+		this.priotizedPlayers = prioPlayerList;
+	}
+
+
+	public Integer getGameId() {
         return gameId;
     }
 
@@ -133,6 +139,20 @@ public class Board extends Subject {
             notifyChange();
         }
     }
+
+	public void addPrioPlayer(@NotNull Player player) {
+		if (player.board == this && !priotizedPlayers.contains(player)) {
+			priotizedPlayers.add(player);
+			notifyChange();
+		}
+	}
+
+	public Player getPrioPlayer(int i) {
+		if (i >= 0 && i < priotizedPlayers.size()) {
+			return priotizedPlayers.get(i);
+		}
+		else {return null;}
+	}
 
     public Player getPlayer(int i) {
         if (i >= 0 && i < players.size()) {
@@ -193,6 +213,14 @@ public class Board extends Subject {
             return -1;
         }
     }
+
+	public int getPrioPlayerNumber(@NotNull Player player) {
+		if (player.board == this) {
+			return priotizedPlayers.indexOf(player);
+		} else {
+			return -1;
+		}
+	}
 
     public int getMoveCount() {
 		return move_count;

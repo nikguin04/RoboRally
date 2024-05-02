@@ -38,7 +38,7 @@ public class PrioAntenna {
 	 * @Author Anders Greve Sørensen, s235093@dtu.dk
 	 */
 	public void updatePlayerPrio() {
-		this.board.setPlayers(getPrioPlayerList(this.board.getPlayers()));
+		this.board.setPriotizedPlayers(getPrioPlayerList(this.board.getPriotizedPlayers()));
 	}
 
 
