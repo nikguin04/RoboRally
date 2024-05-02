@@ -52,41 +52,41 @@ public class LoadTest {
 		Board defaultBoard = new Board(4,4);
 
 		Board b = new Board(4,4); // initialize totally blank board
-		b.getSpace(1, 1).setElement(new ConveyorBelt());
+		//b.getSpace(1, 1).setElement(new ConveyorBelt()); // This will make the assertion fail
+		assertTrue(compareBoard(b, defaultBoard));
 
-		// invalidate all variables
+		System.out.println("Breakpoint");
+		return b;
+	}
+
+	public boolean compareBoard(Board b_one, Board b_two) {
 		Field[] board_fields = Board.class.getDeclaredFields();
 
 		for (int i = 0; i < board_fields.length; i++) {
 			if (board_fields[i].getName().startsWith("$SWITCH_TABLE")) { continue; } // ignore switch tables which is counted with fields
-			System.out.println("Checking: " + board_fields[i].getName());
+			System.out.print("Checking: " + board_fields[i].getName() + " - ");
 			try {
 				board_fields[i].setAccessible(true);
-				Object comp = board_fields[i].get(b);
-				Object def = board_fields[i].get(defaultBoard);
-				if (comp == null && def == null) {
-					System.out.println("Comparison: true");
+				Object comp = board_fields[i].get(b_one);
+				Object def = board_fields[i].get(b_two);
+
+				if (comp == null && def == null) { // Check if both are null
 					continue;
+				} else if (comp == null || def == null) {
+					return false;
+				} else { // No null pointers
+					if (def.getClass().isArray()) {
+						if (!compareArray(def, comp)) return false;
+					} else {
+						if (!comp.equals(def)) return false;
+					}
 				}
-				System.out.println("class: " + def.getClass().getName());
-				if (def.getClass().isArray()) {
-					boolean arrcomp = compareArray(def, comp);
-					System.out.println("ARRAY Comparison: " + arrcomp);
-				}
-
-				boolean compare = (comp == null && def == null) ? true : comp.equals(def);
-				System.out.println("Comparison: " + compare);
-
-
-
 			} catch (IllegalAccessException e) {
 				System.out.println("Debug: " + board_fields[i].getName() + " Error: " + e.getMessage());
+				return false;
 			}
 		}
-
-
-		System.out.println("Breakpoint");
-		return b;
+		return true;
 	}
 
 	public boolean compareArray(Object def, Object comp) {
@@ -99,17 +99,14 @@ public class LoadTest {
 				for (int i = 0; i < defarray.length; i++) {
 					if (!compareArray(defarray[i], comparray[i])) return false;
 				}
-
-				System.out.println("her1123e");
 			} else {
 				for (int i = 0; i < defarray.length; i++) {
 					boolean single_object_comparison = defarray[i].equals(comparray[i]);
-					System.out.println("Comp result" + i + ": " + single_object_comparison);
+					//System.out.println("Comp result" + i + ": " + single_object_comparison);
 					if (!single_object_comparison) return false;
 				}
 				return true;
 			}
-			System.out.println("here");
 			return true;
 		}
 		return false;
