@@ -82,9 +82,13 @@ public class Board extends Subject {
         spaces = new Space[width][height];
         for (int x = 0; x < width; x++) {
             for(int y = 0; y < height; y++) {
-                Space space = new Space(this, x, y);
-                spaces[x][y] = space;
+					Space space = new Space(this, x, y);
+					spaces[x][y] = space;
 
+					// if space is prioAntenna space, add walls to it.
+				if (x == this.prioAntenna.x && y == this.prioAntenna.y) {
+					this.getSpace(this.prioAntenna.x, this.prioAntenna.y).getWalls().addAll(List.of(Heading.NORTH, Heading.SOUTH, Heading.EAST, Heading.WEST));
+				}
 				// Add checkpoint to board for testing
 				//TODO Find alternative way to add checkpoints to board. Probably when loading map.
 				if (x == 3 && y == 3) {

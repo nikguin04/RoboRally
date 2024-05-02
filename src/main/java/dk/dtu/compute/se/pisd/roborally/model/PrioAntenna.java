@@ -1,6 +1,9 @@
 package dk.dtu.compute.se.pisd.roborally.model;
 
 
+import dk.dtu.compute.se.pisd.roborally.controller.GameController;
+import dk.dtu.compute.se.pisd.roborally.controller.SpaceElement;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -8,9 +11,6 @@ import java.util.List;
 import static dk.dtu.compute.se.pisd.roborally.model.Heading.*;
 
 public class PrioAntenna {
-	public final List<Heading> walls = new ArrayList<>(
-		Arrays.asList(SOUTH, WEST, NORTH, EAST));
-
 	public final int x;
 	public final int y;
 
