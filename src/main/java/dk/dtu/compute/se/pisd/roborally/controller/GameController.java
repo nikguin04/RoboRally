@@ -190,8 +190,9 @@ public class GameController {
 						element.doAction(this, space);
 					}
                     step++;
-					// Each time all players have made a mode, recalculate priority
-					board.setPlayers(board.getPrioAntenna().getPrioPlayerList(board.getPlayers()));
+					// Each time all players have made a move, recalculate priority
+//					board.setPlayers(board.getPrioAntenna().getPrioPlayerList(board.getPlayers()));
+					board.getPrioAntenna().updatePlayerPrio();
                     if (step < Player.NO_REGISTERS) {
                         makeProgramFieldsVisible(step);
                         board.setStep(step);

@@ -10,6 +10,7 @@ import java.util.List;
 
 import static dk.dtu.compute.se.pisd.roborally.model.Heading.*;
 
+
 public class PrioAntenna {
 	public final int x;
 	public final int y;
@@ -20,6 +21,11 @@ public class PrioAntenna {
 		this.x = x;
 		this.y = y;
 		this.board = board;
+	}
+
+
+	public void updatePlayerPrio() {
+		this.board.setPlayers(getPrioPlayerList(this.board.getPlayers()));
 	}
 
 	public List<Player> getPrioPlayerList(List<Player> listOfPlayers) {
