@@ -25,6 +25,7 @@ import dk.dtu.compute.se.pisd.roborally.controller.AppController;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextField;
 
 /**
  * ...
@@ -48,9 +49,11 @@ public class RoboRallyMenuBar extends MenuBar {
 
     private MenuItem exitApp;
 
+
+
+
     public RoboRallyMenuBar(AppController appController) {
         this.appController = appController;
-
         controlMenu = new Menu("File");
         this.getMenus().add(controlMenu);
 

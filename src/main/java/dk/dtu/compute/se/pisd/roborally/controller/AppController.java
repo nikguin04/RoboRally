@@ -27,15 +27,28 @@ import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.RoboRally;
 
 import dk.dtu.compute.se.pisd.roborally.model.Board;
+import dk.dtu.compute.se.pisd.roborally.model.Command;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
-
+import dk.dtu.compute.se.pisd.roborally.model.Serializer;
+import dk.dtu.compute.se.pisd.roborally.model.Space;
+import dk.dtu.compute.se.pisd.roborally.view.LoadDialog;
+import dk.dtu.compute.se.pisd.roborally.view.SaveDialog;
+//import dk.dtu.compute.se.pisd.roborally.view.SaveDialog;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceDialog;
+import javafx.scene.control.TextField;
+
 import org.jetbrains.annotations.NotNull;
 
+import com.google.gson.GsonBuilder;
+import com.google.gson.Gson;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -59,6 +72,19 @@ public class AppController implements Observer {
         this.roboRally = roboRally;
     }
 
+    /**
+     * <p>Start a new game with players in default positions,
+     * the user gets a popup dialog where they can select amount of players in new game.
+     * This can only be called when there is not a game already being played.</p>
+     *
+     * <p>Modifies following variables in Roborally class: {@link Board}, {@link GameController}</p>
+     * <p>The dialog box suspends all other use of the Roborally application.
+     * It is a syncronous function which awaits a result from the dialog box on close</p>
+     * <p>Uses variable {@link #PLAYER_NUMBER_OPTIONS} as {@link List} to choose player number from</p>
+     *
+     * @see ChoiceDialog
+     * @see javafx.scene.control.Dialog
+     */
     public void newGame() {
         ChoiceDialog<Integer> dialog = new ChoiceDialog<>(PLAYER_NUMBER_OPTIONS.get(0), PLAYER_NUMBER_OPTIONS);
         dialog.setTitle("Player number");
@@ -77,32 +103,92 @@ public class AppController implements Observer {
             // XXX the board should eventually be created programmatically or loaded from a file
             //     here we just create an empty board with the required number of players.
             Board board = new Board(8,8);
+            board.getSpace(2,2).setElement(new ConveyorBelt()); // WARN: TODO: This is for debugging json temporaryly and might be helpful to debug other parts of our program, delete this before production release
             gameController = new GameController(board);
             int no = result.get();
             for (int i = 0; i < no; i++) {
-                Player player = new Player(board, PLAYER_COLORS.get(i), "Player " + (i + 1));
+                Player player = new Player(board, PLAYER_COLORS.get(i), "Player " + (i + 1), i);
                 board.addPlayer(player);
                 player.setSpace(board.getSpace(i % board.width, i));
             }
 
             // XXX: V2
             // board.setCurrentPlayer(board.getPlayer(0));
-            gameController.startProgrammingPhase();
+            gameController.StartProgrammingPhase(true);
 
             roboRally.createBoardView(gameController);
         }
     }
 
+    /**
+     * TODO: JAVADOC.
+     * This javadoc will be implemented finally when "Simon Olsen" finishes save function
+     */
     public void saveGame() {
-        // XXX needs to be implemented eventually
+        SaveDialog saveDialog = new SaveDialog();
+        saveDialog.setTitle("Save Game");
+        saveDialog.setHeaderText("Select File Name To Save");
+        Optional<String> result = saveDialog.showAndWait();
+        if(result.isPresent()){
+            String filename = result.get();
+            if (gameController != null) {
+                Board board = gameController.board;
+    
+                GsonBuilder gsonBuilder = new GsonBuilder();
+                gsonBuilder.registerTypeAdapter(Board.class, new Serializer.BoardSerializer());
+                gsonBuilder.registerTypeAdapter(Player.class, new Serializer.PlayerSerializer());
+                gsonBuilder.registerTypeAdapter(Command.class, new Serializer.CommandSerializer());
+                gsonBuilder.registerTypeAdapter(Space.class, new Serializer.SpaceSerializer());
+                Gson gson = gsonBuilder.setPrettyPrinting().create();
+    
+                String json = gson.toJson(board);
+    
+                try {
+                    BufferedWriter writer = new BufferedWriter(new FileWriter("src/main/resources/gamedata/" + filename + ".json"));
+                    writer.write(json);
+                    writer.close();
+                } catch (IOException e) {
+                    System.out.println("FAILED TO WRITE SAVE FILE: "  + e.getMessage());
+                }
+            }
+        }
+
     }
 
+    /**
+     * <p>Load and start a previously saved game,
+     * the user gets a popup dialog where they can select any save file to load.
+     * This can only be called when there is not a game already being played.</p>
+     *
+     * <p>Modifies following variables in Roborally class: {@link Board}, {@link GameController}</p>
+     * <p>The dialog box suspends all other use of the Roborally application.
+     * It is a syncronous function which awaits a result from the dialog box on close</p>
+     *
+     * @see LoadDialog
+     * @see javafx.scene.control.Dialog
+     */
     public void loadGame() {
-        // XXX needs to be implemented eventually
-        // for now, we just create a new game
-        if (gameController == null) {
-            newGame();
+        LoadDialog<Board> dialog = new LoadDialog<>();
+        dialog.setTitle("Load Hej");
+        dialog.setHeaderText("Select path to load game from");
+        Optional<Board> result = dialog.showAndWait();
+
+        if (result.isPresent()) {
+            if (gameController != null) {
+                // The UI should not allow this, but in case this happens anyway.
+                // give the user the option to save the game or abort this operation!
+                if (!stopGame()) {
+                    return;
+                }
+            }
+
+            Board board = result.get();
+            gameController = new GameController(board);
+
+            gameController.StartProgrammingPhase(false); // TODO: Make sure to load the correct phase here
+            roboRally.createBoardView(gameController);
         }
+
     }
 
     /**
@@ -118,7 +204,7 @@ public class AppController implements Observer {
         if (gameController != null) {
 
             // here we save the game (without asking the user).
-            saveGame();
+            //saveGame();
 
             gameController = null;
             roboRally.createBoardView(null);
