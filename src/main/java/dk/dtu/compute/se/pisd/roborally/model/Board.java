@@ -92,20 +92,6 @@ public class Board extends Subject {
 		return this.players;
 	}
 
-//	/**
-//	 * Sets the player list of the board, to the given list of players.
-//	 * @author Anders Greve Sørensen, s235093@dtu.dk
-//	 * @param playerList The list of players to set for the board.
-//	 */
-////	public void setPlayers(List<Player> playerList) {
-////		this.players = playerList;
-////	}
-//
-////
-////	public Space[][] getSpaces() {
-////		return this.spaces;
-////	}
-
 	/**
 	 * attaches a given priority antenna to this board.
 	 * @author Anders Greve Sørensen, s235093@dtu.dk.
