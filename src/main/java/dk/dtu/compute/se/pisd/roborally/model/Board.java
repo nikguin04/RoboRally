@@ -65,12 +65,6 @@ public class Board extends Subject {
             for(int y = 0; y < height; y++) {
                 Space space = new Space(this, x, y);
                 spaces[x][y] = space;
-
-				// Add checkpoint to board for testing
-				//TODO Find alternative way to add checkpoints to board. Probably when loading map.
-				if (x == 3 && y == 3) {
-					spaces[x][y].setElement(new CheckPoint(1));
-				}
             }
         }
         this.stepMode = false;
