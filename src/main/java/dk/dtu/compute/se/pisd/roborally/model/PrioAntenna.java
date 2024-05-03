@@ -52,11 +52,12 @@ public class PrioAntenna {
 	 */
 	public List<Player> getPrioPlayerList(List<Player> listOfPlayers) {
 		List<Player> prioPlayerList = new ArrayList<>();
+        List<Player> listOfPlayersCopy = new ArrayList<>(listOfPlayers);
 
-		while (!listOfPlayers.isEmpty()) {
-			Player prioPlayer = getprioPlayer(listOfPlayers);
+		while (!listOfPlayersCopy.isEmpty()) {
+			Player prioPlayer = getprioPlayer(listOfPlayersCopy);
 			prioPlayerList.add(prioPlayer);
-			listOfPlayers.remove(prioPlayer);
+			listOfPlayersCopy.remove(prioPlayer);
 		}
 		return prioPlayerList;
 	}
@@ -67,7 +68,7 @@ public class PrioAntenna {
 	 * @param listOfPlayers List of players from which you wish to find the one with the highest priority.
 	 * @return Player with the highest priority.
 	 */
-	private Player getprioPlayer(List<Player> listOfPlayers) {
+	public Player getprioPlayer(List<Player> listOfPlayers) {
 		Player prioPlayer = null;
 		int prioPlayerManhattenDistance = Integer.MAX_VALUE;
 
@@ -102,7 +103,7 @@ public class PrioAntenna {
 	 * @param player2 The second player in the tiebreak.
 	 * @return The player with priority.
 	 */
-	private Player prioTieBreak(Player player1, Player player2) {
+	public Player prioTieBreak(Player player1, Player player2) {
 		Player prioPlayer = null;
 		Space p1Space = player1.getSpace();
 		Space p2Space = player2.getSpace();
@@ -138,7 +139,7 @@ public class PrioAntenna {
 	 * @param y2 the y coordinate of the second point.
 	 * @return the manhatten distance from one point to another.
 	 */
-	private int getManhattenDistance(int x1, int y1, int x2, int y2) {
+	public int getManhattenDistance(int x1, int y1, int x2, int y2) {
 		return Math.abs(x1 - x2) + Math.abs(y1 - y2);
 	}
 }
