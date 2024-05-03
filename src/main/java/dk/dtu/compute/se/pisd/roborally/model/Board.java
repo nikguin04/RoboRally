@@ -250,9 +250,6 @@ public class Board extends Subject {
      * @return the space in the given direction; null if there is no (reachable) neighbour
      */
     public Space getNeighbour(@NotNull Space space, @NotNull Heading heading) {
-        if (space.getWalls().contains(heading)) {
-            return null;
-        }
         // TODO needs to be implemented based on the actual spaces
         //      and obstacles and walls placed there. For now it,
         //      just calculates the next space in the respective
@@ -277,14 +274,7 @@ public class Board extends Subject {
                 x = (x + 1) % width;
                 break;
         }
-        Heading reverse = Heading.values()[(heading.ordinal() + 2)% Heading.values().length];
-        Space result = getSpace(x, y);
-        if (result != null) {
-            if (result.getWalls().contains(reverse)) {
-                return null;
-            }
-        }
-        return result;
+	    return getSpace(x, y);
     }
 
     public String getStatusMessage() {

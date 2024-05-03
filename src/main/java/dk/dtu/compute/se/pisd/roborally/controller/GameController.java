@@ -38,8 +38,6 @@ public class GameController {
         this.board = board;
     }
 
-
-
     public void moveForward(@NotNull Player player) {
         moveAmt(player, 1);
     }
@@ -168,6 +166,7 @@ public class GameController {
                 if (card != null) {
                     Command command = card.command;
                     executeCommand(currentPlayer, command);
+                    currentPlayer.setLastCardPlayed(card);
                 }
 
 				// After any player move, check space of all players, if checkpoint, activate checkpoint.
@@ -197,7 +196,7 @@ public class GameController {
                         board.setStep(step);
 						board.setCurrentPlayer(board.getPrioPlayer(0));
                     } else {
-                        startProgrammingPhase();
+                        StartProgrammingPhase(true);
                     }
                 }
             } else {
@@ -215,16 +214,20 @@ public class GameController {
             // XXX This is a very simplistic way of dealing with some basic cards and
             //     their execution. This should eventually be done in a more elegant way
             //     (this concerns the way cards are modelled as well as the way they are executed).
-
+            CommandCard currentCard = new CommandCard(command);
             switch (command) {
                 case FWD1:
                     this.moveForward(player);
+                    player.setLastCardPlayed(currentCard);
+
                     break;
                 case RIGHT:
                     this.turnRight(player);
+                    player.setLastCardPlayed(currentCard);
                     break;
                 case LEFT:
                     this.turnLeft(player);
+                    player.setLastCardPlayed(currentCard);
                     break;
                 case FWD2:
                     this.fastForward(player);
@@ -232,7 +235,28 @@ public class GameController {
                 case FWD3:
                     this.fastfastForward(player);
                     break;
-                default:
+                case Back:
+                    this.turnLeft(player);
+                    this.turnLeft(player);
+                    this.moveForward(player);
+                    this.turnLeft(player);
+                    this.turnLeft(player);
+                    player.setLastCardPlayed(currentCard);
+                    break;
+                case UTRN:
+                    this.turnLeft(player);
+                    this.turnLeft(player);
+                    player.setLastCardPlayed(currentCard);
+                    break;
+                case AGAN:
+                    CommandCard lastCard = player.getLastCardPlayed();
+                    if (lastCard != null && lastCard.command != Command.AGAN) {
+                        executeCommand(player, lastCard.command);
+                        
+                    }
+                    player.setLastCardPlayed(currentCard);
+                    break;
+                    default:
                     // DO NOTHING (for now)
             }
         }
@@ -251,11 +275,18 @@ public class GameController {
     }
 
 
-    public void startProgrammingPhase() {
+
+    /**
+     * <p>Starts the {@link Phase#PROGRAMMING} Phase</p>
+     * <p>If cards are NOT randomized, they have to be provided to the player before calling this function, since no cards will be loaded into the {@link Player} otherwise</p>
+     * <p>TODO: Make current player to start align with priority antenna (currently always picking player 0 to begin)</p>
+     * @param RandomizeCards    Determintes whether or not to randomize cards
+     * @see CommandCardField
+     */
+    public void StartProgrammingPhase(Boolean RandomizeCards) {
         board.setPhase(Phase.PROGRAMMING);
         board.setCurrentPlayer(board.getPlayer(0));
         board.setStep(0);
-
         for (int i = 0; i < board.getPlayersNumber(); i++) {
             Player player = board.getPlayer(i);
             if (player != null) {
@@ -266,7 +297,7 @@ public class GameController {
                 }
                 for (int j = 0; j < Player.NO_CARDS; j++) {
                     CommandCardField field = player.getCardField(j);
-                    field.setCard(generateRandomCommandCard());
+                    if (RandomizeCards) field.setCard(generateRandomCommandCard());
                     field.setVisible(true);
                 }
             }

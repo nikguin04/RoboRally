@@ -52,8 +52,34 @@ public class Player extends Subject {
     private CommandCardField[] program;
     private CommandCardField[] cards;
 	private int checkPointCounter;
+	private CommandCard lastCardPlayed;
 
+    /**
+     * {@inheritDoc}
+     * @param board         Board on which player is located and interacts with
+     * @param color         Color {@link String}, needs to comply with css colors, <a href="https://www.w3schools.com/cssref/css_colors.php">css colors (w3schools)</a>
+     * @param name          Given name for a player, which will be used for identification during game
+     *
+     * @see Player#Player(Board, String, String, Command[])  Player() - For creating a player with predefined commands
+     */
     public Player(@NotNull Board board, String color, @NotNull String name) {
+        this(board, color, name, null);
+        for (int i = 0; i < this.cards.length; i++) {
+            this.cards[i] = new CommandCardField(this);
+        }
+
+    }
+
+    /**
+     * Creates player
+     * @param board asdasd
+     * @param color
+     * @param name
+     * @param Commands given predefined commands
+     *
+     * @see Player#Player(Board, String, String)  Player() - For creating a player with blank commands
+     */
+    public Player(@NotNull Board board, String color, @NotNull String name, Command[] Commands) {
         this.board = board;
         this.name = name;
         this.color = color;
@@ -65,11 +91,15 @@ public class Player extends Subject {
         for (int i = 0; i < program.length; i++) {
             program[i] = new CommandCardField(this);
         }
-
-        cards = new CommandCardField[NO_CARDS];
-        for (int i = 0; i < cards.length; i++) {
-            cards[i] = new CommandCardField(this);
+        this.cards = new CommandCardField[NO_CARDS];
+        if (Commands != null) {
+            for (int i = 0; i < Commands.length; i++) {
+                this.cards[i] = new CommandCardField(this);
+                this.cards[i].setCard(new CommandCard(Commands[i]));
+            }
         }
+
+        //this.cards = cards;
     }
 
 	/**
@@ -157,4 +187,11 @@ public class Player extends Subject {
         return cards[i];
     }
 
+    public CommandCard getLastCardPlayed() {
+        return lastCardPlayed;
+    }
+
+    public void setLastCardPlayed(CommandCard card) {
+        this.lastCardPlayed = card;
+    }
 }
