@@ -3,6 +3,9 @@ package dk.dtu.compute.se.pisd.roborally.controller.SaveLoad;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -69,8 +72,10 @@ public class LoadTest {
 		b.setStepMode(true);
 		b.incMoveCount();
 
-
-		compareBoardSimilarity(b, defaultBoard);
+		List<String> ignoreVariables = Arrays.asList(
+			"width",
+			"height");
+		assureBoardIndifference(b, defaultBoard, ignoreVariables);
 
 		return b;
 	}
@@ -114,14 +119,14 @@ public class LoadTest {
 	 * @param b_two
 	 * @return
 	 */
-	public void compareBoardSimilarity(Board b_one, Board b_two) throws AssertionError {
+	public void assureBoardIndifference(Board b_one, Board b_two, List<String> ignoreVariables) throws AssertionError {
 		Field[] board_fields = Board.class.getDeclaredFields();
 
 		for (int i = 0; i < board_fields.length; i++) {
-			// Ignore height and width so our other functions can test it
-			if (board_fields[i].getName().startsWith("width") || board_fields[i].getName().startsWith("height")) { continue; }
+			// Ignore predetermined variables so our other functions can test it
+			if (ignoreVariables.contains(board_fields[i].getName())) { continue; }
 			if (board_fields[i].getName().startsWith("$SWITCH_TABLE")) { continue; } // ignore switch tables which is counted with fields
-			System.out.print("Checking: " + board_fields[i].getName() + " - ");
+			System.out.println("Checking: " + board_fields[i].getName() + " - ");
 			try {
 				board_fields[i].setAccessible(true);
 				Object comp = board_fields[i].get(b_one);
