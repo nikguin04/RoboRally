@@ -12,7 +12,7 @@ import static dk.dtu.compute.se.pisd.roborally.model.Heading.*;
 
 
 /**
- * @Author Anders Greve Sørensen, s235093@dtu.dk
+ * @author Anders Greve Sørensen, s235093@dtu.dk
  */
 public class PrioAntenna {
 	public final int x;
@@ -21,11 +21,11 @@ public class PrioAntenna {
 	public final Board board;
 
 	/**
-	 * Create an instance of the PrioAntenna
-	 * @Author Anders Greve Sørensen, s235093@dtu.dk
-	 * @param x The x coordinate of the prioAntenna
-	 * @param y The y coordinate of the prioAntenna
-	 * @param board The board the prioAntenna is associated with
+	 * Creates an instance of the priority antenna at a given position, on a given board.
+	 * @author Anders Greve Sørensen, s235093@dtu.dk.
+	 * @param x The x coordinate of the priority antenna.
+	 * @param y The y coordinate of the priority antenna.
+	 * @param board The board that the priority antenna is associated with.
 	 */
 	public PrioAntenna(int x, int y, Board board) {
 		this.x = x;
@@ -35,14 +35,21 @@ public class PrioAntenna {
 	}
 
 	/**
-	 * Updates player priority for the associated board
-	 * @Author Anders Greve Sørensen, s235093@dtu.dk
+	 * Updates the associated boards player priority list.
+	 * @author Anders Greve Sørensen, s235093@dtu.dk.
 	 */
 	public void updatePlayerPrio() {
-		this.board.setPriotizedPlayers(getPrioPlayerList(this.board.getPriotizedPlayers()));
+		this.board.setPrioritizedPlayers(getPrioPlayerList(this.board.getPrioritizedPlayers()));
 	}
 
 
+	/**
+	 * Calculates an ordered list of players in descending order of priority. So the first player in the array has
+	 * the highest priority, the next player has second highest and so on.
+	 * @author Anders Greve Sørensen, s235093@dtu.dk.
+	 * @param listOfPlayers The list of players to prioritize.
+	 * @return An ordered list of players in descending order of priority.
+	 */
 	public List<Player> getPrioPlayerList(List<Player> listOfPlayers) {
 		List<Player> prioPlayerList = new ArrayList<>();
 
@@ -54,7 +61,12 @@ public class PrioAntenna {
 		return prioPlayerList;
 	}
 
-
+	/**
+	 * Find the player with the highest priority, given a list of players.
+	 * @author Anders Greve Sørensen, s235093@dtu.dk.
+	 * @param listOfPlayers List of players from which you wish to find the one with the highest priority.
+	 * @return Player with the highest priority.
+	 */
 	private Player getprioPlayer(List<Player> listOfPlayers) {
 		Player prioPlayer = null;
 		int prioPlayerManhattenDistance = Integer.MAX_VALUE;
@@ -82,7 +94,14 @@ public class PrioAntenna {
 		return prioPlayer;
 	}
 
-
+	/**
+	 * Calculates the player with priority given two players who are equally far from the priority antenna.
+	 * In other words, performs a tiebreak.
+	 * @author Anders Greve Sørensen, s235093@dtu.dk.
+	 * @param player1 The first player in the tiebreak.
+	 * @param player2 The second player in the tiebreak.
+	 * @return The player with priority.
+	 */
 	private Player prioTieBreak(Player player1, Player player2) {
 		Player prioPlayer = null;
 		Space p1Space = player1.getSpace();
@@ -109,7 +128,16 @@ public class PrioAntenna {
 		return prioPlayer;
 	}
 
-
+	/**
+	 * Calculates the manhatten distance from one point to another. Meaning, the amount of spaces
+	 * between the two points without going diagonally.
+	 * @author Anders Greve Sørensen, s235093@dtu.dk.
+	 * @param x1 the x coordinate of the first point.
+	 * @param y1 the y coordinate of the first point.
+	 * @param x2 the x coordinate of the second point.
+	 * @param y2 the y coordinate of the second point.
+	 * @return the manhatten distance from one point to another.
+	 */
 	private int getManhattenDistance(int x1, int y1, int x2, int y2) {
 		return Math.abs(x1 - x2) + Math.abs(y1 - y2);
 	}

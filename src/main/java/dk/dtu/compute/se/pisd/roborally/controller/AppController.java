@@ -109,7 +109,7 @@ public class AppController implements Observer {
             board.getSpace(2,2).setElement(new ConveyorBelt()); // WARN: TODO: This is for debugging json temporaryly and might be helpful to debug other parts of our program, delete this before production release
 			// Add prioAntenna to board, and set walls on its space.
 			PrioAntenna prioAntenna = new PrioAntenna(5, 5, board);
-			board.getSpaces()[5][5].getWalls().addAll(List.of(Heading.NORTH, Heading.SOUTH, Heading.EAST, Heading.WEST));
+			board.getSpace(5, 5).getWalls().addAll(List.of(Heading.NORTH, Heading.SOUTH, Heading.EAST, Heading.WEST));
 
             gameController = new GameController(board);
             int no = result.get();

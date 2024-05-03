@@ -74,38 +74,62 @@ public class Board extends Subject {
         this.stepMode = false;
     }
 
-
+	/**
+	 * Gives the priority antenna of the board.
+	 * @author Anders Greve Sørensen, s235093@dtu.dk.
+	 * @return the priority antenna of this board.
+	 */
 	public PrioAntenna getPrioAntenna() {
 		return this.prioAntenna;
 	}
 
 	/**
 	 * Retrieves list of all players.
-	 * @author Anders Greve Sørensen, s235093@dtu.dk
+	 * @author Anders Greve Sørensen, s235093@dtu.dk.
 	 * @return list of Player objects.
 	 */
 	public List<Player> getPlayers() {
 		return this.players;
 	}
 
-	public void setPlayers(List<Player> playerList) {
-		this.players = playerList;
-	}
+//	/**
+//	 * Sets the player list of the board, to the given list of players.
+//	 * @author Anders Greve Sørensen, s235093@dtu.dk
+//	 * @param playerList The list of players to set for the board.
+//	 */
+////	public void setPlayers(List<Player> playerList) {
+////		this.players = playerList;
+////	}
+//
+////
+////	public Space[][] getSpaces() {
+////		return this.spaces;
+////	}
 
-
-	public Space[][] getSpaces() {
-		return this.spaces;
-	}
-
+	/**
+	 * attaches a given priority antenna to this board.
+	 * @author Anders Greve Sørensen, s235093@dtu.dk.
+	 * @param prioAntenna the priority antenna to be attached to this board.
+	 */
 	public void setPrioAntenna(PrioAntenna prioAntenna) {
 		this.prioAntenna = prioAntenna;
 	}
 
-	public List<Player> getPriotizedPlayers() {
+	/**
+	 * retrieve this boards list of prioritized players.
+	 * @author Anders Greve Sørensen, s235093@dtu.dk.
+	 * @return the boards list of prioritized players.
+	 */
+	public List<Player> getPrioritizedPlayers() {
 		return priotizedPlayers;
 	}
 
-	public void setPriotizedPlayers(List<Player> prioPlayerList) {
+	/**
+	 * Set this boards prioritized players list to the given list of players.
+	 * @author Anders Greve Sørensen, s235093@dtu.dk.
+	 * @param prioPlayerList The player list to set this boards prioritized players list to.
+	 */
+	public void setPrioritizedPlayers(List<Player> prioPlayerList) {
 		this.priotizedPlayers = prioPlayerList;
 	}
 
@@ -145,6 +169,11 @@ public class Board extends Subject {
         }
     }
 
+	/**
+	 * Add a player to this board's prioritized players list.
+	 * @author Anders Greve Sørensen, s235093@dtu.dk.
+	 * @param player the player to be added to the prioritized players list.
+	 */
 	public void addPrioPlayer(@NotNull Player player) {
 		if (player.board == this && !priotizedPlayers.contains(player)) {
 			priotizedPlayers.add(player);
@@ -152,6 +181,12 @@ public class Board extends Subject {
 		}
 	}
 
+	/**
+	 * Get a player from the prioritized player list, given its index.
+	 * @author Anders Greve Sørensen, s235093@dtu.dk.
+	 * @param i the index of the player in the prioritized player list.
+	 * @return the player with index i in this board's prioritized player list. null if index is out of range.
+	 */
 	public Player getPrioPlayer(int i) {
 		if (i >= 0 && i < priotizedPlayers.size()) {
 			return priotizedPlayers.get(i);
@@ -219,6 +254,12 @@ public class Board extends Subject {
         }
     }
 
+	/**
+	 * Gets the index of the given player in the prioritized player list of this board.
+	 * @author Anders Greve Sørensen, s235093@dtu.dk.
+	 * @param player The player the find the index of.
+	 * @return the index of the given player in the boards prioritized players list.
+	 */
 	public int getPrioPlayerNumber(@NotNull Player player) {
 		if (player.board == this) {
 			return priotizedPlayers.indexOf(player);
