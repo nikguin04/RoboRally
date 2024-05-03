@@ -27,10 +27,11 @@ public class PrioAntenna {
 	 * @param y The y coordinate of the prioAntenna
 	 * @param board The board the prioAntenna is associated with
 	 */
-	PrioAntenna(int x, int y, Board board) {
+	public PrioAntenna(int x, int y, Board board) {
 		this.x = x;
 		this.y = y;
 		this.board = board;
+		board.setPrioAntenna(this);
 	}
 
 	/**

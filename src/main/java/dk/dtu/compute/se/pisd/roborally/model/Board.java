@@ -45,7 +45,7 @@ public class Board extends Subject {
 
     private final Space[][] spaces;
 
-	private final PrioAntenna prioAntenna = new PrioAntenna(5, 5, this);
+	private PrioAntenna prioAntenna;
 
     private List<Player> players = new ArrayList<>();
 
@@ -60,6 +60,20 @@ public class Board extends Subject {
     private boolean stepMode;
 
     private int move_count = 0;
+
+    public Board(int width, int height) {
+		this.width = width;
+        this.height = height;
+        spaces = new Space[width][height];
+        for (int x = 0; x < width; x++) {
+            for(int y = 0; y < height; y++) {
+					Space space = new Space(this, x, y);
+					spaces[x][y] = space;
+            }
+        }
+        this.stepMode = false;
+    }
+
 
 	public PrioAntenna getPrioAntenna() {
 		return this.prioAntenna;
@@ -78,23 +92,14 @@ public class Board extends Subject {
 		this.players = playerList;
 	}
 
-    public Board(int width, int height) {
-		this.width = width;
-        this.height = height;
-        spaces = new Space[width][height];
-        for (int x = 0; x < width; x++) {
-            for(int y = 0; y < height; y++) {
-					Space space = new Space(this, x, y);
-					spaces[x][y] = space;
 
-					// if space is prioAntenna space, add walls to it.
-				if (x == this.prioAntenna.x && y == this.prioAntenna.y) {
-					this.getSpace(this.prioAntenna.x, this.prioAntenna.y).getWalls().addAll(List.of(Heading.NORTH, Heading.SOUTH, Heading.EAST, Heading.WEST));
-				}
-            }
-        }
-        this.stepMode = false;
-    }
+	public Space[][] getSpaces() {
+		return this.spaces;
+	}
+
+	public void setPrioAntenna(PrioAntenna prioAntenna) {
+		this.prioAntenna = prioAntenna;
+	}
 
 	public List<Player> getPriotizedPlayers() {
 		return priotizedPlayers;
