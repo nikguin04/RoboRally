@@ -1,5 +1,6 @@
 package dk.dtu.compute.se.pisd.roborally.controller.SaveLoad;
 
+import static dk.dtu.compute.se.pisd.roborally.model.Heading.SOUTH;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.reflect.Field;
@@ -10,12 +11,16 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import com.mysql.cj.exceptions.AssertionFailedException;
+
 import dk.dtu.compute.se.pisd.roborally.controller.ConveyorBelt;
 import dk.dtu.compute.se.pisd.roborally.model.Board;
+import dk.dtu.compute.se.pisd.roborally.model.Command;
 import dk.dtu.compute.se.pisd.roborally.model.Phase;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.view.LoadDialog;
@@ -27,42 +32,50 @@ import javafx.application.Platform;
  */
 public class LoadTest {
 
-
 	@Test
 	public void testLoad() throws InterruptedException, ExecutionException {
-		CompletableFuture<Boolean> passed = new CompletableFuture<>();
+		CompletableFuture<AssertionFailedException> passed = new CompletableFuture<>();
+		passed.completeOnTimeout(new AssertionFailedException("Timeout"), 5000, TimeUnit.MILLISECONDS);
 
 		Platform.startup(new Runnable() {
 			@Override
 			public void run() {
+				Board testboard = CreateTestBoard();
 
+				// TODO: Save test board and load
 
 
 				LoadDialog<Board> ld = new LoadDialog<>();
 				ld.LoadBoardFromFile("gamedata/TempTest.json");
-				Board loadedBoard = ld.getResult();
+				Board loadedBoard = ld.getCurrentBoard();
 
-				passed.complete(false);
+				try {
+					CompareBoard(testboard, loadedBoard);
+					passed.complete(null);
+				} catch (AssertionFailedException ae) { // AssertError will not be catched if not catching all exceptions
+					passed.complete(ae);
+				}
+
 			}
 		});
-
-
-
-		assertTrue(passed.get());
+		assertNull(passed.get());
 	}
 
 	@Test
-	public void Testctb() {
+	public void TestTestBoardValidity() {
 		CreateTestBoard();
 	}
 
-	public Board CreateTestBoard()  {
+	public Board CreateTestBoard() throws AssertionError {
 
-		Board defaultBoard = new Board(4,4);
+		Board defaultBoard = new Board(8,8);
 
-		Board b = new Board(4,4); // initialize totally blank board
+		Board b = new Board(8,8); // initialize totally blank board
 		// add variables to board for saving and loading sucessfully
-		Player p = new Player(b, "red", "test player 1");
+		Player p = new Player(b, "red", "test player 1", new Command[] {Command.FWD2, Command.FWD1, Command.LEFT, Command.FWD1, Command.FWD1, Command.FWD2, Command.FWD1, Command.RIGHT});
+		p.setSpace(b.getSpace(1, 3));
+		p.setHeading(SOUTH);
+
 		b.addPlayer(p);
 		b.setCurrentPlayer(p);
 		b.setGameId(1);
@@ -75,36 +88,37 @@ public class LoadTest {
 		List<String> ignoreVariables = Arrays.asList(
 			"width",
 			"height");
-		assureBoardIndifference(b, defaultBoard, ignoreVariables);
+		AssureBoardIndifference(b, defaultBoard, ignoreVariables);
 
 		return b;
 	}
 
-	public boolean compareBoard(Board b_one, Board b_two) {
+	public boolean CompareBoard(Board b_one, Board b_two) throws AssertionFailedException {
 		Field[] board_fields = Board.class.getDeclaredFields();
+		if ((b_one == null || b_two == null)) return (b_one == null && b_two == null);
 
 		for (int i = 0; i < board_fields.length; i++) {
 			if (board_fields[i].getName().startsWith("$SWITCH_TABLE")) { continue; } // ignore switch tables which is counted with fields
-			System.out.print("Checking: " + board_fields[i].getName() + " - ");
+			System.out.println("Checking: " + board_fields[i].getName());
 			try {
-				board_fields[i].setAccessible(true);
+ 				board_fields[i].setAccessible(true);
 				Object comp = board_fields[i].get(b_one);
 				Object def = board_fields[i].get(b_two);
 
 				if (comp == null && def == null) { // Check if both are null
 					continue;
 				} else if (comp == null || def == null) {
-					return false;
+					throw new AssertionFailedException("Variable \"" + board_fields[i].getName() + "\" check failed, single variable is null: " + (comp == null  ? "null" : comp.toString()) + ":" + (def == null  ? "null" : def.toString()) );
 				} else { // No null pointers
 					if (def.getClass().isArray()) {
-						if (!compareArray(def, comp)) return false;
+						if (!compareArray(def, comp)) throw new AssertionFailedException("Variable \"" + board_fields[i].getName() + "\" check failed, arrays are not equal: " + comp.toString() + ":" + def.toString());;
 					} else {
-						if (!comp.equals(def)) return false;
+						if (!comp.equals(def)) throw new AssertionFailedException("Variable \"" + board_fields[i].getName() + "\" check failed, variables are not equal: " + comp.toString() + ":" + def.toString());;
 					}
 				}
 			} catch (IllegalAccessException e) {
 				System.out.println("Debug: " + board_fields[i].getName() + " Error: " + e.getMessage());
-				return false;
+				throw new AssertionFailedException("IllegalAccessException - " + board_fields[i].getName() + " Error: " + e.getMessage());
 			}
 		}
 		return true;
@@ -119,7 +133,7 @@ public class LoadTest {
 	 * @param b_two
 	 * @return
 	 */
-	public void assureBoardIndifference(Board b_one, Board b_two, List<String> ignoreVariables) throws AssertionError {
+	public void AssureBoardIndifference(Board b_one, Board b_two, List<String> ignoreVariables) throws AssertionError {
 		Field[] board_fields = Board.class.getDeclaredFields();
 
 		for (int i = 0; i < board_fields.length; i++) {

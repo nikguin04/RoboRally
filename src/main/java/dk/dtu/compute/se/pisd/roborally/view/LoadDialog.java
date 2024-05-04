@@ -207,6 +207,14 @@ public class LoadDialog<T> extends Dialog<Board> {
         return defaultChoice;
     }
 
+    /**
+     * Gets current board loaded from selected combobox, this is usually for testing
+     * @return Current board loaded from selection
+     */
+    public final Board getCurrentBoard() {
+        return current_board;
+    }
+
 
 
     /* ************************************************************************
