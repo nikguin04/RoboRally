@@ -10,6 +10,9 @@ import com.google.gson.JsonParseException;
 import dk.dtu.compute.se.pisd.roborally.controller.SpaceElement;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Deserializer {
 	/**
@@ -148,12 +151,16 @@ public class Deserializer {
 			}
 			String cl = obj.get("element").getAsString();
 			if (!cl.isEmpty()) {
+				String[] split = cl.split("-");
 				try {
-
-					Class elemClass = Class.forName("dk.dtu.compute.se.pisd.roborally.controller." + cl);
+					Class elemClass = Class.forName("dk.dtu.compute.se.pisd.roborally.controller." + split[0]);
 					boolean properclass = SpaceElement.class.isAssignableFrom(elemClass);
 					if (properclass) {
-						SpaceElement se = (SpaceElement) elemClass.getDeclaredConstructor().newInstance();
+						//String[] args = (split.size() == 0) ? null : (String[]) split.toArray();
+						SpaceElement se = (SpaceElement)
+							((split.length == 1)
+							? elemClass.getDeclaredConstructor().newInstance()
+							: elemClass.getDeclaredConstructor(String.class).newInstance(split[1]));
 						s.setElement(se);
 					}
 				} catch (Exception e) {
