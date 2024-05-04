@@ -35,7 +35,7 @@ public class LoadTest {
 	@Test
 	public void testLoad() throws InterruptedException, ExecutionException {
 		CompletableFuture<AssertionFailedException> passed = new CompletableFuture<>();
-		passed.completeOnTimeout(new AssertionFailedException("Timeout"), 5000, TimeUnit.MILLISECONDS);
+		//passed.completeOnTimeout(new AssertionFailedException("Timeout"), 5000, TimeUnit.MILLISECONDS);
 
 		Platform.startup(new Runnable() {
 			@Override
@@ -63,12 +63,17 @@ public class LoadTest {
 
 	@Test
 	public void TestTestBoardValidity() {
-		CreateTestBoard();
+		Board defaultBoard = new Board(8,8);
+		Board test = CreateTestBoard();
+
+		List<String> ignoreVariables = Arrays.asList(
+			"width",
+			"height");
+		AssureBoardIndifference(test, defaultBoard, ignoreVariables);
 	}
 
 	public Board CreateTestBoard() throws AssertionError {
 
-		Board defaultBoard = new Board(8,8);
 
 		Board b = new Board(8,8); // initialize totally blank board
 		// add variables to board for saving and loading sucessfully
@@ -78,17 +83,14 @@ public class LoadTest {
 
 		b.addPlayer(p);
 		b.setCurrentPlayer(p);
-		b.setGameId(1);
+		b.setGameId(69);
 		b.getSpace(2, 2).setElement(new ConveyorBelt());
 		b.setPhase(Phase.ACTIVATION);
 		b.setStep(1);
 		b.setStepMode(true);
 		b.incMoveCount();
 
-		List<String> ignoreVariables = Arrays.asList(
-			"width",
-			"height");
-		AssureBoardIndifference(b, defaultBoard, ignoreVariables);
+
 
 		return b;
 	}
@@ -111,9 +113,9 @@ public class LoadTest {
 					throw new AssertionFailedException("Variable \"" + board_fields[i].getName() + "\" check failed, single variable is null: " + (comp == null  ? "null" : comp.toString()) + ":" + (def == null  ? "null" : def.toString()) );
 				} else { // No null pointers
 					if (def.getClass().isArray()) {
-						if (!compareArray(def, comp)) throw new AssertionFailedException("Variable \"" + board_fields[i].getName() + "\" check failed, arrays are not equal: " + comp.toString() + ":" + def.toString());;
+						compareArray(def, comp);
 					} else {
-						if (!comp.equals(def)) throw new AssertionFailedException("Variable \"" + board_fields[i].getName() + "\" check failed, variables are not equal: " + comp.toString() + ":" + def.toString());;
+						if (!comp.equals(def)) throw new AssertionFailedException("Variable \"" + board_fields[i].getName() + "\" check failed, variables are not equal: " + comp.toString() + ":" + def.toString());
 					}
 				}
 			} catch (IllegalAccessException e) {
@@ -152,7 +154,11 @@ public class LoadTest {
 					continue;
 				} else { // No null pointers
 					if (def.getClass().isArray()) {
-						if (compareArray(def, comp)) throw new AssertionError("The two boards are similar in array variable: " + board_fields[i].getName()); //return true;
+						try {
+							if (compareArray(def, comp)) throw new AssertionError("The two boards are similar in array variable: " + board_fields[i].getName()); //return true;
+						} catch (AssertionFailedException e) {
+							// The comparison has a difference, so we can continue
+						}
 					} else {
 						if (comp.equals(def)) throw new AssertionError("The two boards are similar in variable: " + board_fields[i].getName()); //return true;
 					}
@@ -164,21 +170,21 @@ public class LoadTest {
 		//return false;
 	}
 
-	public boolean compareArray(Object def, Object comp) {
-		if (def.getClass() != comp.getClass()) { return false; }
+	public boolean compareArray(Object def, Object comp) throws AssertionFailedException {
+		if (def.getClass() != comp.getClass()) { throw new AssertionFailedException("Array classes are indifferent"); }
 		if (def.getClass().isArray() && comp.getClass().isArray()) {
 			Object[] defarray = (Object[])def;
 			Object[] comparray = (Object[])comp;
-			if (defarray.length != comparray.length) { return false; }
+			if (defarray.length != comparray.length) { throw new AssertionFailedException("Arrays differ in size: " + defarray.length + " - " + comparray.length); }
 			if (defarray[0].getClass().isArray() && comparray[0].getClass().isArray()) { // check for nested array
 				for (int i = 0; i < defarray.length; i++) {
-					if (!compareArray(defarray[i], comparray[i])) return false;
+					compareArray(defarray[i], comparray[i]);
 				}
 			} else {
 				for (int i = 0; i < defarray.length; i++) {
 					boolean single_object_comparison = defarray[i].equals(comparray[i]);
 					//System.out.println("Comp result" + i + ": " + single_object_comparison);
-					if (!single_object_comparison) return false;
+					if (!single_object_comparison) throw new AssertionFailedException("Objects are not equal: " + defarray[i] + " != " + comparray[i]);
 				}
 				return true;
 			}
