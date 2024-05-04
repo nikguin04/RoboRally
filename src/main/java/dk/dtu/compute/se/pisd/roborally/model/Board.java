@@ -22,6 +22,8 @@
 package dk.dtu.compute.se.pisd.roborally.model;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
+import dk.dtu.compute.se.pisd.roborally.controller.CheckPoint;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -185,6 +187,10 @@ public class Board extends Subject {
 
 	public void incMoveCount() {
 		move_count++;
+	}
+
+    public void setMoveCount(int move_count) {
+		this.move_count = move_count;
 	}
 
     public Player getNextPlayer() {

@@ -21,6 +21,7 @@ public class Deserializer {
 	 * <p>TODO: Deserialize "move_count"</p>
 	 * <p>TODO: Deserialize "current_playerindex"</p>
 	 * <p>TODO: Deserialize "phase" (Currently always starts in PROGRAMMING)</p>
+	 * <p>TODO: Deserialize "gameId"</p>
 	 */
 	public static class BoardDeserializer implements JsonDeserializer<Board>	{
         @Override
@@ -37,11 +38,14 @@ public class Deserializer {
 				JsonArray xarr = spaces.get(ix).getAsJsonArray();
 				for (int iy = 0; iy < spaces.size(); iy++) {
 					Space new_s = context.deserialize(xarr.get(iy), Space.class);
-					b.getSpace(ix, iy).copyAttributesFrom(new_s);;
+					b.getSpace(ix, iy).copyAttributesFrom(new_s);
 				}
 			}
 
-
+			b.setMoveCount(obj.get("move_count").getAsInt());
+			b.setCurrentPlayer(b.getPlayer(obj.get("current_playerindex").getAsInt()));
+			b.setPhase(Phase.valueOf(obj.get("phase").getAsString()));
+			b.setGameId(obj.get("gameId").getAsInt());
 
 			PlayerDeserializer.board = b;
 

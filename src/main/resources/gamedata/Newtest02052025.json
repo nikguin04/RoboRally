@@ -1,42 +1,73 @@
 {
   "players": [
     {
-      "name": "test player 1",
+      "name": "Player 1",
       "color": "red",
-      "space": "1,3",
-      "heading": "SOUTH",
+      "space": "2,4",
+      "heading": "WEST",
       "command_cards": [
         {
+          "command": "OPTION_LEFT_RIGHT"
+        },
+        {
+          "command": "FWD1"
+        },
+        {
+          "command": "Back"
+        },
+        {
+          "command": "OPTION_LEFT_RIGHT"
+        },
+        {
+          "command": "FWD3"
+        },
+        {
+          "command": "RIGHT"
+        },
+        {
           "command": "FWD2"
-        },
-        {
-          "command": "FWD1"
-        },
-        {
-          "command": "LEFT"
-        },
-        {
-          "command": "FWD1"
-        },
-        {
-          "command": "FWD1"
-        },
-        {
-          "command": "FWD2"
-        },
-        {
-          "command": "FWD1"
         },
         {
           "command": "RIGHT"
         }
       ]
+    },
+    {
+      "name": "Player 2",
+      "color": "green",
+      "space": "4,5",
+      "heading": "EAST",
+      "command_cards": [
+        {
+          "command": "AGAN"
+        },
+        {
+          "command": "Back"
+        },
+        {
+          "command": "RIGHT"
+        },
+        {
+          "command": "OPTION_LEFT_RIGHT"
+        },
+        {
+          "command": "Back"
+        },
+        {
+          "command": "FWD1"
+        },
+        {
+          "command": "UTRN"
+        },
+        {
+          "command": "AGAN"
+        }
+      ]
     }
   ],
-  "current_playerindex": 0,
-  "phase": "ACTIVATION",
-  "move_count": 4,
-  "gameId": 69,
+  "current_playerindex": 1,
+  "phase": "PROGRAMMING",
+  "move_count": 26,
   "spaces": [
     [
       {
@@ -155,7 +186,7 @@
       },
       {
         "walls": [],
-        "element": "CheckPoint(1)"
+        "element": ""
       },
       {
         "walls": [],
