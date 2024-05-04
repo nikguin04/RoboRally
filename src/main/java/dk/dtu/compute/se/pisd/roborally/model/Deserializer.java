@@ -47,7 +47,8 @@ public class Deserializer {
 
 			b.setMoveCount(obj.get("move_count").getAsInt());
 			b.setPhase(Phase.valueOf(obj.get("phase").getAsString()));
-			b.setGameId(obj.get("gameId").getAsInt());
+			if (obj.has("gameId"))
+				b.setGameId(obj.get("gameId").getAsInt());
 
 			PlayerDeserializer.board = b;
 

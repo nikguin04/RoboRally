@@ -40,6 +40,7 @@ public class Serializer {
 			jsonObject.addProperty("phase", board.getPhase().name());
 			//jsonObject.addProperty("step", "null"); // dont save step, we should only let player save at start/end of a phase
 			jsonObject.addProperty("move_count", board.getMoveCount());
+			jsonObject.addProperty("gameId", board.getGameId());
 
             //jsonObject.add("instance", context.serialize(src));
 			JsonArray spacesX = new JsonArray();

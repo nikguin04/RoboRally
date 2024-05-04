@@ -207,11 +207,12 @@ public class Player extends Subject {
 
             same = (!same) ? false : this.name.equals(comp.name);
             same = (!same) ? false : this.color.equals(comp.color);
-
-            if (this.space.getElement() != null && comp.space.getElement() != null)
-                same = (!same) ? false : this.space.getElement().equals(comp.space.getElement());
-            else if (this.space.getElement() == null || comp.space.getElement() == null)
-                same = (!same) ? false : this.space.getElement() == null && comp.space.getElement() == null;
+            if (this.space != null) { // workaround when initializing player for blank game
+                if (this.space.getElement() != null && comp.space.getElement() != null)
+                    same = (!same) ? false : this.space.getElement().equals(comp.space.getElement());
+                else if (this.space.getElement() == null || comp.space.getElement() == null)
+                    same = (!same) ? false : this.space.getElement() == null && comp.space.getElement() == null;
+            }
 
             same = (!same) ? false : this.heading.equals(comp.heading);
             same = (!same) ? false : compareArray(this.program, comp.program);
