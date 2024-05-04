@@ -64,4 +64,15 @@ public class CommandCardField extends Subject {
             notifyChange();
         }
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof CommandCardField) {
+            CommandCardField f = ((CommandCardField)obj);
+            if (this.card == null && f.card == null) { return true; }
+            if (this.card == null || f.card == null) { return false; }
+            return this.card.equals(f.card);
+        }
+        return false;
+    }
 }

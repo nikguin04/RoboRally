@@ -65,4 +65,13 @@ public class CheckPoint extends SpaceElement {
 	public String getArgument() {
         return String.valueOf(checkPointNr);
     }
+
+	@Override
+    public boolean equals(Object obj) {
+        if (obj instanceof CheckPoint) {
+            CheckPoint comp = ((CheckPoint)obj);
+            return this.checkPointNr == comp.checkPointNr;
+		}
+		return false;
+    }
 }

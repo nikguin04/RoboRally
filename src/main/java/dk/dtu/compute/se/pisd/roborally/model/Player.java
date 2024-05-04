@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static dk.dtu.compute.se.pisd.roborally.model.Heading.SOUTH;
+import static dk.dtu.compute.se.pisd.roborally.utils.ArrayCompare.compareArray;
 
 /**
  * ...
@@ -194,5 +195,41 @@ public class Player extends Subject {
 
     public void setLastCardPlayed(CommandCard card) {
         this.lastCardPlayed = card;
+    }
+
+
+    @Override
+    public boolean equals(Object obj) { // TODO: This should be made as the board, where all variables are checked
+        if (obj instanceof Player) {
+            Player comp = ((Player)obj);
+            boolean same = true;
+
+
+            same = (!same) ? false : this.name.equals(comp.name);
+            same = (!same) ? false : this.color.equals(comp.color);
+
+            if (this.space.getElement() != null && comp.space.getElement() != null)
+                same = (!same) ? false : this.space.getElement().equals(comp.space.getElement());
+            else if (this.space.getElement() == null || comp.space.getElement() == null)
+                same = (!same) ? false : this.space.getElement() == null && comp.space.getElement() == null;
+
+            same = (!same) ? false : this.heading.equals(comp.heading);
+            same = (!same) ? false : compareArray(this.program, comp.program);
+            same = (!same) ? false : compareArray(this.cards, comp.cards);
+
+            if (this.lastCardPlayed != null)
+                same = (!same) ? false : this.lastCardPlayed.equals(comp.lastCardPlayed);
+            else {
+                same = (!same) ? false : this.lastCardPlayed == null && comp.lastCardPlayed == null;
+            }
+
+
+            same = (!same) ? false : this.checkPointCounter == comp.checkPointCounter;
+
+
+
+            return same;
+        }
+        return false;
     }
 }

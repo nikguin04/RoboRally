@@ -46,7 +46,6 @@ public class Deserializer {
 			}
 
 			b.setMoveCount(obj.get("move_count").getAsInt());
-			b.setCurrentPlayer(b.getPlayer(obj.get("current_playerindex").getAsInt()));
 			b.setPhase(Phase.valueOf(obj.get("phase").getAsString()));
 			b.setGameId(obj.get("gameId").getAsInt());
 
@@ -58,6 +57,7 @@ public class Deserializer {
 				Player p = context.deserialize(players.get(i), Player.class);
 				b.addPlayer(p);
 			}
+			b.setCurrentPlayer(b.getPlayer(obj.get("current_playerindex").getAsInt()));
 
             /*switch (className) {
                 case "com.example.expressions.Const" -> {e = new Const(obj.get("value").getAsInt());}
