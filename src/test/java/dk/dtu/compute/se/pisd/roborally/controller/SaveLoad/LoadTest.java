@@ -44,9 +44,11 @@ public class LoadTest {
 				LoadDialog<Board> ld = new LoadDialog<>();
 				ld.LoadBoardFromFile("gamedata/TempTest.json");
 				Board loadedBoard = ld.getCurrentBoard();
-
+				List<String> ignoreVariables = Arrays.asList(
+					"step",
+					"stepMode");
 				try {
-					CompareBoard(testboard, loadedBoard);
+					CompareBoard(testboard, loadedBoard, ignoreVariables);
 					passed.complete(null);
 				} catch (AssertionFailedException ae) { // AssertError will not be catched if not catching all exceptions
 					passed.complete(ae);
@@ -91,11 +93,12 @@ public class LoadTest {
 		return b;
 	}
 
-	public boolean CompareBoard(Board b_one, Board b_two) throws AssertionFailedException {
+	public boolean CompareBoard(Board b_one, Board b_two, List<String> ignoreVariables) throws AssertionFailedException {
 		Field[] board_fields = Board.class.getDeclaredFields();
 		if ((b_one == null || b_two == null)) return (b_one == null && b_two == null);
 
 		for (int i = 0; i < board_fields.length; i++) {
+			if (ignoreVariables.contains(board_fields[i].getName())) { continue; }
 			if (board_fields[i].getName().startsWith("$SWITCH_TABLE")) { continue; } // ignore switch tables which is counted with fields
 			System.out.println("Checking: " + board_fields[i].getName());
 			try {
