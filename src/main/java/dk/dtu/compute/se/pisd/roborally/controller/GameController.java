@@ -22,6 +22,9 @@
 package dk.dtu.compute.se.pisd.roborally.controller;
 
 import dk.dtu.compute.se.pisd.roborally.model.*;
+
+import static dk.dtu.compute.se.pisd.roborally.model.Phase.INITIALISATION;
+
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -163,6 +166,10 @@ public class GameController {
                 CommandCard card = currentPlayer.getProgramField(step).getCard();
                 if (card != null) {
                     Command command = card.command;
+                    if (command == command.OPTION_LEFT_RIGHT){
+                        board.setPhase(Phase.PLAYER_INTERACTION);
+                        return;
+                    }
                     executeCommand(currentPlayer, command);
                 }
                 int nextPlayerNumber = board.getPlayerNumber(currentPlayer) + 1;
@@ -249,6 +256,14 @@ public class GameController {
                 }
             }
         }
+    }
+
+
+    public void executeCommandOptionAndContinue(Command command){
+        board.setPhase(Phase.ACTIVATION);
+        executeCommand(board.getCurrentPlayer(), command);
+        board.setStep(board.getStep() + 1);
+        continuePrograms();
     }
 
     private CommandCard generateRandomCommandCard() {
