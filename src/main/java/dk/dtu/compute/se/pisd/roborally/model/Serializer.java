@@ -118,7 +118,9 @@ public class Serializer {
 			space_object.add("walls", wallArr);
 
 			SpaceElement elem = space.getElement();
-			space_object.addProperty("element", elem == null ? "" : elem.getClass().getSimpleName());
+			String element = elem == null ? "" : elem.getClass().getSimpleName(); // Add class name
+			element += (elem == null || elem.getArgument() == "") ? "" : "-"+elem.getArgument(); // Add argument
+			space_object.addProperty("element", element);
 
 			return space_object;
         }

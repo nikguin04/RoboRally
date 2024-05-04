@@ -60,4 +60,9 @@ public class CheckPoint extends SpaceElement {
 		}
 		return false;
 	}
+
+	@Override
+	public String getArgument() {
+        return String.valueOf(checkPointNr);
+    }
 }

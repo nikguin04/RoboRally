@@ -33,4 +33,7 @@ public abstract class SpaceElement {
 
     public abstract boolean doAction(GameController gameController, Space space);
 
+    public String getArgument() {
+        return "";
+    }
 }
