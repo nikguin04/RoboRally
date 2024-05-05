@@ -2,6 +2,8 @@ package dk.dtu.compute.se.pisd.roborally.controller.SaveLoad;
 
 import static dk.dtu.compute.se.pisd.roborally.model.Heading.SOUTH;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static dk.dtu.compute.se.pisd.roborally.utils.ArrayCompare.compareArray;
 
 import java.lang.reflect.Field;
@@ -72,9 +74,35 @@ public class LoadTest {
 		AssureBoardIndifference(test, defaultBoard, ignoreVariables);
 	}
 
+	@Test
+	public void TestTestBoardInvaliditySimple() {
+		Board defaultBoard = new Board(8,8);
+		Board test = CreateTestBoard();
+
+		List<String> ignoreVariables = Arrays.asList(
+			"width",
+			"height");
+		test.setStep(0);
+		assertThrows(AssertionError.class,
+			() -> AssureBoardIndifference(test, defaultBoard, ignoreVariables),
+			"Board is not indifferent in all variables (did not throw exception)c");
+	}
+
+	@Test
+	public void TestTestBoardInvalidityNested() {
+		Board defaultBoard = new Board(8,8);
+		Board test = CreateTestBoard();
+
+		List<String> ignoreVariables = Arrays.asList(
+			"width",
+			"height");
+		test.getSpace(2, 2).setElement(null);
+		assertThrows(AssertionError.class,
+			() -> AssureBoardIndifference(test, defaultBoard, ignoreVariables),
+			"Board is not indifferent in all variables (did not throw exception)c");
+	}
+
 	public Board CreateTestBoard() throws AssertionError {
-
-
 		Board b = new Board(8,8); // initialize totally blank board
 		// add variables to board for saving and loading sucessfully
 		Player p = new Player(b, "red", "test player 1", new Command[] {Command.FWD2, Command.FWD1, Command.LEFT, Command.FWD1, Command.FWD1, Command.FWD2, Command.FWD1, Command.RIGHT});
@@ -89,8 +117,6 @@ public class LoadTest {
 		b.setStep(1);
 		b.setStepMode(true);
 		b.incMoveCount();
-
-
 
 		return b;
 	}
