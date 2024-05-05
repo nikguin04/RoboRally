@@ -27,8 +27,11 @@ import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.RoboRally;
 
 import dk.dtu.compute.se.pisd.roborally.model.Board;
+import dk.dtu.compute.se.pisd.roborally.model.Heading;
 import dk.dtu.compute.se.pisd.roborally.model.Command;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
+
+import dk.dtu.compute.se.pisd.roborally.model.PrioAntenna;
 import dk.dtu.compute.se.pisd.roborally.model.Serializer;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
 import dk.dtu.compute.se.pisd.roborally.view.LoadDialog;
@@ -104,11 +107,16 @@ public class AppController implements Observer {
             //     here we just create an empty board with the required number of players.
             Board board = new Board(8,8);
             board.getSpace(2,2).setElement(new ConveyorBelt()); // WARN: TODO: This is for debugging json temporaryly and might be helpful to debug other parts of our program, delete this before production release
+			// Add prioAntenna to board, and set walls on its space.
+			PrioAntenna prioAntenna = new PrioAntenna(5, 5, board);
+			board.getSpace(5, 5).getWalls().addAll(List.of(Heading.NORTH, Heading.SOUTH, Heading.EAST, Heading.WEST));
+
             gameController = new GameController(board);
             int no = result.get();
             for (int i = 0; i < no; i++) {
                 Player player = new Player(board, PLAYER_COLORS.get(i), "Player " + (i + 1));
                 board.addPlayer(player);
+				board.addPrioPlayer(player);
                 player.setSpace(board.getSpace(i % board.width, i));
             }
 

@@ -132,10 +132,12 @@ public class GameController {
     }
 
     public void finishProgrammingPhase() {
-        makeProgramFieldsInvisible();
+		makeProgramFieldsInvisible();
         makeProgramFieldsVisible(0);
         board.setPhase(Phase.ACTIVATION);
-        board.setCurrentPlayer(board.getPlayer(0));
+		// When entering activation phase, calculate priority of players.
+		board.getPrioAntenna().updatePlayerPrio();
+        board.setCurrentPlayer(board.getPrioPlayer(0));
         board.setStep(0);
     }
 
@@ -156,7 +158,7 @@ public class GameController {
     }
 
     private void executeNextStep() {
-        Player currentPlayer = board.getCurrentPlayer();
+		Player currentPlayer = board.getCurrentPlayer();
         if (board.getPhase() == Phase.ACTIVATION && currentPlayer != null) {
             int step = board.getStep();
             if (step >= 0 && step < Player.NO_REGISTERS) {
@@ -174,9 +176,9 @@ public class GameController {
 					}
 				}
 
-                int nextPlayerNumber = board.getPlayerNumber(currentPlayer) + 1;
+                int nextPlayerNumber = board.getPrioPlayerNumber(currentPlayer) + 1;
                 if (nextPlayerNumber < board.getPlayersNumber()) {
-                    board.setCurrentPlayer(board.getPlayer(nextPlayerNumber));
+                    board.setCurrentPlayer(board.getPrioPlayer(nextPlayerNumber));
                 } else {
 					// For some reason, we can't just get a list of players???
 					for (int i = 0; i < board.getPlayersNumber(); i++) {
@@ -187,10 +189,12 @@ public class GameController {
 						element.doAction(this, space);
 					}
                     step++;
+					// Each time all players have made a move, recalculate priority
+					board.getPrioAntenna().updatePlayerPrio();
                     if (step < Player.NO_REGISTERS) {
                         makeProgramFieldsVisible(step);
                         board.setStep(step);
-                        board.setCurrentPlayer(board.getPlayer(0));
+						board.setCurrentPlayer(board.getPrioPlayer(0));
                     } else {
                         StartProgrammingPhase(true);
                     }
