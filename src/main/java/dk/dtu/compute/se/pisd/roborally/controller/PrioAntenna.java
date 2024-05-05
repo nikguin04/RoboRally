@@ -170,4 +170,9 @@ public class PrioAntenna extends SpaceElement {
 	public boolean doAction(GameController gameController, Space space) {
 		throw new UnsupportedOperationException("Unimplemented method 'doAction' for priotiry antenna. This point should never be reached as priority antenna should have walls. If you get this message, there is a flaw in the game move logic");
 	}
+
+	@Override
+	public String getArgument() {
+        return String.valueOf(x + "," + y);
+    }
 }
