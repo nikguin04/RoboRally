@@ -19,6 +19,8 @@ import dk.dtu.compute.se.pisd.roborally.model.Board;
 import dk.dtu.compute.se.pisd.roborally.model.Command;
 import dk.dtu.compute.se.pisd.roborally.model.Phase;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
+import dk.dtu.compute.se.pisd.roborally.utils.CompareException;
+import dk.dtu.compute.se.pisd.roborally.utils.FieldsCompare;
 import dk.dtu.compute.se.pisd.roborally.view.LoadDialog;
 import javafx.application.Platform;
 
@@ -30,7 +32,7 @@ public class LoadTest {
 
 	@Test
 	public void testLoad() throws InterruptedException, ExecutionException {
-		CompletableFuture<AssertionFailedException> passed = new CompletableFuture<>();
+		CompletableFuture<CompareException> passed = new CompletableFuture<>();
 		//passed.completeOnTimeout(new AssertionFailedException("Timeout"), 5000, TimeUnit.MILLISECONDS);
 
 		Platform.startup(new Runnable() {
@@ -50,7 +52,7 @@ public class LoadTest {
 				try {
 					CompareBoard(testboard, loadedBoard, ignoreVariables);
 					passed.complete(null);
-				} catch (AssertionFailedException ae) { // AssertError will not be catched if not catching all exceptions
+				} catch (CompareException ae) {
 					passed.complete(ae);
 				}
 
@@ -93,36 +95,12 @@ public class LoadTest {
 		return b;
 	}
 
-	public boolean CompareBoard(Board b_one, Board b_two, List<String> ignoreVariables) throws AssertionFailedException {
-		Field[] board_fields = Board.class.getDeclaredFields();
-		if ((b_one == null || b_two == null)) return (b_one == null && b_two == null);
-
-		for (int i = 0; i < board_fields.length; i++) {
-			if (ignoreVariables.contains(board_fields[i].getName())) { continue; }
-			if (board_fields[i].getName().startsWith("$SWITCH_TABLE")) { continue; } // ignore switch tables which is counted with fields
-			System.out.println("Checking: " + board_fields[i].getName());
-			try {
- 				board_fields[i].setAccessible(true);
-				Object comp = board_fields[i].get(b_one);
-				Object def = board_fields[i].get(b_two);
-
-				if (comp == null && def == null) { // Check if both are null
-					continue;
-				} else if (comp == null || def == null) {
-					throw new AssertionFailedException("Variable \"" + board_fields[i].getName() + "\" check failed, single variable is null: " + (comp == null  ? "null" : comp.toString()) + ":" + (def == null  ? "null" : def.toString()) );
-				} else { // No null pointers
-					if (def.getClass().isArray()) {
-						compareArray(def, comp);
-					} else {
-						if (!comp.equals(def)) throw new AssertionFailedException("Variable \"" + board_fields[i].getName() + "\" check failed, variables are not equal: " + comp.toString() + ":" + def.toString());
-					}
-				}
-			} catch (IllegalAccessException e) {
-				System.out.println("Debug: " + board_fields[i].getName() + " Error: " + e.getMessage());
-				throw new AssertionFailedException("IllegalAccessException - " + board_fields[i].getName() + " Error: " + e.getMessage());
-			}
-		}
+	public boolean CompareBoard(Board b_one, Board b_two, List<String> ignoreVariables) throws CompareException {
+		FieldsCompare<Board> fc = new FieldsCompare<Board>();
+		// Dont test player for an equal board, since the player can be identical but on another board.
+		fc.CompareFields(b_one, b_two, ignoreVariables);
 		return true;
+
 	}
 
 	/**
