@@ -21,6 +21,7 @@ import dk.dtu.compute.se.pisd.roborally.model.Board;
 import dk.dtu.compute.se.pisd.roborally.model.Command;
 import dk.dtu.compute.se.pisd.roborally.model.Phase;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
+import dk.dtu.compute.se.pisd.roborally.model.PrioAntenna;
 import dk.dtu.compute.se.pisd.roborally.utils.CompareException;
 import dk.dtu.compute.se.pisd.roborally.utils.FieldsCompare;
 import dk.dtu.compute.se.pisd.roborally.view.LoadDialog;
@@ -44,8 +45,13 @@ public class LoadTest {
 
 				// TODO: Save test board and load
 
-
-				LoadDialog<Board> ld = new LoadDialog<>();
+				LoadDialog<Board> ld;
+				try {
+					ld = new LoadDialog<>();
+				} catch (Exception e) {
+					passed.complete(new CompareException("Could not open load dialog, check deserializer"));
+					return; // for warning messages
+				}
 				ld.LoadBoardFromFile("gamedata/TempTest.json");
 				Board loadedBoard = ld.getCurrentBoard();
 				List<String> ignoreVariables = Arrays.asList(
@@ -117,6 +123,9 @@ public class LoadTest {
 		b.setStep(1);
 		b.setStepMode(true);
 		b.incMoveCount();
+
+		b.setPrioAntenna(new PrioAntenna(4, 5, b));
+		b.addPrioPlayer(p);
 
 		return b;
 	}
