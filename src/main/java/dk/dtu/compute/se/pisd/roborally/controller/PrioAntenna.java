@@ -1,12 +1,15 @@
-package dk.dtu.compute.se.pisd.roborally.model;
+package dk.dtu.compute.se.pisd.roborally.controller;
 
-
-import dk.dtu.compute.se.pisd.roborally.controller.GameController;
-import dk.dtu.compute.se.pisd.roborally.controller.SpaceElement;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import dk.dtu.compute.se.pisd.roborally.model.Board;
+import dk.dtu.compute.se.pisd.roborally.model.Heading;
+import dk.dtu.compute.se.pisd.roborally.model.Player;
+import dk.dtu.compute.se.pisd.roborally.model.Space;
+import static dk.dtu.compute.se.pisd.roborally.utils.StringUtils.intarrFromCommaStr;
 
 import static dk.dtu.compute.se.pisd.roborally.model.Heading.*;
 
@@ -14,11 +17,32 @@ import static dk.dtu.compute.se.pisd.roborally.model.Heading.*;
 /**
  * @author Anders Greve Sørensen, s235093@dtu.dk
  */
-public class PrioAntenna {
+public class PrioAntenna extends SpaceElement {
+
+	// All these variables are only initialzied when a board uses a priority antenna.
 	public final int x;
 	public final int y;
 
-	public final Board board;
+	private Board board;
+
+	public void attachBoard(Board board) {
+		board.getSpace(x, y).setElement(this);
+		// Automatically create walls?
+		board.getSpace(x, y).getWalls().clear();
+		board.getSpace(x, y).getWalls().addAll(Arrays.asList(new Heading[] {Heading.NORTH, Heading.SOUTH, Heading.EAST, Heading.WEST}));
+		this.board = board;
+	}
+
+	public PrioAntenna(int x, int y) {
+		this.x = x;
+		this.y = y;
+	}
+
+	public PrioAntenna(String coord) {
+		int[] coordi = intarrFromCommaStr(coord);
+		this.x = coordi[0];
+		this.y = coordi[1];
+	}
 
 	/**
 	 * Creates an instance of the priority antenna at a given position, on a given board.
@@ -27,12 +51,11 @@ public class PrioAntenna {
 	 * @param y The y coordinate of the priority antenna.
 	 * @param board The board that the priority antenna is associated with.
 	 */
-	public PrioAntenna(int x, int y, Board board) {
+	/*public PrioAntenna(int x, int y, Board board) {
 		this.x = x;
 		this.y = y;
 		this.board = board;
-		board.setPrioAntenna(this);
-	}
+	}*/
 
 	/**
 	 * Updates the associated boards player priority list.
@@ -141,5 +164,10 @@ public class PrioAntenna {
 	 */
 	public int getManhattenDistance(int x1, int y1, int x2, int y2) {
 		return Math.abs(x1 - x2) + Math.abs(y1 - y2);
+	}
+
+	@Override
+	public boolean doAction(GameController gameController, Space space) {
+		throw new UnsupportedOperationException("Unimplemented method 'doAction' for priotiry antenna. This point should never be reached as priority antenna should have walls. If you get this message, there is a flaw in the game move logic");
 	}
 }

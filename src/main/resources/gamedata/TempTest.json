@@ -155,40 +155,6 @@
       },
       {
         "walls": [],
-        "element": "CheckPoint-1"
-      },
-      {
-        "walls": [],
-        "element": ""
-      },
-      {
-        "walls": [],
-        "element": ""
-      },
-      {
-        "walls": [],
-        "element": ""
-      },
-      {
-        "walls": [],
-        "element": ""
-      }
-    ],
-    [
-      {
-        "walls": [],
-        "element": ""
-      },
-      {
-        "walls": [],
-        "element": ""
-      },
-      {
-        "walls": [],
-        "element": ""
-      },
-      {
-        "walls": [],
         "element": ""
       },
       {
@@ -232,6 +198,40 @@
       {
         "walls": [],
         "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      }
+    ],
+    [
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": ["NORTH", "SOUTH", "EAST", "WEST"],
+        "element": "PrioAntenna-5,5"
       },
       {
         "walls": [],

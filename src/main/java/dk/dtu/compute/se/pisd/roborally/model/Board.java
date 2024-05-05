@@ -23,6 +23,7 @@ package dk.dtu.compute.se.pisd.roborally.model;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.controller.CheckPoint;
+import dk.dtu.compute.se.pisd.roborally.controller.PrioAntenna;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -100,6 +101,7 @@ public class Board extends Subject {
 	 * @param prioAntenna the priority antenna to be attached to this board.
 	 */
 	public void setPrioAntenna(PrioAntenna prioAntenna) {
+        prioAntenna.attachBoard(this);
 		this.prioAntenna = prioAntenna;
 	}
 

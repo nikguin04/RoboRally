@@ -17,11 +17,11 @@ import org.junit.jupiter.api.Test;
 import com.mysql.cj.exceptions.AssertionFailedException;
 
 import dk.dtu.compute.se.pisd.roborally.controller.ConveyorBelt;
+import dk.dtu.compute.se.pisd.roborally.controller.PrioAntenna;
 import dk.dtu.compute.se.pisd.roborally.model.Board;
 import dk.dtu.compute.se.pisd.roborally.model.Command;
 import dk.dtu.compute.se.pisd.roborally.model.Phase;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
-import dk.dtu.compute.se.pisd.roborally.model.PrioAntenna;
 import dk.dtu.compute.se.pisd.roborally.utils.CompareException;
 import dk.dtu.compute.se.pisd.roborally.utils.FieldsCompare;
 import dk.dtu.compute.se.pisd.roborally.view.LoadDialog;
@@ -103,9 +103,11 @@ public class LoadTest {
 			"width",
 			"height");
 		test.getSpace(2, 2).setElement(null);
+		test.getSpace(5, 5).setElement(null);
+		test.getSpace(5, 5).getWalls().clear();
 		assertThrows(AssertionError.class,
 			() -> AssureBoardIndifference(test, defaultBoard, ignoreVariables),
-			"Board is not indifferent in all variables (did not throw exception)c");
+			"Board is not indifferent in all variables (did not throw exception)");
 	}
 
 	public Board CreateTestBoard() throws AssertionError {
@@ -124,7 +126,7 @@ public class LoadTest {
 		b.setStepMode(true);
 		b.incMoveCount();
 
-		b.setPrioAntenna(new PrioAntenna(4, 5, b));
+		b.setPrioAntenna(new PrioAntenna(5, 5));
 		b.addPrioPlayer(p);
 
 		return b;
@@ -167,12 +169,14 @@ public class LoadTest {
 				} else { // No null pointers
 					if (def.getClass().isArray()) {
 						try {
-							if (compareArray(def, comp)) throw new AssertionError("The two boards are similar in array variable: " + board_fields[i].getName()); //return true;
+							if (compareArray(def, comp))
+								throw new AssertionError("The two boards are similar in array variable: " + board_fields[i].getName()); //return true;
 						} catch (AssertionFailedException e) {
 							// The comparison has a difference, so we can continue
 						}
 					} else {
-						if (comp.equals(def)) throw new AssertionError("The two boards are similar in variable: " + board_fields[i].getName()); //return true;
+						if (comp.equals(def))
+							throw new AssertionError("The two boards are similar in variable: " + board_fields[i].getName()); //return true;
 					}
 				}
 			} catch (IllegalAccessException e) {
