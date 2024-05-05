@@ -46,7 +46,7 @@ import java.io.Reader;
 
 /**
  * A dialog that shows a load menu to the user where they can pick a path
- *
+ * LoadDialog is user tested, and does not reqiuire a unit test.
  *
  * @see Dialog
  * @param <T> The type of the items to show to the user, and the type that is returned
@@ -164,6 +164,7 @@ public class LoadDialog<T> extends Dialog<Board> {
 
 
 
+
     /* ************************************************************************
      *
      * Public API
@@ -206,6 +207,14 @@ public class LoadDialog<T> extends Dialog<Board> {
         return defaultChoice;
     }
 
+    /**
+     * Gets current board loaded from selected combobox, this is usually for testing
+     * @return Current board loaded from selection
+     */
+    public final Board getCurrentBoard() {
+        return current_board;
+    }
+
 
 
     /* ************************************************************************
@@ -222,9 +231,27 @@ public class LoadDialog<T> extends Dialog<Board> {
     private void updateGrid() {
         grid.getChildren().clear();
 
-		FileResourceUtils fileutil = new FileResourceUtils();
+
 		String fileName = "gamedata/" + getSelectedItem() + ".json";
-		System.out.println("\ngetResource : " + fileName);
+        LoadBoardFromFile(fileName);
+
+
+        grid.add(label, 0, 0);
+        grid.add(comboBox, 0, 1);
+		grid.add(board_info_label, 0, 2);
+        getDialogPane().setContent(grid);
+
+
+        Platform.runLater(() -> comboBox.requestFocus());
+    }
+
+    /**
+     * Loads a save game from a file into the {@link #current_board} variable
+     * @param fileName File to load from resources
+     */
+    public void LoadBoardFromFile(String fileName) {
+        FileResourceUtils fileutil = new FileResourceUtils();
+        System.out.println("\ngetResource : " + fileName);
 		InputStream file;
 		try {
         	file = fileutil.getFileFromResourceAsStream(fileName);
@@ -246,16 +273,6 @@ public class LoadDialog<T> extends Dialog<Board> {
 		} catch (IOException e) {
 			current_board = null;
 		}
-
-
-
-        grid.add(label, 0, 0);
-        grid.add(comboBox, 0, 1);
-		grid.add(board_info_label, 0, 2);
-        getDialogPane().setContent(grid);
-
-
-        Platform.runLater(() -> comboBox.requestFocus());
     }
 
     /**

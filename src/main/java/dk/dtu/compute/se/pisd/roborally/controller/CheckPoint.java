@@ -1,7 +1,5 @@
 package dk.dtu.compute.se.pisd.roborally.controller;
 
-import dk.dtu.compute.se.pisd.roborally.controller.GameController;
-import dk.dtu.compute.se.pisd.roborally.controller.SpaceElement;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
 
@@ -23,6 +21,28 @@ public class CheckPoint extends SpaceElement {
 	}
 
 	/**
+	 * Instantiate checkpoint with given checkpoint number.
+	 * This works with strings so we can load from json easier
+	 * @author Niklas Jensen, s235101@dtu.dk
+	 * @param checkPointNr the checkpoint number to be assigned to checkpoint. Players must visit checkpoints
+	 *                     with their numbers in ascending order. So 1 first, then 2, etc.
+	 */
+	public CheckPoint(String checkPointNr) {
+		this.checkPointNr = (sToInt(checkPointNr));
+	}
+
+	private int sToInt(String s) {
+		try {
+			int parse = Integer.parseInt(s);
+			return parse;
+		} catch (NumberFormatException e) {
+			System.out.println("Parsed number was not int, defaulting to 0");
+			return 0;
+		}
+	}
+
+
+	/**
 	 * Updates checkpoint counter for player on checkpoint if player has visited all previous checkpoints.
 	 * @author Anders Greve Sørnsen, s235093@dtu.dk
 	 * @param space The space containing the checkpoint to be activated
@@ -40,4 +60,18 @@ public class CheckPoint extends SpaceElement {
 		}
 		return false;
 	}
+
+	@Override
+	public String getArgument() {
+        return String.valueOf(checkPointNr);
+    }
+
+	@Override
+    public boolean equals(Object obj) {
+        if (obj instanceof CheckPoint) {
+            CheckPoint comp = ((CheckPoint)obj);
+            return this.checkPointNr == comp.checkPointNr;
+		}
+		return false;
+    }
 }

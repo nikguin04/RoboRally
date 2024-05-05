@@ -40,6 +40,7 @@ public class Serializer {
 			jsonObject.addProperty("phase", board.getPhase().name());
 			//jsonObject.addProperty("step", "null"); // dont save step, we should only let player save at start/end of a phase
 			jsonObject.addProperty("move_count", board.getMoveCount());
+			jsonObject.addProperty("gameId", board.getGameId());
 
             //jsonObject.add("instance", context.serialize(src));
 			JsonArray spacesX = new JsonArray();
@@ -118,7 +119,9 @@ public class Serializer {
 			space_object.add("walls", wallArr);
 
 			SpaceElement elem = space.getElement();
-			space_object.addProperty("element", elem == null ? "" : elem.getClass().getSimpleName());
+			String element = elem == null ? "" : elem.getClass().getSimpleName(); // Add class name
+			element += (elem == null || elem.getArgument() == "") ? "" : "-"+elem.getArgument(); // Add argument
+			space_object.addProperty("element", element);
 
 			return space_object;
         }

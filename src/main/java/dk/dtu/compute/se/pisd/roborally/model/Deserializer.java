@@ -7,9 +7,13 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
+import dk.dtu.compute.se.pisd.roborally.controller.PrioAntenna;
 import dk.dtu.compute.se.pisd.roborally.controller.SpaceElement;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Deserializer {
 	/**
@@ -21,6 +25,7 @@ public class Deserializer {
 	 * <p>TODO: Deserialize "move_count"</p>
 	 * <p>TODO: Deserialize "current_playerindex"</p>
 	 * <p>TODO: Deserialize "phase" (Currently always starts in PROGRAMMING)</p>
+	 * <p>TODO: Deserialize "gameId"</p>
 	 */
 	public static class BoardDeserializer implements JsonDeserializer<Board>	{
         @Override
@@ -37,11 +42,19 @@ public class Deserializer {
 				JsonArray xarr = spaces.get(ix).getAsJsonArray();
 				for (int iy = 0; iy < spaces.size(); iy++) {
 					Space new_s = context.deserialize(xarr.get(iy), Space.class);
-					b.getSpace(ix, iy).copyAttributesFrom(new_s);;
+					b.getSpace(ix, iy).copyAttributesFrom(new_s);
+
+					// Special case for prio antenna
+					if (new_s.getElement() != null && new_s.getElement().getClass().equals(PrioAntenna.class)) {
+						b.setPrioAntenna((PrioAntenna) new_s.getElement());
+					}
 				}
 			}
 
-
+			b.setMoveCount(obj.get("move_count").getAsInt());
+			b.setPhase(Phase.valueOf(obj.get("phase").getAsString()));
+			if (obj.has("gameId"))
+				b.setGameId(obj.get("gameId").getAsInt());
 
 			PlayerDeserializer.board = b;
 
@@ -50,7 +63,9 @@ public class Deserializer {
 				PlayerDeserializer.player_index = i;
 				Player p = context.deserialize(players.get(i), Player.class);
 				b.addPlayer(p);
+				b.addPrioPlayer(p);
 			}
+			b.setCurrentPlayer(b.getPlayer(obj.get("current_playerindex").getAsInt()));
 
             /*switch (className) {
                 case "com.example.expressions.Const" -> {e = new Const(obj.get("value").getAsInt());}
@@ -144,12 +159,16 @@ public class Deserializer {
 			}
 			String cl = obj.get("element").getAsString();
 			if (!cl.isEmpty()) {
+				String[] split = cl.split("-");
 				try {
-
-					Class elemClass = Class.forName("dk.dtu.compute.se.pisd.roborally.controller." + cl);
+					Class elemClass = Class.forName("dk.dtu.compute.se.pisd.roborally.controller." + split[0]);
 					boolean properclass = SpaceElement.class.isAssignableFrom(elemClass);
 					if (properclass) {
-						SpaceElement se = (SpaceElement) elemClass.getDeclaredConstructor().newInstance();
+						//String[] args = (split.size() == 0) ? null : (String[]) split.toArray();
+						SpaceElement se = (SpaceElement)
+							((split.length == 1)
+							? elemClass.getDeclaredConstructor().newInstance()
+							: elemClass.getDeclaredConstructor(String.class).newInstance(split[1]));
 						s.setElement(se);
 					}
 				} catch (Exception e) {

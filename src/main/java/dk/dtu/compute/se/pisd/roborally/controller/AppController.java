@@ -30,8 +30,6 @@ import dk.dtu.compute.se.pisd.roborally.model.Board;
 import dk.dtu.compute.se.pisd.roborally.model.Heading;
 import dk.dtu.compute.se.pisd.roborally.model.Command;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
-
-import dk.dtu.compute.se.pisd.roborally.model.PrioAntenna;
 import dk.dtu.compute.se.pisd.roborally.model.Serializer;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
 import dk.dtu.compute.se.pisd.roborally.view.LoadDialog;
@@ -108,8 +106,8 @@ public class AppController implements Observer {
             Board board = new Board(8,8);
             board.getSpace(2,2).setElement(new ConveyorBelt()); // WARN: TODO: This is for debugging json temporaryly and might be helpful to debug other parts of our program, delete this before production release
 			// Add prioAntenna to board, and set walls on its space.
-			PrioAntenna prioAntenna = new PrioAntenna(5, 5, board);
-			board.getSpace(5, 5).getWalls().addAll(List.of(Heading.NORTH, Heading.SOUTH, Heading.EAST, Heading.WEST));
+			PrioAntenna prioAntenna = new PrioAntenna(5,5);
+            board.setPrioAntenna(prioAntenna);
 
             gameController = new GameController(board);
             int no = result.get();
@@ -191,12 +189,16 @@ public class AppController implements Observer {
             }
 
             Board board = result.get();
-            gameController = new GameController(board);
-
-            gameController.StartProgrammingPhase(false); // TODO: Make sure to load the correct phase here
-            roboRally.createBoardView(gameController);
+            loadBoardIntoGame(board);
         }
+    }
 
+    private void loadBoardIntoGame(Board board) {
+
+        gameController = new GameController(board);
+
+        gameController.StartProgrammingPhase(false); // TODO: Make sure to load the correct phase here
+        roboRally.createBoardView(gameController);
     }
 
     /**
