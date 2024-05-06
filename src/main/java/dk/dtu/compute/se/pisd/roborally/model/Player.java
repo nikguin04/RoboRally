@@ -22,9 +22,18 @@
 package dk.dtu.compute.se.pisd.roborally.model;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
+import dk.dtu.compute.se.pisd.roborally.controller.CheckPoint;
+import dk.dtu.compute.se.pisd.roborally.utils.CompareException;
+import dk.dtu.compute.se.pisd.roborally.utils.FieldsCompare;
+
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import static dk.dtu.compute.se.pisd.roborally.model.Heading.SOUTH;
+import static dk.dtu.compute.se.pisd.roborally.utils.ArrayCompare.compareArray;
 
 /**
  * ...
@@ -47,26 +56,76 @@ public class Player extends Subject {
 
     private CommandCardField[] program;
     private CommandCardField[] cards;
+	private int checkPointCounter;
+	private CommandCard lastCardPlayed;
 
+    /**
+     * {@inheritDoc}
+     * @param board         Board on which player is located and interacts with
+     * @param color         Color {@link String}, needs to comply with css colors, <a href="https://www.w3schools.com/cssref/css_colors.php">css colors (w3schools)</a>
+     * @param name          Given name for a player, which will be used for identification during game
+     *
+     * @see Player#Player(Board, String, String, Command[])  Player() - For creating a player with predefined commands
+     */
     public Player(@NotNull Board board, String color, @NotNull String name) {
+        this(board, color, name, null);
+        for (int i = 0; i < this.cards.length; i++) {
+            this.cards[i] = new CommandCardField(this);
+        }
+
+    }
+
+    /**
+     * Creates player
+     * @param board asdasd
+     * @param color
+     * @param name
+     * @param Commands given predefined commands
+     *
+     * @see Player#Player(Board, String, String)  Player() - For creating a player with blank commands
+     */
+    public Player(@NotNull Board board, String color, @NotNull String name, Command[] Commands) {
         this.board = board;
         this.name = name;
         this.color = color;
 
         this.space = null;
+		checkPointCounter = 0;
 
         program = new CommandCardField[NO_REGISTERS];
         for (int i = 0; i < program.length; i++) {
             program[i] = new CommandCardField(this);
         }
-
-        cards = new CommandCardField[NO_CARDS];
-        for (int i = 0; i < cards.length; i++) {
-            cards[i] = new CommandCardField(this);
+        this.cards = new CommandCardField[NO_CARDS];
+        if (Commands != null) {
+            for (int i = 0; i < Commands.length; i++) {
+                this.cards[i] = new CommandCardField(this);
+                this.cards[i].setCard(new CommandCard(Commands[i]));
+            }
         }
+
+        //this.cards = cards;
     }
 
-    public String getName() {
+	/**
+	 * Retrieves players checkpoint counter.
+	 * @author Anders Greve Sørensen, s235093@dtu.dk
+	 * @return Checkpoint counter of the player.
+	 */
+	public int getCheckPointCounter() {
+		return this.checkPointCounter;
+	}
+
+	/**
+	 * Sets players checkpoint counter to given value.
+	 * @author Anders Greve Sørensen, s235093@dtu.dk
+	 * @param checkPointCounter The checkpoint number of the last checkpoint player has passed. 0 if none have
+	 *                          been passed yet.
+	 */
+	public void setCheckPointCounter(int checkPointCounter) {
+		this.checkPointCounter = checkPointCounter;
+	}
+	public String getName() {
         return name;
     }
 
@@ -133,4 +192,29 @@ public class Player extends Subject {
         return cards[i];
     }
 
+    public CommandCard getLastCardPlayed() {
+        return lastCardPlayed;
+    }
+
+    public void setLastCardPlayed(CommandCard card) {
+        this.lastCardPlayed = card;
+    }
+
+
+    @Override
+    public boolean equals(Object obj) { // TODO: This should be made as the board, where all variables are checked
+        if (obj instanceof Player) {
+            Player comp = ((Player)obj);
+
+            try {
+                FieldsCompare<Player> fc = new FieldsCompare<Player>();
+                // Dont test player for an equal board, since the player can be identical but on another board.
+                fc.CompareFields(this, comp, Arrays.asList(new String[] {"board"}));
+                return true;
+            } catch (CompareException e) {
+                return false;
+            }
+        }
+        return false;
+    }
 }

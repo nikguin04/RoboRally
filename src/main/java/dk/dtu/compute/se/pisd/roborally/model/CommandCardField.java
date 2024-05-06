@@ -39,7 +39,7 @@ public class CommandCardField extends Subject {
 
     public CommandCardField(Player player) {
         this.player = player;
-        this. card = null;
+        this.card = null;
         this.visible = true;
     }
 
@@ -63,5 +63,16 @@ public class CommandCardField extends Subject {
             this.visible = visible;
             notifyChange();
         }
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof CommandCardField) {
+            CommandCardField f = ((CommandCardField)obj);
+            if (this.card == null && f.card == null) { return true; }
+            if (this.card == null || f.card == null) { return false; }
+            return this.card.equals(f.card);
+        }
+        return false;
     }
 }

@@ -1,0 +1,314 @@
+{
+  "players": [
+    {
+      "name": "test player 1",
+      "color": "red",
+      "space": "1,3",
+      "heading": "SOUTH",
+      "command_cards": [
+        {
+          "command": "FWD2"
+        },
+        {
+          "command": "FWD1"
+        },
+        {
+          "command": "LEFT"
+        },
+        {
+          "command": "FWD1"
+        },
+        {
+          "command": "FWD1"
+        },
+        {
+          "command": "FWD2"
+        },
+        {
+          "command": "FWD1"
+        },
+        {
+          "command": "RIGHT"
+        }
+      ]
+    }
+  ],
+  "current_playerindex": 0,
+  "phase": "ACTIVATION",
+  "move_count": 1,
+  "gameId": 69,
+  "spaces": [
+    [
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      }
+    ],
+    [
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      }
+    ],
+    [
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": "ConveyorBelt"
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      }
+    ],
+    [
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      }
+    ],
+    [
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      }
+    ],
+    [
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": ["NORTH", "SOUTH", "EAST", "WEST"],
+        "element": "PrioAntenna-5,5"
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      }
+    ],
+    [
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      }
+    ],
+    [
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      },
+      {
+        "walls": [],
+        "element": ""
+      }
+    ]
+  ]
+}

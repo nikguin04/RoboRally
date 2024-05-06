@@ -42,5 +42,13 @@ public class CommandCard extends Subject {
         return command.displayName;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof CommandCard) {
+            CommandCard cc = ((CommandCard)obj);
 
+            return this.command.equals(cc.command);
+        }
+        return false;
+    }
 }

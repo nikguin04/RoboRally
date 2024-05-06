@@ -22,7 +22,7 @@
 package dk.dtu.compute.se.pisd.roborally.model;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
-import dk.dtu.compute.se.pisd.roborally.controller.FieldAction;
+import dk.dtu.compute.se.pisd.roborally.controller.SpaceElement;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +38,7 @@ public class Space extends Subject {
     private Player player;
 
     private List<Heading> walls = new ArrayList<>();
-    private List<FieldAction> actions = new ArrayList<>();
+    private SpaceElement element = null;
 
     public final Board board;
 
@@ -76,8 +76,17 @@ public class Space extends Subject {
         return walls;
     }
 
-    public List<FieldAction> getActions() {
-        return actions;
+    public SpaceElement getElement() {
+        return element;
+    }
+
+	public void setElement(SpaceElement element) {
+		this.element = element;
+	}
+
+    public void copyAttributesFrom(Space news) {
+        walls = news.walls;
+        element = news.element;
     }
 
     void playerChanged() {
@@ -85,6 +94,23 @@ public class Space extends Subject {
         // also need to update when some player attributes change, the player can
         // notify the space of these changes by calling this method.
         notifyChange();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Space) {
+            Space comp = ((Space)obj);
+            boolean same = true;
+            if (this.element != null && comp.element != null)
+                same = (!same) ? false : this.element.getClass() == comp.element.getClass();
+            else if (this.element == null || comp.element == null)
+                same = (!same) ? false : this.element == null && comp.element == null;
+            same = (!same) ? false : this.walls.equals(comp.walls);
+            same = (!same) ? false : this.x == comp.x;
+            same = (!same) ? false : this.y == comp.y;
+            return same;
+        }
+        return false;
     }
 
 }
