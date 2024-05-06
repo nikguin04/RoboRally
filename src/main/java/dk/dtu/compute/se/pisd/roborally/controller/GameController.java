@@ -262,8 +262,22 @@ public class GameController {
     public void executeCommandOptionAndContinue(Command command){
         board.setPhase(Phase.ACTIVATION);
         executeCommand(board.getCurrentPlayer(), command);
-        board.setStep(board.getStep() + 1);
-        continuePrograms();
+        int step = board.getStep();
+        int nextPlayerNumber = board.getPlayerNumber(board.getCurrentPlayer()) + 1;
+                if (nextPlayerNumber < board.getPlayersNumber()) {
+                    board.setCurrentPlayer(board.getPlayer(nextPlayerNumber));
+                } else {
+                    step++;
+                    if (step < Player.NO_REGISTERS) {
+                        makeProgramFieldsVisible(step);
+                        board.setStep(step);
+                        board.setCurrentPlayer(board.getPlayer(0));
+                    } else {
+                        startProgrammingPhase();
+                    }
+                }
+
+        // executeNextStep();
     }
 
     private CommandCard generateRandomCommandCard() {
