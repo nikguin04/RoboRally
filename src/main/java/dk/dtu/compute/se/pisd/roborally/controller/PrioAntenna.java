@@ -25,6 +25,12 @@ public class PrioAntenna extends SpaceElement {
 
 	private Board board;
 
+	/**
+	 * Attaches the prio antenna to a board.
+	 * Automatically creates walls at space.
+	 * The {@link Board#prioAntenna} element is not set automatically and needs to be set in the {@link Board} class
+	 * @param board The board to attach this prio antenna to
+	 */
 	public void attachBoard(Board board) {
 		board.getSpace(x, y).setElement(this);
 		// Automatically create walls?
@@ -33,11 +39,20 @@ public class PrioAntenna extends SpaceElement {
 		this.board = board;
 	}
 
+	/**
+	 * Create a new prio antenna, with set coordinates x,y
+	 * @param x Coordinate x
+	 * @param y Coordiante y
+	 */
 	public PrioAntenna(int x, int y) {
 		this.x = x;
 		this.y = y;
 	}
 
+	/**
+	 * Create a new prio antenna, with a set coordinate x,y given as a string
+	 * @param coord Stringified coordinates: "x,y"
+	 */
 	public PrioAntenna(String coord) {
 		int[] coordi = intarrFromCommaStr(coord);
 		this.x = coordi[0];
