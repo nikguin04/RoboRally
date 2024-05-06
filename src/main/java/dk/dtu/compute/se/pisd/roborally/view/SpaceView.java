@@ -41,8 +41,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public class SpaceView extends StackPane implements ViewObserver {
 
-	final public static Image blankSquare = new Image(SpaceView.class.getClassLoader().getResourceAsStream("assets/empty.png"));
-	final public static Image wallTexture = new Image(SpaceView.class.getClassLoader().getResourceAsStream("assets/wall.png"));
+	final public static Image blankSquare;
+	final public static Image wallTexture;
 
     final public static int SPACE_HEIGHT = 60; // 75;
     final public static int SPACE_WIDTH = 60; // 75;
@@ -119,5 +119,11 @@ public class SpaceView extends StackPane implements ViewObserver {
             updatePlayer();
         }
     }
+
+	static {
+		ClassLoader loader = SpaceView.class.getClassLoader();
+		blankSquare = new Image(loader.getResourceAsStream("assets/empty.png"));
+		wallTexture = new Image(loader.getResourceAsStream("assets/wall.png"));
+	}
 
 }
