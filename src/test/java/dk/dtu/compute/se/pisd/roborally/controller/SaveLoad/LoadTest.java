@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Test;
 
 import com.mysql.cj.exceptions.AssertionFailedException;
 
+import dk.dtu.compute.se.pisd.roborally.controller.CheckPoint;
 import dk.dtu.compute.se.pisd.roborally.controller.ConveyorBelt;
 import dk.dtu.compute.se.pisd.roborally.controller.PrioAntenna;
 import dk.dtu.compute.se.pisd.roborally.model.Board;
@@ -121,6 +122,7 @@ public class LoadTest {
 		b.setCurrentPlayer(p);
 		b.setGameId(69);
 		b.getSpace(2, 2).setElement(new ConveyorBelt());
+		b.getSpace(2, 1).setElement(new CheckPoint(1));
 		b.setPhase(Phase.ACTIVATION);
 		b.setStep(1);
 		b.setStepMode(true);
