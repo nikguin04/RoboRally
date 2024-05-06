@@ -22,7 +22,6 @@
 package dk.dtu.compute.se.pisd.roborally.view;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
-import dk.dtu.compute.se.pisd.roborally.controller.CheckPoint;
 import dk.dtu.compute.se.pisd.roborally.model.Heading;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
@@ -64,14 +63,7 @@ public class SpaceView extends StackPane implements ViewObserver {
         this.setMinHeight(SPACE_HEIGHT);
         this.setMaxHeight(SPACE_HEIGHT);
 
-		ImageView tile = new ImageView();
-		tile.setFitWidth(SPACE_WIDTH);
-		tile.setFitHeight(SPACE_HEIGHT);
-		this.getChildren().add(tile);
-
-		if (space.getElement() == null) {
-			tile.setImage(blankSquare);
-		}
+		this.addBackground();
 
 		for (Heading heading : space.getWalls()) {
 			ImageView wall = new ImageView();
@@ -86,6 +78,22 @@ public class SpaceView extends StackPane implements ViewObserver {
         space.attach(this);
         update(space);
     }
+
+	/**
+	 * Inserts an {@link ImageView} to the list of children depending on the space element.
+	 * If no space element is present, inserts an {@link ImageView} containing a blank tile.
+	 * The inserted {@link ImageView} may be rotated or transformed depending on the space element.
+	 */
+	private void addBackground() {
+		ImageView tile = new ImageView();
+		tile.setFitWidth(SPACE_WIDTH);
+		tile.setFitHeight(SPACE_HEIGHT);
+		this.getChildren().add(tile);
+
+		if (space.getElement() == null) {
+			tile.setImage(blankSquare);
+		}
+	}
 
 	private void updatePlayer() {
 		Player player = space.getPlayer();
