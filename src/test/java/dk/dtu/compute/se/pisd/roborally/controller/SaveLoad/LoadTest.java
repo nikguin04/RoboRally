@@ -16,7 +16,6 @@ import org.junit.jupiter.api.Test;
 
 import com.mysql.cj.exceptions.AssertionFailedException;
 
-import dk.dtu.compute.se.pisd.roborally.controller.CheckPoint;
 import dk.dtu.compute.se.pisd.roborally.controller.ConveyorBelt;
 import dk.dtu.compute.se.pisd.roborally.controller.PrioAntenna;
 import dk.dtu.compute.se.pisd.roborally.model.Board;
@@ -122,7 +121,6 @@ public class LoadTest {
 		b.setCurrentPlayer(p);
 		b.setGameId(69);
 		b.getSpace(2, 2).setElement(new ConveyorBelt());
-		b.getSpace(2, 1).setElement(new CheckPoint(1));
 		b.setPhase(Phase.ACTIVATION);
 		b.setStep(1);
 		b.setStepMode(true);
@@ -158,7 +156,7 @@ public class LoadTest {
 			// Ignore predetermined variables so our other functions can test it
 			if (ignoreVariables.contains(board_fields[i].getName())) { continue; }
 			if (board_fields[i].getName().startsWith("$SWITCH_TABLE")) { continue; } // ignore switch tables which is counted with fields
-			//System.out.println("Checking: " + board_fields[i].getName() + " - ");
+			System.out.println("Checking: " + board_fields[i].getName() + " - ");
 			try {
 				board_fields[i].setAccessible(true);
 				Object comp = board_fields[i].get(b_one);

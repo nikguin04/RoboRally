@@ -25,8 +25,6 @@ import dk.dtu.compute.se.pisd.roborally.model.Board;
 import dk.dtu.compute.se.pisd.roborally.model.Heading;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
-import javafx.scene.image.Image;
-
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -38,8 +36,6 @@ import org.jetbrains.annotations.NotNull;
 public class ConveyorBelt extends SpaceElement {
 
     private Heading heading;
-
-	final public static Image texture = new Image(ConveyorBelt.class.getClassLoader().getResourceAsStream("assets/blue.png"));
 
     public Heading getHeading() {
         return heading;
@@ -53,11 +49,6 @@ public class ConveyorBelt extends SpaceElement {
     public boolean doAction(@NotNull GameController gameController, @NotNull Space space) {
         // TODO needs to be implemented
         return false;
-    }
-
-    @Override
-    public Image getImage() {
-        return texture;
     }
 
 }

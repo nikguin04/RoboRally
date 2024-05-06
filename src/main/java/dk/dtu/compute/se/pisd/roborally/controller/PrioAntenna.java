@@ -9,8 +9,6 @@ import dk.dtu.compute.se.pisd.roborally.model.Board;
 import dk.dtu.compute.se.pisd.roborally.model.Heading;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
-import javafx.scene.image.Image;
-
 import static dk.dtu.compute.se.pisd.roborally.utils.StringUtils.intarrFromCommaStr;
 
 import static dk.dtu.compute.se.pisd.roborally.model.Heading.*;
@@ -27,7 +25,6 @@ public class PrioAntenna extends SpaceElement {
 
 	private Board board;
 
-	final public static Image texture = new Image(PrioAntenna.class.getClassLoader().getResourceAsStream("assets/antenna.png"));
 	public void attachBoard(Board board) {
 		board.getSpace(x, y).setElement(this);
 		// Automatically create walls?
@@ -177,10 +174,5 @@ public class PrioAntenna extends SpaceElement {
 	@Override
 	public String getArgument() {
         return String.valueOf(x + "," + y);
-    }
-
-	@Override
-    public Image getImage() {
-        return texture;
     }
 }

@@ -75,8 +75,8 @@ public class BoardView extends VBox implements ViewObserver {
             }
         }
 
-		//PrioAntennaView prioAntennaView = new PrioAntennaView(board.getPrioAntenna());
-		//mainBoardPane.add(prioAntennaView, board.getPrioAntenna().x, board.getPrioAntenna().y);
+		PrioAntennaView prioAntennaView = new PrioAntennaView(board.getPrioAntenna());
+		mainBoardPane.add(prioAntennaView, board.getPrioAntenna().x, board.getPrioAntenna().y);
 
         board.attach(this);
         update(board);
