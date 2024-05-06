@@ -71,6 +71,9 @@ public class SpaceView extends StackPane implements ViewObserver {
 
 		if (space.getElement() == null) {
 			tile.setImage(blankSquare);
+		} else {
+			Image img = space.getElement().getImage();
+			tile.setImage((img != null ? img : blankSquare));
 		}
 
 		for (Heading heading : space.getWalls()) {
