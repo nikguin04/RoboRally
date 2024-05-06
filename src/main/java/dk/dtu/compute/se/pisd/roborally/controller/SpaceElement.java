@@ -22,6 +22,7 @@
 package dk.dtu.compute.se.pisd.roborally.controller;
 
 import dk.dtu.compute.se.pisd.roborally.model.Space;
+import javafx.scene.image.Image;
 
 /**
  * ...
@@ -46,4 +47,8 @@ public abstract class SpaceElement {
         return false;
     }
 
+    // Override this in board spaces with a texture
+    public Image getImage() {
+        return null;
+    }
 }

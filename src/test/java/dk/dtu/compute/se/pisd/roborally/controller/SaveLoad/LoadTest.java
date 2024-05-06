@@ -156,7 +156,7 @@ public class LoadTest {
 			// Ignore predetermined variables so our other functions can test it
 			if (ignoreVariables.contains(board_fields[i].getName())) { continue; }
 			if (board_fields[i].getName().startsWith("$SWITCH_TABLE")) { continue; } // ignore switch tables which is counted with fields
-			System.out.println("Checking: " + board_fields[i].getName() + " - ");
+			//System.out.println("Checking: " + board_fields[i].getName() + " - ");
 			try {
 				board_fields[i].setAccessible(true);
 				Object comp = board_fields[i].get(b_one);
