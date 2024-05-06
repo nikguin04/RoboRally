@@ -2,6 +2,7 @@ package dk.dtu.compute.se.pisd.roborally.controller;
 
 import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
+import javafx.scene.image.Image;
 
 
 /**
@@ -10,6 +11,16 @@ import dk.dtu.compute.se.pisd.roborally.model.Space;
 public class CheckPoint extends SpaceElement {
 	public final int checkPointNr;
 
+	final public static Image[] textures = new Image[] {
+		new Image(CheckPoint.class.getClassLoader().getResourceAsStream("assets/1.png")),
+		new Image(CheckPoint.class.getClassLoader().getResourceAsStream("assets/2.png")),
+		new Image(CheckPoint.class.getClassLoader().getResourceAsStream("assets/3.png")),
+		new Image(CheckPoint.class.getClassLoader().getResourceAsStream("assets/4.png")),
+		new Image(CheckPoint.class.getClassLoader().getResourceAsStream("assets/5.png")),
+		new Image(CheckPoint.class.getClassLoader().getResourceAsStream("assets/6.png")),
+		new Image(CheckPoint.class.getClassLoader().getResourceAsStream("assets/7.png")),
+		new Image(CheckPoint.class.getClassLoader().getResourceAsStream("assets/8.png"))
+	};
 	/**
 	 * Instantiate checkpoint with given checkpoint number.
 	 * @author Anders Greve Sørensen, s235093@dtu.dk
@@ -73,5 +84,10 @@ public class CheckPoint extends SpaceElement {
             return this.checkPointNr == comp.checkPointNr;
 		}
 		return false;
+    }
+
+	@Override
+    public Image getImage() {
+        return textures[checkPointNr-1];
     }
 }
