@@ -126,10 +126,11 @@ public class AppController implements Observer {
         }
     }
 
-    /**
-     * TODO: JAVADOC.
-     * This javadoc will be implemented finally when "Simon Olsen" finishes save function
-     */
+	/**
+	 *Start up a dialog with user and
+	 * calls on the saveFile function, to save the file,
+	 * with the name the user has giving it
+	 */
     public void saveGame() {
         SaveDialog saveDialog = new SaveDialog();
         saveDialog.setTitle("Save Game");
@@ -145,8 +146,14 @@ public class AppController implements Observer {
         }
 
     }
-    
-    public void saveFile(Board board, String filename){
+
+	/**
+	 *
+	 * @param board
+	 * @param filename
+	 * Saves a game to Json
+	 */
+	public void saveFile(Board board, String filename){
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(Board.class, new Serializer.BoardSerializer());
         gsonBuilder.registerTypeAdapter(Player.class, new Serializer.PlayerSerializer());
