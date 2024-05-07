@@ -25,6 +25,7 @@ import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.controller.CheckPoint;
 import dk.dtu.compute.se.pisd.roborally.controller.ConveyorBelt;
 import dk.dtu.compute.se.pisd.roborally.controller.PrioAntenna;
+import dk.dtu.compute.se.pisd.roborally.controller.StartTile;
 import dk.dtu.compute.se.pisd.roborally.model.Heading;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
@@ -47,6 +48,7 @@ public class SpaceView extends StackPane implements ViewObserver {
 	final public static Image blankSquare;
 	final public static Image wallTexture;
 	final public static Image antennaTexture;
+	final public static Image startTileTexture;
 	final public static Image[] checkpointTextures;
 	final public static Image[] conveyorTextures;
 
@@ -100,6 +102,8 @@ public class SpaceView extends StackPane implements ViewObserver {
 			tile.setImage(blankSquare);
 		} else if (space.getElement() instanceof PrioAntenna) {
 			tile.setImage(antennaTexture);
+		} else if (space.getElement() instanceof StartTile) {
+			tile.setImage(startTileTexture);
 		} else if (space.getElement() instanceof CheckPoint cp) {
 			assert cp.checkPointNr <= 8;
 			tile.setImage(checkpointTextures[cp.checkPointNr - 1]);
@@ -154,6 +158,7 @@ public class SpaceView extends StackPane implements ViewObserver {
 		blankSquare = new Image(loader.getResourceAsStream("assets/empty.png"));
 		wallTexture = new Image(loader.getResourceAsStream("assets/wall.png"));
 		antennaTexture = new Image(loader.getResourceAsStream("assets/antenna.png"));
+		startTileTexture = new Image(loader.getResourceAsStream("assets/startTile.png"));
 		checkpointTextures = new Image[8];
 		for (int i = 1; i <= 8; i++) {
 			checkpointTextures[i - 1] = new Image(loader.getResourceAsStream("assets/" + i + ".png"));
