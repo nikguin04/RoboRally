@@ -22,8 +22,8 @@
 package dk.dtu.compute.se.pisd.roborally.model;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
-import dk.dtu.compute.se.pisd.roborally.controller.CheckPoint;
 import dk.dtu.compute.se.pisd.roborally.controller.PrioAntenna;
+import dk.dtu.compute.se.pisd.roborally.controller.StartTile;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -49,6 +49,8 @@ public class Board extends Subject {
     private final Space[][] spaces;
 
 	private PrioAntenna prioAntenna;
+
+    private StartTile startTile;
 
     private List<Player> players = new ArrayList<>();
 
@@ -104,6 +106,26 @@ public class Board extends Subject {
         prioAntenna.attachBoard(this);
 		this.prioAntenna = prioAntenna;
 	}
+
+    /**
+	 * attaches a given StartTile to this board.
+	 * @author Emil Thostrup Pedersen, s235105@dtu.dk.
+	 * @param startTile the StartTile to be attached to this board.
+	 */
+	public void setStartTile(StartTile startTile) {
+        startTile.attachBoard(this);
+		this.startTile = startTile;
+	}
+
+    /**
+	 * Gives the priority antenna of the board.
+	 * @author Emil Thostrup, s235105@dtu.dk.
+	 * @return the StartTile of this board.
+	 */
+	public StartTile getStartTile() {
+		return this.startTile;
+	}
+
 
 	/**
 	 * retrieve this boards list of prioritized players.
