@@ -25,6 +25,12 @@
     </properties>
 
     <dependencies>
+
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.11.0</version>
+        </dependency>
         <!-- Note that the dependencies here include some more dependencies
              than are necessary right now; dependencies that might need to
              be included later in the course of the project are added
