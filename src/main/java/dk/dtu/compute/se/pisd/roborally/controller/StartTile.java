@@ -5,6 +5,7 @@ import java.util.Arrays;
 import dk.dtu.compute.se.pisd.roborally.model.Board;
 import dk.dtu.compute.se.pisd.roborally.model.Heading;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
+import static dk.dtu.compute.se.pisd.roborally.utils.StringUtils.intarrFromCommaStr;
 
 public class StartTile extends SpaceElement {
     // All these variables are only initialzied when a board uses a StartTile.
@@ -32,10 +33,23 @@ public class StartTile extends SpaceElement {
 		this.x = x;
 		this.y = y;
 	}
-
+	/**
+	 * Create a new prio antenna, with a set coordinate x,y given as a string
+	 * @param coord Stringified coordinates: "x,y"
+	 */
+	public StartTile(String coord) {
+		int[] coordi = intarrFromCommaStr(coord);
+		this.x = coordi[0];
+		this.y = coordi[1];
+	}
     @Override
     public boolean doAction(GameController gameController, Space space) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'doAction'");
+    }
+
+	@Override
+	public String getArgument() {
+        return String.valueOf(x + "," + y);
     }
 }

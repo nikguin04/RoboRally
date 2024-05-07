@@ -9,6 +9,7 @@ import com.google.gson.JsonParseException;
 
 import dk.dtu.compute.se.pisd.roborally.controller.PrioAntenna;
 import dk.dtu.compute.se.pisd.roborally.controller.SpaceElement;
+import dk.dtu.compute.se.pisd.roborally.controller.StartTile;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -47,6 +48,8 @@ public class Deserializer {
 					// Special case for prio antenna
 					if (new_s.getElement() != null && new_s.getElement().getClass().equals(PrioAntenna.class)) {
 						b.setPrioAntenna((PrioAntenna) new_s.getElement());
+					} else if (new_s.getElement() != null && new_s.getElement().getClass().equals(StartTile.class)) {
+						b.setStartTile((StartTile) new_s.getElement());
 					}
 				}
 			}

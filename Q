@@ -1,0 +1,536 @@
+[33mcommit de498b3013f9c0e2639884d3c64c2ff52b20cf6b[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: christianwienelundquist <s235091@dtu.dk>
+Date:   Mon May 6 20:43:55 2024 +0200
+
+    javaDOC
+
+[33mcommit 17febe3bda7358404b24f7838972c0eb7836458e[m
+Author: Niklas Jensen <niklaspj2004@gmail.com>
+Date:   Mon May 6 13:32:06 2024 +0200
+
+    Javadoc expansion for prioantenna
+
+[33mcommit 2e67e143edea1f08a1b7ab9fdf6b74c4d4c95bae[m
+Author: Niklas Jensen <niklaspj2004@gmail.com>
+Date:   Mon May 6 13:29:05 2024 +0200
+
+    Load heading for conveyorbelt
+
+[33mcommit 72c2cf0eea738493e25dcd4928f79de37def21fc[m
+Merge: 2d8ba56 500f1dd
+Author: Niklas Jensen <niklaspj2004@gmail.com>
+Date:   Mon May 6 09:19:52 2024 +0200
+
+    Merge branch 'main' of https://github.com/nikguin04/RoboRally
+
+[33mcommit 500f1dd34337709c317106726acd9e3fa730dcc0[m
+Merge: d2d2b7a b679fa5
+Author: nikguin04 <niklaspj2004@gmail.com>
+Date:   Mon May 6 09:19:45 2024 +0200
+
+    Merge pull request #28 from nikguin04/revert-27-Assets-on-tile
+    
+    Revert "Assets on tile"
+
+[33mcommit b679fa502aaef9fbf29851c040a5a88cef702655[m
+Author: nikguin04 <niklaspj2004@gmail.com>
+Date:   Mon May 6 09:19:36 2024 +0200
+
+    Revert "Assets on tile"
+
+[33mcommit 2d8ba56049350eb147ae347fe434dd31ee6f30be[m
+Author: Niklas Jensen <niklaspj2004@gmail.com>
+Date:   Mon May 6 09:18:11 2024 +0200
+
+    Reset main to before assets
+
+[33mcommit d2d2b7a7bdbda53b14293653fa989b682e068f40[m
+Merge: bd1cb06 668ff67
+Author: Niklas Jensen <niklaspj2004@gmail.com>
+Date:   Mon May 6 09:15:11 2024 +0200
+
+    Merge branch 'main' of https://github.com/nikguin04/RoboRally
+
+[33mcommit bd1cb06a92bde415b545bf66c3a01c56d0d0087a[m
+Author: Niklas Jensen <niklaspj2004@gmail.com>
+Date:   Mon May 6 09:14:42 2024 +0200
+
+    Revert main
+
+[33mcommit 668ff67f13ec03e69e3bbbfbb666892c0982c4a8[m
+Merge: f67fa93 4c86d89
+Author: nikguin04 <niklaspj2004@gmail.com>
+Date:   Mon May 6 09:02:19 2024 +0200
+
+    Merge pull request #27 from nikguin04/Assets-on-tile
+    
+    Assets on tile
+
+[33mcommit 4c86d89379bb885a2d09752f6fa142454d914bff[m
+Author: Niklas Jensen <niklaspj2004@gmail.com>
+Date:   Mon May 6 08:56:48 2024 +0200
+
+    Prioantenna and checkpoint textures fix
+
+[33mcommit adc70263b5a1efad1988e497f4096c5152824ca6[m
+Author: Niklas Jensen <niklaspj2004@gmail.com>
+Date:   Mon May 6 08:45:38 2024 +0200
+
+    Assets on time
+
+[33mcommit f67fa9382d66506cadbd044ee7775c63c0b5af96[m[33m ([m[1;32moldmain[m[33m)[m
+Merge: 3aed252 a93e62d
+Author: nikguin04 <niklaspj2004@gmail.com>
+Date:   Sun May 5 23:21:39 2024 +0200
+
+    Merge pull request #26 from nikguin04/LoadSaveTest
+    
+    Load save test
+
+[33mcommit a93e62dfa30b226c27e35b1424514d55198f5f54[m
+Author: Niklas Jensen <niklaspj2004@gmail.com>
+Date:   Sun May 5 23:19:44 2024 +0200
+
+    Save for prio antenna working
+
+[33mcommit b4240c5b9a8e2f5180ac44ff19c3f647318d215e[m
+Author: Niklas Jensen <niklaspj2004@gmail.com>
+Date:   Sun May 5 23:17:30 2024 +0200
+
+    Cleaned up prio antenna code and tests
+    
+    Missing javadoc
+
+[33mcommit 5c29c6aad2428d43d39e6ecca5cb871a2994a77b[m
+Author: Niklas Jensen <niklaspj2004@gmail.com>
+Date:   Sun May 5 22:24:59 2024 +0200
+
+    Fixed load test for prio antenna null
+
+[33mcommit 3c95b62515a0df73a9a3cf2df63826d4081416bc[m
+Merge: e49f3f1 3aed252
+Author: Niklas Jensen <niklaspj2004@gmail.com>
+Date:   Sun May 5 21:59:22 2024 +0200
+
+    Merge remote-tracking branch 'origin/main' into LoadSaveTest
+    
+    # Conflicts:
+    #       src/main/java/dk/dtu/compute/se/pisd/roborally/controller/CheckPoint.java
+    #       src/main/java/dk/dtu/compute/se/pisd/roborally/model/Player.java
+    #       src/main/java/dk/dtu/compute/se/pisd/roborally/view/SpaceView.java
+
+[33mcommit e49f3f12f45876cbc3a4d1e1568cc48c86d253b0[m
+Author: Niklas Jensen <niklaspj2004@gmail.com>
+Date:   Sun May 5 11:21:06 2024 +0200
+
+    Expanded test coverage for load
+
+[33mcommit ddca0bbf89f65ff4b8642597889c3c5c0ef214b3[m
+Author: Niklas Jensen <niklaspj2004@gmail.com>
+Date:   Sun May 5 11:07:09 2024 +0200
+
+    Cleaned up a lot of comparison code
+
+[33mcommit 3aed252a1affea5d3d32003b63d5a85d263ebbab[m
+Author: Anders Greve Soerensen <anders1709@gmail.com>
+Date:   Sat May 4 20:49:38 2024 +0200
+
+    Move checkpoints into controller
+
+[33mcommit f97c20d6d9bf3b24f99c26dc55994be9b8222a6a[m
+Author: christianwienelundquist <s235091@dtu.dk>
+Date:   Sat May 4 19:50:10 2024 +0200
+
+    Har lavet Test til Kortene, mangler Again kortet, det må blive en Test through public interface
+
+[33mcommit 62a4c4861a1f6df175dbadd3f9087f39b46a66b1[m
+Author: Niklas Jensen <niklaspj2004@gmail.com>
+Date:   Sat May 4 17:32:06 2024 +0200
+
+    Save and load for regular game working
+
+[33mcommit d826f3f223b4cc6c3d3968c323d6ccedb1df46c2[m
+Author: Niklas Jensen <niklaspj2004@gmail.com>
+Date:   Sat May 4 17:17:47 2024 +0200
+
+    Code coverage on test
+
+[33mcommit b6a8d5ff581fd5d59dd01e700a5b9fa487e67180[m
+Author: Niklas Jensen <niklaspj2004@gmail.com>
+Date:   Sat May 4 17:09:12 2024 +0200
+
+    Successfully running tests
+
+[33mcommit 416a8b09d17bdc41885459ccdb24973965b86c58[m
+Author: Niklas Jensen <niklaspj2004@gmail.com>
+Date:   Sat May 4 17:05:35 2024 +0200
+
+    Expanded on equals comparison and utils
+
+[33mcommit d4eb2d7410b0ccb6c3d803ed3f332412c5dc9f4e[m
+Author: Niklas Jensen <niklaspj2004@gmail.com>
+Date:   Sat May 4 16:19:58 2024 +0200
+
+    Saving argument for board elements
+
+[33mcommit ce8df46cf656b2e5a79e33cdd1ea05baece2c185[m
+Author: Niklas Jensen <niklaspj2004@gmail.com>
+Date:   Sat May 4 15:44:57 2024 +0200
+
+    Load element with string argument
+
+[33mcommit d172e7314d0bde809b430a079d25ee7d27c7d709[m
+Author: Niklas Jensen <niklaspj2004@gmail.com>
+Date:   Sat May 4 14:50:55 2024 +0200
+
+    Test improved still WIP
+
+[33mcommit e8d5ff7639d004f1f8026abdecd3e0589a6f7bac[m
+Author: Niklas Jensen <niklaspj2004@gmail.com>
+Date:   Sat May 4 14:50:40 2024 +0200
+
+    prev
+
+[33mcommit d60e871679fc2c835a0fe106fef4bb4f6f0d9c73[m
+Author: Niklas Jensen <niklaspj2004@gmail.com>
+Date:   Sat May 4 14:50:30 2024 +0200
+
+    prev
+
+[33mcommit 6dce589ad90041896116598ccfe4979185b48486[m
+Author: Niklas Jensen <niklaspj2004@gmail.com>
+Date:   Sat May 4 14:50:12 2024 +0200
+
+    Checkpoint moved to correct folder
+
+[33mcommit b40ab6c4b3fcaa7fe9afbf918302a5f1710990c3[m
+Author: Niklas Jensen <niklaspj2004@gmail.com>
+Date:   Sat May 4 13:23:20 2024 +0200
+
+    Loading test fils if loaded board != test board
+
+[33mcommit 5a78acca40387ea6b2a71b6b8f24949f784abfeb[m
+Author: Anders Greve Sørensen <anders1709@gmail.com>
+Date:   Sat May 4 08:26:34 2024 +0200
+
+    Add tests for checkpoints
+
+[33mcommit e0ef7f25d179ef111da1de38bb2778aecc0b31d8[m
+Author: Anders Greve Sørensen <anders1709@gmail.com>
+Date:   Fri May 3 17:24:29 2024 +0200
+
+    Add tests of all prioAntenna methods
+
+[33mcommit b5026d3addfb462b29512bfc2b990e72534fa827[m
+Author: Niklas Jensen <niklaspj2004@gmail.com>
+Date:   Fri May 3 16:27:12 2024 +0200
+
+    Un hardcode variables not to test in board
+
+[33mcommit 2dfb116d243227adaac407a954720afc6b53e58c[m
+Author: Anders Greve Sørensen <anders1709@gmail.com>
+Date:   Fri May 3 14:49:53 2024 +0200
+
+    Small cleanup of some unnecessary board methods
+
+[33mcommit f04d9919c0554a16ae3700efd5a83126e3217d4b[m
+Author: Anders Greve Sørensen <anders1709@gmail.com>
+Date:   Fri May 3 14:49:21 2024 +0200
+
+    Add java doc to prioAntenna and associated board methods
+
+[33mcommit a5a5f9d21e0fe7e83dc9acf178c1833db6e008bf[m
+Merge: b75e7f7 8e4e493
+Author: Anders Greve Soerensen <anders1709@gmail.com>
+Date:   Fri May 3 12:13:13 2024 +0200
+
+    Merge main into PrioAntenna
+
+[33mcommit 8e4e4934d4ddaaebe559436bf5d67819541fd776[m
+Author: Anders Greve Soerensen <anders1709@gmail.com>
+Date:   Fri May 3 12:02:55 2024 +0200
+
+    Remove debugging code for checkpoints
+
+[33mcommit b75e7f71ae64a89493332595056d1bf25dc0fac0[m
+Author: Anders Greve Soerensen <anders1709@gmail.com>
+Date:   Fri May 3 10:47:23 2024 +0200
+
+    Change how prioAntenna is added to board
+
+[33mcommit d282a79a9093066e972041a3b5366ed0f5ddd471[m
+Author: Simon Olsen <s235106@dtu.dk>
+Date:   Thu May 2 23:21:14 2024 +0200
+
+    Javadoc for SaveDialog
+
+[33mcommit 17a3ecc38935ec868956c8fa47e7f9f84eec0e17[m
+Author: Niklas Jensen <niklaspj2004@gmail.com>
+Date:   Thu May 2 21:02:59 2024 +0200
+
+    Test Board comparison pass
+
+[33mcommit 8856183b0b879cdcb4341fe8749f2ccdc5105dac[m
+Author: Niklas Jensen <niklaspj2004@gmail.com>
+Date:   Thu May 2 20:52:12 2024 +0200
+
+    Function for testing if board vars are similar
+
+[33mcommit ac09cc38187f9b70fcdca8f42ffd9e12b40609d9[m
+Author: Niklas Jensen <niklaspj2004@gmail.com>
+Date:   Thu May 2 20:28:45 2024 +0200
+
+    Board comparison for loading working WIP
+
+[33mcommit d8c808a18bb4636811ed11660f3166ddfa7a5ab0[m
+Author: Niklas Jensen <niklaspj2004@gmail.com>
+Date:   Thu May 2 20:10:00 2024 +0200
+
+    Comparison working, still printouts
+
+[33mcommit 4efdc20f8ed3ad4b72ceeb04bcd072800d6a88fe[m
+Author: Anders Greve Sørensen <anders1709@gmail.com>
+Date:   Thu May 2 18:58:24 2024 +0200
+
+    Fix prioAntenna GUI bug by prioritzing players in new prio array
+
+[33mcommit 17e6b3aed616f96347804a186b7dfd6c3c3b2fec[m
+Author: Niklas Jensen <niklaspj2004@gmail.com>
+Date:   Thu May 2 18:42:49 2024 +0200
+
+    Array comparinson WIP
+
+[33mcommit fffd5f2e65e9cb4ecc0326b615d0daef3c1ce5fe[m
+Author: Niklas Jensen <niklaspj2004@gmail.com>
+Date:   Thu May 2 18:42:37 2024 +0200
+
+    Adjusted functions for testing
+
+[33mcommit 464cc8bfb950b16b42dc7ee872019337714989f9[m
+Author: Niklas Jensen <niklaspj2004@gmail.com>
+Date:   Thu May 2 18:42:20 2024 +0200
+
+    Space equals override
+
+[33mcommit 34d420f559bda8bd1df17f352c05d7f4016e262e[m
+Author: Christian Livbjerg Worsøe <s235111@dtu.dk>
+Date:   Thu May 2 12:38:43 2024 +0200
+
+    Removed unused field
+
+[33mcommit f9d550dda37ecae3bc274cf47139392d956380d8[m
+Author: Christian Livbjerg Worsøe <s235111@dtu.dk>
+Date:   Thu May 2 12:16:28 2024 +0200
+
+    Add unit test for walls
+
+[33mcommit 39ae820bb68468ed8a84146106a8335964aae472[m
+Author: Christian Livbjerg Worsøe <s235111@dtu.dk>
+Date:   Thu May 2 12:15:47 2024 +0200
+
+    Make Board.getNeighbour not be fucking stupid with walls
+
+[33mcommit e2411dc97a7684185295cf7699df380ed7b52c74[m
+Merge: 1b71476 7bf91cb
+Author: nikguin04 <niklaspj2004@gmail.com>
+Date:   Thu May 2 11:22:19 2024 +0200
+
+    Merge pull request #25 from nikguin04/JSON_saveload
+    
+    Json saveload
+
+[33mcommit 7bf91cbae65931d67cab8d7538d239ddb9f3cbff[m
+Merge: d962856 65f32dd
+Author: Niklas Jensen <niklaspj2004@gmail.com>
+Date:   Thu May 2 11:15:12 2024 +0200
+
+    Merge branch 'main' into JSON_saveload
+    
+    # Conflicts:
+    #       src/main/java/dk/dtu/compute/se/pisd/roborally/model/Player.java
+
+[33mcommit 1b71476c4393b054ef27a54d600100a2c1907b9f[m
+Merge: 65f32dd 19c6111
+Author: Christian Livbjerg Worsøe <s235111@dtu.dk>
+Date:   Thu May 2 11:11:34 2024 +0200
+
+    Merge branch 'drawboard'
+
+[33mcommit c73c666e23835ae5e03a4c76c4c98b15c26cd013[m[33m ([m[1;32mPrioAntenna[m[33m)[m
+Author: Anders Greve Sørensen <anders1709@gmail.com>
+Date:   Thu May 2 11:02:56 2024 +0200
+
+    Add more javadoc to PrioAntenna
+
+[33mcommit 00124ccbd060ad6ffa28cb339affef0600756eaf[m
+Author: Anders Greve Sørensen <anders1709@gmail.com>
+Date:   Thu May 2 06:40:11 2024 +0200
+
+    Add method to prioAntenna to update playerPrio for board
+
+[33mcommit 3fb83cee28cb74958cc681111b1ee5d491f58013[m
+Author: Anders Greve Sørensen <anders1709@gmail.com>
+Date:   Thu May 2 06:26:51 2024 +0200
+
+    Make prioAntenna work with walls
+
+[33mcommit 65f32ddf4cd8ca1c77eca22a02e492e2f5dab427[m
+Merge: d9765c9 370ad54
+Author: christianwienelundquist <s235091@dtu.dk>
+Date:   Thu May 2 00:04:24 2024 +0200
+
+    Merge branch 'ProgrammingCards'
+
+[33mcommit 370ad543ddb5e6934e619a951f0be7c554c27345[m
+Author: christianwienelundquist <s235091@dtu.dk>
+Date:   Wed May 1 23:57:49 2024 +0200
+
+    har lavet U-Turn, Again og Back-Up
+
+[33mcommit d9628560e709b6b2c0c28b746af7b1489398c549[m
+Merge: b30c5fa db1d928
+Author: Simon Olsen <s235106@dtu.dk>
+Date:   Wed May 1 22:11:27 2024 +0200
+
+    Save done
+
+[33mcommit b30c5fa6cd59b8e70175b031063397cef862100e[m
+Author: Simon Olsen <s235106@dtu.dk>
+Date:   Wed May 1 22:05:51 2024 +0200
+
+    Testing
+
+[33mcommit 19c6111c74ac7c840fe9c68d4e6ac98252be1b0b[m
+Author: Christian Livbjerg Worsøe <s235111@dtu.dk>
+Date:   Wed May 1 12:48:29 2024 +0200
+
+    Draw the walls
+
+[33mcommit db1d9280d1910ab2ab183bf28027cf374c14c25c[m
+Author: Niklas Jensen <niklaspj2004@gmail.com>
+Date:   Wed May 1 11:26:33 2024 +0200
+
+    Deserializing spaces
+
+[33mcommit 11d1b4980ec3db7793b187d2b00d1987f58e3537[m
+Author: Anders Greve Sørensen <anders1709@gmail.com>
+Date:   Wed May 1 10:42:35 2024 +0200
+
+    Small cleanup
+
+[33mcommit 5ea945999f087b1a6f177a24e24176bb87bb358f[m
+Merge: 39c8457 d9765c9
+Author: Anders Greve Sørensen <anders1709@gmail.com>
+Date:   Wed May 1 09:57:17 2024 +0200
+
+    Merge branch 'main' into PrioAntenna
+
+[33mcommit b83143e6c0cc0216b7b21440a00d5d6e293b62a4[m
+Author: Niklas Jensen <niklaspj2004@gmail.com>
+Date:   Wed May 1 09:18:00 2024 +0200
+
+    Nuclear bomb javadoc
+
+[33mcommit d9765c9ff81990400ceb6433c7b7e4e1c51c8024[m
+Author: Anders Greve Soerensen <anders1709@gmail.com>
+Date:   Tue Apr 30 22:23:19 2024 +0200
+
+    Add more javadoc
+
+[33mcommit c1917506b10ef211864f1cdf6732380ff018e52f[m
+Author: Anders Greve Soerensen <anders1709@gmail.com>
+Date:   Tue Apr 30 22:07:49 2024 +0200
+
+    Add more javadoc to CheckPoint class methods
+
+[33mcommit 0319305e1c775ca207f037890a5112535cfc1895[m
+Author: Anders Greve Soerensen <anders1709@gmail.com>
+Date:   Tue Apr 30 19:14:10 2024 +0200
+
+    begin to write javadoc for checkpoint class and methods
+
+[33mcommit 53a31a8d8028b840b19e765bdb4fe9a80daaeeb8[m
+Author: Anders Greve Soerensen <anders1709@gmail.com>
+Date:   Tue Apr 30 18:11:57 2024 +0200
+
+    Fix small bug with checkpoint activation
+
+[33mcommit f9fe66a2891dbdb7bc2d629ac1876937057b67b3[m
+Author: Anders Greve Soerensen <anders1709@gmail.com>
+Date:   Tue Apr 30 16:08:20 2024 +0200
+
+    Implement checkpoints
+
+[33mcommit 2f1d7ae13859d5b3aa44abbc5de87f0bc47d5c45[m
+Author: Niklas Jensen <niklaspj2004@gmail.com>
+Date:   Tue Apr 30 08:15:07 2024 +0200
+
+    Removed json appendage from load file names
+
+[33mcommit 39c84575b0ba651f95f14a62802a442485e8792b[m
+Author: Anders Greve Soerensen <anders1709@gmail.com>
+Date:   Sun Apr 28 20:27:08 2024 +0200
+
+    Fix bug with prioAntenna not tie breaking properly
+
+[33mcommit 9a37b4c4343ae1d7464d492d62d7ccad833a6554[m
+Author: Anders Greve Soerensen <anders1709@gmail.com>
+Date:   Sun Apr 28 14:56:19 2024 +0200
+
+    Add blue field in gui as visualization of prioAntenna
+
+[33mcommit 7666bc40f5c874fd3d8712193fd155a7260b46ab[m
+Author: Anders Greve Sørensen <anders1709@gmail.com>
+Date:   Sun Apr 28 12:16:46 2024 +0200
+
+    Implement working priority antenna with small GUI bug
+
+[33mcommit 1a1cee11988e9ee20b1dbd3ff0da031150dffb06[m
+Author: Simon Olsen <s235106@dtu.dk>
+Date:   Fri Apr 26 01:15:02 2024 +0200
+
+    Minor changes
+
+[33mcommit a418b721975d9f4b142e13fd6c9d4bf999503d41[m
+Author: Simon Olsen <s235106@dtu.dk>
+Date:   Fri Apr 26 01:14:13 2024 +0200
+
+    User can choose file name
+
+[33mcommit b2889ecf60219ad98555b694577ad39a600f8404[m
+Author: Simon Olsen <s235106@dtu.dk>
+Date:   Fri Apr 26 00:47:40 2024 +0200
+
+    New file made
+
+[33mcommit 9002d42ffd77cd10f01fcf65e5c1cf3652df7a3c[m
+Author: Simon Olsen <s235106@dtu.dk>
+Date:   Fri Apr 26 00:44:52 2024 +0200
+
+    Hjulene på bussen drejer rundt
+
+[33mcommit e129e793e33c762f8bf4acba3cc5db19aaf31a64[m
+Author: Niklas Jensen <niklaspj2004@gmail.com>
+Date:   Thu Apr 25 21:59:44 2024 +0200
+
+    Javadoc + Better size for load board_info_label
+
+[33mcommit 2cd40392db8b91a2686a33c7a93a15afcf9166e5[m
+Author: Niklas Jensen <niklaspj2004@gmail.com>
+Date:   Thu Apr 25 19:38:07 2024 +0200
+
+    Beginning on javadoc - error in desc
+    
+    Window does not scale when lave has multimple lines (ex: 4 players vs 2 players listed)
+
+[33mcommit 366a3c84e33811620f6ac1d52127cc8adcc2b995[m
+Author: Simon Olsen <s235106@dtu.dk>
+Date:   Thu Apr 25 18:35:33 2024 +0200
+
+    Test for save file name
+
+[33mcommit 09c9118965cc7423b000964f2b58aa5c54b57730[m
+Author: Niklas Jensen <niklaspj2004@gmail.com>
+Date:   Thu Apr 25 15:12:22 2024 +0200
+
+    Cleaned ud some garbage code for starting p phase

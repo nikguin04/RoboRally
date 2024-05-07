@@ -18,6 +18,7 @@ import com.mysql.cj.exceptions.AssertionFailedException;
 
 import dk.dtu.compute.se.pisd.roborally.controller.ConveyorBelt;
 import dk.dtu.compute.se.pisd.roborally.controller.PrioAntenna;
+import dk.dtu.compute.se.pisd.roborally.controller.StartTile;
 import dk.dtu.compute.se.pisd.roborally.model.Board;
 import dk.dtu.compute.se.pisd.roborally.model.Command;
 import dk.dtu.compute.se.pisd.roborally.model.Heading;
@@ -103,6 +104,7 @@ public class LoadTest {
 		List<String> ignoreVariables = Arrays.asList(
 			"width",
 			"height");
+		test.getSpace(0, 4).setElement(null);
 		test.getSpace(2, 2).setElement(null);
 		test.getSpace(5, 5).setElement(null);
 		test.getSpace(5, 5).getWalls().clear();
@@ -126,6 +128,8 @@ public class LoadTest {
 		b.setStep(1);
 		b.setStepMode(true);
 		b.incMoveCount();
+		b.setStartTile(new StartTile(0, 4));
+
 
 		b.setPrioAntenna(new PrioAntenna(5, 5));
 		b.addPrioPlayer(p);
