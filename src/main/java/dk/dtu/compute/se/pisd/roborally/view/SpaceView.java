@@ -22,6 +22,10 @@
 package dk.dtu.compute.se.pisd.roborally.view;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
+import dk.dtu.compute.se.pisd.roborally.controller.CheckPoint;
+import dk.dtu.compute.se.pisd.roborally.controller.ConveyorBelt;
+import dk.dtu.compute.se.pisd.roborally.controller.PrioAntenna;
+import dk.dtu.compute.se.pisd.roborally.controller.StartTile;
 import dk.dtu.compute.se.pisd.roborally.model.Heading;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
@@ -41,8 +45,12 @@ import org.jetbrains.annotations.NotNull;
  */
 public class SpaceView extends StackPane implements ViewObserver {
 
-	final public static Image blankSquare = new Image(SpaceView.class.getClassLoader().getResourceAsStream("assets/empty.png"));
-	final public static Image wallTexture = new Image(SpaceView.class.getClassLoader().getResourceAsStream("assets/wall.png"));
+	final public static Image blankSquare;
+	final public static Image wallTexture;
+	final public static Image antennaTexture;
+	final public static Image startTileTexture;
+	final public static Image[] checkpointTextures;
+	final public static Image[] conveyorTextures;
 
     final public static int SPACE_HEIGHT = 60; // 75;
     final public static int SPACE_WIDTH = 60; // 75;
@@ -63,14 +71,7 @@ public class SpaceView extends StackPane implements ViewObserver {
         this.setMinHeight(SPACE_HEIGHT);
         this.setMaxHeight(SPACE_HEIGHT);
 
-		ImageView tile = new ImageView();
-		tile.setFitWidth(SPACE_WIDTH);
-		tile.setFitHeight(SPACE_HEIGHT);
-		this.getChildren().add(tile);
-
-		if (space.getElement() == null) {
-			tile.setImage(blankSquare);
-		}
+		this.addBackground();
 
 		for (Heading heading : space.getWalls()) {
 			ImageView wall = new ImageView();
@@ -85,6 +86,47 @@ public class SpaceView extends StackPane implements ViewObserver {
         space.attach(this);
         update(space);
     }
+
+	/**
+	 * Inserts an {@link ImageView} to the list of children depending on the space element.
+	 * If no space element is present, inserts an {@link ImageView} containing a blank tile.
+	 * The inserted {@link ImageView} may be rotated or transformed depending on the space element.
+	 */
+	private void addBackground() {
+		ImageView tile = new ImageView();
+		tile.setFitWidth(SPACE_WIDTH);
+		tile.setFitHeight(SPACE_HEIGHT);
+		this.getChildren().add(tile);
+
+		if (space.getElement() == null) {
+			tile.setImage(blankSquare);
+		} else if (space.getElement() instanceof PrioAntenna) {
+			tile.setImage(antennaTexture);
+		} else if (space.getElement() instanceof StartTile) {
+			tile.setImage(startTileTexture);
+		} else if (space.getElement() instanceof CheckPoint cp) {
+			assert cp.checkPointNr <= 8;
+			tile.setImage(checkpointTextures[cp.checkPointNr - 1]);
+		} else if (space.getElement() instanceof ConveyorBelt belt) {
+			int index = 0;
+			Space neighbour;
+			// Check if there's another conveyor pointing to this one on each of the neighbour spaces
+			neighbour = space.board.getNeighbour(space, belt.getHeading().prev());
+			if (neighbour != null && neighbour.getElement() instanceof ConveyorBelt neighbourBelt
+				&& neighbourBelt.getHeading() == belt.getHeading().next())
+				index |= 1;
+			neighbour = space.board.getNeighbour(space, belt.getHeading().next());
+			if (neighbour != null && neighbour.getElement() instanceof ConveyorBelt neighbourBelt
+				&& neighbourBelt.getHeading() == belt.getHeading().prev())
+				index |= 2;
+			neighbour = space.board.getNeighbour(space, belt.getHeading().opposite());
+			if (neighbour != null && neighbour.getElement() instanceof ConveyorBelt neighbourBelt
+				&& neighbourBelt.getHeading() == belt.getHeading())
+				index |= 4;
+			tile.setImage(conveyorTextures[index]);
+			tile.setRotate(90 * (belt.getHeading().ordinal() + 2));
+		}
+	}
 
 	private void updatePlayer() {
 		Player player = space.getPlayer();
@@ -110,5 +152,26 @@ public class SpaceView extends StackPane implements ViewObserver {
             updatePlayer();
         }
     }
+
+	static {
+		ClassLoader loader = SpaceView.class.getClassLoader();
+		blankSquare = new Image(loader.getResourceAsStream("assets/empty.png"));
+		wallTexture = new Image(loader.getResourceAsStream("assets/wall.png"));
+		antennaTexture = new Image(loader.getResourceAsStream("assets/antenna.png"));
+		startTileTexture = new Image(loader.getResourceAsStream("assets/startTile.png"));
+		checkpointTextures = new Image[8];
+		for (int i = 1; i <= 8; i++) {
+			checkpointTextures[i - 1] = new Image(loader.getResourceAsStream("assets/" + i + ".png"));
+		}
+		conveyorTextures = new Image[8];
+		conveyorTextures[0] = new Image(loader.getResourceAsStream("assets/green.png"));
+		conveyorTextures[1] = new Image(loader.getResourceAsStream("assets/greenTurnLeft.png"));
+		conveyorTextures[2] = new Image(loader.getResourceAsStream("assets/greenTurnRight.png"));
+		conveyorTextures[3] = new Image(loader.getResourceAsStream("assets/greenMergeSide.png"));
+		conveyorTextures[4] = conveyorTextures[0];
+		conveyorTextures[5] = new Image(loader.getResourceAsStream("assets/greenMergeLeft.png"));
+		conveyorTextures[6] = new Image(loader.getResourceAsStream("assets/greenMergeRight.png"));
+		conveyorTextures[7] = conveyorTextures[0];
+	}
 
 }

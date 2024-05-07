@@ -54,14 +54,6 @@ public class BoardView extends VBox implements ViewObserver {
         board = gameController.board;
 
         mainBoardPane = new GridPane();
-
-        
-        StartTileView StartTileView = new StartTileView(board.getStartTile());
-		mainBoardPane.add(StartTileView, board.getStartTile().x, board.getStartTile().y);
-        
-        
-
-
         playersView = new PlayersView(gameController);
         statusLabel = new Label("<no status>");
 
@@ -82,11 +74,6 @@ public class BoardView extends VBox implements ViewObserver {
                 spaceView.setOnMouseClicked(spaceEventHandler);
             }
         }
-
-		PrioAntennaView prioAntennaView = new PrioAntennaView(board.getPrioAntenna());
-		mainBoardPane.add(prioAntennaView, board.getPrioAntenna().x, board.getPrioAntenna().y);
-
-        
 
         board.attach(this);
         update(board);
