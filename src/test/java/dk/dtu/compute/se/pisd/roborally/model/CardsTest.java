@@ -193,5 +193,49 @@ public class CardsTest {
     //    assertEquals(Heading.SOUTH, newHeading1);
     //    
     //}
+
+    @Test
+    public void testOptinalTurnLeft() {
+        
+        Board board = new Board(8, 8);
+		GameController gameController = new GameController(board);
+        Player player = new Player(board, "red", "Test player1");
+        
+        Space initialSpace = new Space(board, 0, 0); 
+        player.setSpace(initialSpace);
+        player.setHeading(Heading.NORTH);
+        
+        gameController.executeCommandOptionAndContinue(player.getProgramField(player.board.getStep()).getCard().command.getOptions().get(1));
+        
+        Space newSpace = player.getSpace();
+        
+        assertNotNull(newSpace);
+        
+        Heading newHeading = player.getHeading();
+        assertEquals(Heading.EAST, newHeading);
+        
+    }
+
+    @Test
+    public void testOptinalTurnRight() {
+        
+        Board board = new Board(8, 8);
+		GameController gameController = new GameController(board);
+        Player player = new Player(board, "red", "Test player1");
+        
+        Space initialSpace = new Space(board, 0, 0); 
+        player.setSpace(initialSpace);
+        player.setHeading(Heading.NORTH);
+        
+        gameController.executeCommandOptionAndContinue(player.getProgramField(player.board.getStep()).getCard().command.getOptions().get(1));
+        
+        Space newSpace = player.getSpace();
+        
+        assertNotNull(newSpace);
+        
+        Heading newHeading = player.getHeading();
+        assertEquals(Heading.EAST, newHeading);
+        
+    }
     
 }
