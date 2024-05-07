@@ -35,7 +35,8 @@ public class StartTile extends SpaceElement {
 
     @Override
     public boolean doAction(GameController gameController, Space space) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'doAction'");
+		// TODO Auto-generated method stub
+        // throw new UnsupportedOperationException("Unimplemented method 'doAction'");
+        return false;
     }
 }
