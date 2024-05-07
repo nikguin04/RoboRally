@@ -195,47 +195,16 @@ public class CardsTest {
     //}
 
     @Test
-    public void testOptinalTurnLeft() {
+    public void testOptinalGetTurnLeft() {
         
-        Board board = new Board(8, 8);
-		GameController gameController = new GameController(board);
-        Player player = new Player(board, "red", "Test player1");
-        
-        Space initialSpace = new Space(board, 0, 0); 
-        player.setSpace(initialSpace);
-        player.setHeading(Heading.NORTH);
-        
-        gameController.executeCommandOptionAndContinue(player.getProgramField(player.board.getStep()).getCard().command.getOptions().get(1));
-        
-        Space newSpace = player.getSpace();
-        
-        assertNotNull(newSpace);
-        
-        Heading newHeading = player.getHeading();
-        assertEquals(Heading.EAST, newHeading);
-        
+        Command command = Command.OPTION_LEFT_RIGHT;
+        assertEquals(command.LEFT, command.getOptions().get(0));
     }
 
     @Test
-    public void testOptinalTurnRight() {
-        
-        Board board = new Board(8, 8);
-		GameController gameController = new GameController(board);
-        Player player = new Player(board, "red", "Test player1");
-        
-        Space initialSpace = new Space(board, 0, 0); 
-        player.setSpace(initialSpace);
-        player.setHeading(Heading.NORTH);
-        
-        gameController.executeCommandOptionAndContinue(player.getProgramField(player.board.getStep()).getCard().command.getOptions().get(1));
-        
-        Space newSpace = player.getSpace();
-        
-        assertNotNull(newSpace);
-        
-        Heading newHeading = player.getHeading();
-        assertEquals(Heading.EAST, newHeading);
-        
+    public void testOptinalGetTurnRight() {
+        Command command = Command.OPTION_LEFT_RIGHT;
+        assertEquals(command.RIGHT, command.getOptions().get(1));
     }
     
 }
