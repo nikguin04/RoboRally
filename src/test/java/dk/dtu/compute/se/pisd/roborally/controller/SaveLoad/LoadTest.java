@@ -20,6 +20,7 @@ import dk.dtu.compute.se.pisd.roborally.controller.ConveyorBelt;
 import dk.dtu.compute.se.pisd.roborally.controller.PrioAntenna;
 import dk.dtu.compute.se.pisd.roborally.model.Board;
 import dk.dtu.compute.se.pisd.roborally.model.Command;
+import dk.dtu.compute.se.pisd.roborally.model.Heading;
 import dk.dtu.compute.se.pisd.roborally.model.Phase;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.utils.CompareException;
@@ -120,7 +121,7 @@ public class LoadTest {
 		b.addPlayer(p);
 		b.setCurrentPlayer(p);
 		b.setGameId(69);
-		b.getSpace(2, 2).setElement(new ConveyorBelt());
+		b.getSpace(2, 2).setElement(new ConveyorBelt(Heading.EAST)); // note: currently not directly checked by heading.
 		b.setPhase(Phase.ACTIVATION);
 		b.setStep(1);
 		b.setStepMode(true);

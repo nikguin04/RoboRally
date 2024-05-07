@@ -214,12 +214,15 @@ public class GameController {
             // XXX This is a very simplistic way of dealing with some basic cards and
             //     their execution. This should eventually be done in a more elegant way
             //     (this concerns the way cards are modelled as well as the way they are executed).
+            //     player.setLastCardPlayed(currentCard); function calls the setLastCardPlayed and 
+            //     copies the latest card for the Again card to use. 
+            //
+
             CommandCard currentCard = new CommandCard(command);
             switch (command) {
                 case FWD1:
                     this.moveForward(player);
                     player.setLastCardPlayed(currentCard);
-
                     break;
                 case RIGHT:
                     this.turnRight(player);

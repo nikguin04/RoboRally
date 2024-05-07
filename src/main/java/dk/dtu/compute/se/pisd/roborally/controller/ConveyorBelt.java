@@ -34,21 +34,43 @@ import org.jetbrains.annotations.NotNull;
  *
  */
 public class ConveyorBelt extends SpaceElement {
-
-    private Heading heading;
+    // TODO: NIKLAS SAVE AND LOAD HEADING
+    private final Heading heading;
+    /**
+     * Initialize ConveyorBelt with a default heading of north
+     */
+    public ConveyorBelt() {
+        this.heading = Heading.NORTH;
+    }
+    /**
+     * Initialize ConveyorBelt with a specific heading
+     * @param heading enum Heading given as string
+     */
+    public ConveyorBelt(String heading) {
+        this.heading = Heading.valueOf(heading);
+    }
+    /**
+     * Initialize ConveyorBelt with a specific heading
+     * @param heading enum Heading
+     */
+    public ConveyorBelt(Heading heading) {
+        this.heading = heading;
+    }
 
     public Heading getHeading() {
         return heading;
     }
 
-    public void setHeading(Heading heading) {
-        this.heading = heading;
-    }
 
     @Override
     public boolean doAction(@NotNull GameController gameController, @NotNull Space space) {
         // TODO needs to be implemented
         return false;
+    }
+
+    @Override
+	public String getArgument() {
+        return String.valueOf(heading.toString());
     }
 
 
