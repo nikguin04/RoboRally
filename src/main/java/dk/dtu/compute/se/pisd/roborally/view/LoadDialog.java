@@ -1,20 +1,17 @@
 package dk.dtu.compute.se.pisd.roborally.view;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URISyntaxException;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.Enumeration;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
+import org.apache.commons.io.IOUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -26,6 +23,7 @@ import dk.dtu.compute.se.pisd.roborally.model.Command;
 import dk.dtu.compute.se.pisd.roborally.model.Deserializer;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
+import dk.dtu.compute.se.pisd.roborally.utils.FileResourceUtils;
 import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.collections.ObservableList;
@@ -36,13 +34,9 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
-import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
-import dk.dtu.compute.se.pisd.roborally.utils.FileResourceUtils;
-import java.io.InputStreamReader;
-import java.io.Reader;
 
 /**
  * A dialog that shows a load menu to the user where they can pick a path
@@ -81,23 +75,24 @@ public class LoadDialog<T> extends Dialog<Board> {
         Set<String> files;
 		// UserDirectory = ""C:\Users\nikla\Desktop\Programmering\RoboRally""
 		// TODO: This should be changed so it also works at release, this currently only works when debugging (point to proper resource path)
-		try (Stream<Path> stream = Files.list(Paths.get("target/classes/gamedata"))) {
-			files_json = stream
-			  .filter(file -> !Files.isDirectory(file))
-			  .map(Path::getFileName)
-			  .map(Path::toString)
-			  .collect(Collectors.toSet());
+        try {
+            Enumeration<URL> resources = Thread.currentThread().getContextClassLoader().getResources("gamedata"); // replace with your directory path
 
             files = new HashSet<String>();
-            for (String s: files_json) {
-                if (s.endsWith(".json"))
-                    { files.add(s.substring(0, s.length() - ".json".length())); }
+            while (resources.hasMoreElements()) {
+                URL directoryURL = resources.nextElement();
+                List<String> fileNames = IOUtils.readLines(directoryURL.openStream(), StandardCharsets.UTF_8);
+                for (String fileName : fileNames) {
+                   if (fileName.endsWith(".json"))
+                    { files.add(fileName.substring(0, fileName.length() - ".json".length())); }
+                }
             }
 		} catch (Exception e) {
 			System.out.println("Load error, cant find gamedata/save path");
 			files = new HashSet<String>();
 			//files.add("ERROR");
 		}
+
 		String defaultChoice = files.stream().findFirst().get(); // This might crash if above exception is caught
 
 		final DialogPane dialogPane = getDialogPane();
