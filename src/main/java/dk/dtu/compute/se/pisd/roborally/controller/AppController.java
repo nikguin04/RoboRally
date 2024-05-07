@@ -109,13 +109,14 @@ public class AppController implements Observer {
 			PrioAntenna prioAntenna = new PrioAntenna(5,5);
             board.setPrioAntenna(prioAntenna);
 
-
+            // Set the startTile on the board
             for(int i = 0; i < PLAYER_NUMBER_OPTIONS.get(0); i++){
                 StartTile startTile = new StartTile(i,0);
                 board.setStartTile(startTile);
             }
 		
 
+            // Set Player on startTile
             gameController = new GameController(board);
             int no = result.get();
             Player player;

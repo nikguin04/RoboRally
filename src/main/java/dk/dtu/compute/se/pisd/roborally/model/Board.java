@@ -108,9 +108,9 @@ public class Board extends Subject {
 	}
 
     /**
-	 * attaches a given priority antenna to this board.
-	 * @author Anders Greve Sørensen, s235093@dtu.dk.
-	 * @param startTile the priority antenna to be attached to this board.
+	 * attaches a given StartTile to this board.
+	 * @author Emil Thostrup Pedersen, s235105@dtu.dk.
+	 * @param startTile the StartTile to be attached to this board.
 	 */
 	public void setStartTile(StartTile startTile) {
         startTile.attachBoard(this);
@@ -119,8 +119,8 @@ public class Board extends Subject {
 
     /**
 	 * Gives the priority antenna of the board.
-	 * @author Anders Greve Sørensen, s235093@dtu.dk.
-	 * @return the priority antenna of this board.
+	 * @author Emil Thostrup, s235105@dtu.dk.
+	 * @return the StartTile of this board.
 	 */
 	public StartTile getStartTile() {
 		return this.startTile;

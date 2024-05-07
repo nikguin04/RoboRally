@@ -7,16 +7,15 @@ import dk.dtu.compute.se.pisd.roborally.model.Heading;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
 
 public class StartTile extends SpaceElement {
-    // All these variables are only initialzied when a board uses a priority antenna.
+    // All these variables are only initialzied when a board uses a StartTile.
 	public final int x;
 	public final int y;
 
 	private Board board;
 
 	/**
-	 * Attaches the prio antenna to a board.
-	 * Automatically creates walls at space.
-	 * The {@link Board#prioAntenna} element is not set automatically and needs to be set in the {@link Board} class
+	 * Attaches the StartTile to a board
+	 * The {@link Board#StartTile} element is not set automatically and needs to be set in the {@link Board} class
 	 * @param board The board to attach this prio antenna to
 	 */
 	public void attachBoard(Board board) {
@@ -25,7 +24,7 @@ public class StartTile extends SpaceElement {
 	}
 
     /**
-	 * Create a new prio antenna, with set coordinates x,y
+	 * Create a new StartTile, with set coordinates x,y
 	 * @param x Coordinate x
 	 * @param y Coordiante y
 	 */
