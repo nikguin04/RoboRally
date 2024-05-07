@@ -25,6 +25,7 @@ import dk.dtu.compute.se.pisd.roborally.model.*;
 
 import static dk.dtu.compute.se.pisd.roborally.model.Phase.INITIALISATION;
 
+
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -255,6 +256,11 @@ public class GameController {
                     this.turnLeft(player);
                     player.setLastCardPlayed(currentCard);
                     break;
+                case OPTION_LEFT_RIGHT:
+                    board.setPhase(Phase.PLAYER_INTERACTION);
+                    player.setLastCardPlayed(currentCard);
+
+                    break;
                 case AGAN:
                     CommandCard lastCard = player.getLastCardPlayed();
                     if (lastCard != null && lastCard.command != Command.AGAN) {
@@ -313,22 +319,34 @@ public class GameController {
 
 
     public void executeCommandOptionAndContinue(Command command){
+        Player currentPlayer = board.getCurrentPlayer();
         board.setPhase(Phase.ACTIVATION);
         executeCommand(board.getCurrentPlayer(), command);
+        currentPlayer.setLastCardPlayed(new CommandCard(Command.OPTION_LEFT_RIGHT));
         int step = board.getStep();
-        int nextPlayerNumber = board.getPlayerNumber(board.getCurrentPlayer()) + 1;
-                if (nextPlayerNumber < board.getPlayersNumber()) {
-                    board.setCurrentPlayer(board.getPlayer(nextPlayerNumber));
-                } else {
-                    step++;
-                    if (step < Player.NO_REGISTERS) {
-                        makeProgramFieldsVisible(step);
-                        board.setStep(step);
-                        board.setCurrentPlayer(board.getPlayer(0));
-                    } else {
-                        startProgrammingPhase();
-                    }
-                }
+        int nextPlayerNumber = board.getPrioPlayerNumber(currentPlayer) + 1;
+        if (nextPlayerNumber < board.getPlayersNumber()) {
+            board.setCurrentPlayer(board.getPrioPlayer(nextPlayerNumber));
+        } else {
+            // For some reason, we can't just get a list of players???
+            for (int i = 0; i < board.getPlayersNumber(); i++) {
+                Space space = board.getPlayer(i).getSpace();
+                SpaceElement element = space.getElement();
+                if (element == null) continue;
+                // TODO We should probably handle activation order
+                element.doAction(this, space);
+            }
+            step++;
+            // Each time all players have made a move, recalculate priority
+            board.getPrioAntenna().updatePlayerPrio();
+            if (step < Player.NO_REGISTERS) {
+                makeProgramFieldsVisible(step);
+                board.setStep(step);
+                board.setCurrentPlayer(board.getPrioPlayer(0));
+            } else {
+                StartProgrammingPhase(true);
+            }
+        }
 
         // executeNextStep();
     }
