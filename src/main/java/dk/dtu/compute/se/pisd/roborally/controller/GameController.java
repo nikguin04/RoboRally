@@ -321,8 +321,7 @@ public class GameController {
     public void executeCommandOptionAndContinue(Command command){
         Player currentPlayer = board.getCurrentPlayer();
         board.setPhase(Phase.ACTIVATION);
-        executeCommand(board.getCurrentPlayer(), command);
-        currentPlayer.setLastCardPlayed(new CommandCard(Command.OPTION_LEFT_RIGHT));
+        executeCommand(board.getCurrentPlayer(), command); 
         int step = board.getStep();
         int nextPlayerNumber = board.getPrioPlayerNumber(currentPlayer) + 1;
         if (nextPlayerNumber < board.getPlayersNumber()) {
