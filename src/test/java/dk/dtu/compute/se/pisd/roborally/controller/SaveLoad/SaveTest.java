@@ -46,39 +46,39 @@ public class SaveTest{
 	@Test
 	public void TestTestBoardValidity() {
 		Board defaultBoard = new Board(8,8);
-		Board test = CreateTestBoard();
+		Board testBoard = CreateTestBoard();
 
 		List<String> ignoreVariables = Arrays.asList(
 			"width",
 			"height");
-		AssureBoardIndifference(test, defaultBoard, ignoreVariables);
+		AssureBoardIndifference(testBoard, defaultBoard, ignoreVariables);
 	}
 
 	@Test
 	public void TestTestBoardInvaliditySimple() {
 		Board defaultBoard = new Board(8,8);
-		Board test = CreateTestBoard();
+		Board testBoard = CreateTestBoard();
 
 		List<String> ignoreVariables = Arrays.asList(
 			"width",
 			"height");
-		test.setStep(0);
+			testBoard.setStep(0);
 		assertThrows(AssertionError.class,
-			() -> AssureBoardIndifference(test, defaultBoard, ignoreVariables),
+			() -> AssureBoardIndifference(testBoard, defaultBoard, ignoreVariables),
 			"Board is not indifferent in all variables (did not throw exception)c");
 	}
 
 	@Test
 	public void TestTestBoardInvalidityNested() {
 		Board defaultBoard = new Board(8,8);
-		Board test = CreateTestBoard();
+		Board testBoard = CreateTestBoard();
 
 		List<String> ignoreVariables = Arrays.asList(
 			"width",
 			"height");
-		test.getSpace(2, 2).setElement(null);
-		test.getSpace(5, 5).setElement(null);
-		test.getSpace(5, 5).getWalls().clear();
+			testBoard.getSpace(2, 2).setElement(null);
+			testBoard.getSpace(5, 5).setElement(null);
+			testBoard.getSpace(5, 5).getWalls().clear();
 		assertThrows(AssertionError.class,
 			() -> AssureBoardIndifference(test, defaultBoard, ignoreVariables),
 			"Board is not indifferent in all variables (did not throw exception)");
@@ -159,38 +159,5 @@ public class SaveTest{
 		}
 		//return false;
 	}
-	/*
-	This Test would test if the save file does get saved correctly, but does have some bugs, with the loadTest if run on the same time
-	@Test
-	public void compareSaveTest() throws InterruptedException, ExecutionException{
-		CompletableFuture<CompareException> passed = new CompletableFuture<>();
-
-		Platform.startup(new Runnable() {
-			@Override
-			public void run() {
-				Board testboard = CreateTestBoard();
-   				LoadDialog<Board> ld;
-				try {
-					ld = new LoadDialog<>();
-				} catch (Exception e) {
-					passed.complete(new CompareException("Could not open load dialog, check deserializer"));
-					return; // for warning messages
-				}
-				ld.LoadBoardFromFile("gamedata/SaveTestUnit.json");
-				Board loadedBoard = ld.getCurrentBoard();
-				List<String> ignoreVariables = Arrays.asList(
-					"step",
-					"stepMode");
-				try {
-					CompareBoard(testboard, loadedBoard, ignoreVariables);
-					passed.complete(null);
-				} catch (CompareException ae) {
-					passed.complete(ae);
-				}
-			}
-		});
-		assertNull(passed.get());
-		
-	}*/
 }
 
