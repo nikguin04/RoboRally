@@ -84,7 +84,7 @@ public class GameController {
 
     void moveToSpace(@NotNull Player player, @NotNull Space space, @NotNull Heading heading) throws ImpossibleMoveException {
         assert board.getNeighbour(player.getSpace(), heading) == space; // make sure the move to here is possible in principle
-		if (player.getSpace().getWalls().contains(heading) || space.getWalls().contains(heading.opposite()))
+		if (board.isObstructed(player.getSpace(), heading))
 			throw new ImpossibleMoveException(player, space, heading);
         Player other = space.getPlayer();
         if (other != null){
@@ -222,8 +222,8 @@ public class GameController {
             // XXX This is a very simplistic way of dealing with some basic cards and
             //     their execution. This should eventually be done in a more elegant way
             //     (this concerns the way cards are modelled as well as the way they are executed).
-            //     player.setLastCardPlayed(currentCard); function calls the setLastCardPlayed and 
-            //     copies the latest card for the Again card to use. 
+            //     player.setLastCardPlayed(currentCard); function calls the setLastCardPlayed and
+            //     copies the latest card for the Again card to use.
             //
 
             CommandCard currentCard = new CommandCard(command);
@@ -268,7 +268,7 @@ public class GameController {
                     CommandCard lastCard = player.getLastCardPlayed();
                     if (lastCard != null && lastCard.command != Command.AGAN) {
                         executeCommand(player, lastCard.command);
-                        
+
                     }
                     player.setLastCardPlayed(currentCard);
                     break;
@@ -324,7 +324,7 @@ public class GameController {
     public void executeCommandOptionAndContinue(Command command){
         Player currentPlayer = board.getCurrentPlayer();
         board.setPhase(Phase.ACTIVATION);
-        executeCommand(board.getCurrentPlayer(), command); 
+        executeCommand(board.getCurrentPlayer(), command);
         int step = board.getStep();
         int nextPlayerNumber = board.getPrioPlayerNumber(currentPlayer) + 1;
         if (nextPlayerNumber < board.getPlayersNumber()) {

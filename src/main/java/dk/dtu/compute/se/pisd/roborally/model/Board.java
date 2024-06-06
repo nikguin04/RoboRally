@@ -334,6 +334,16 @@ public class Board extends Subject {
 	    return getSpace(x, y);
     }
 
+	public boolean isObstructed(@NotNull Space space, @NotNull Heading heading) {
+		if (space.getWalls().contains(heading))
+			return true;
+		Space nextSpace = getNeighbour(space, heading);
+		if (nextSpace == null)
+			return false;
+		return nextSpace.getWalls().contains(heading.opposite())
+			|| nextSpace.getElement() instanceof PrioAntenna;
+	}
+
     public String getStatusMessage() {
         return "Phase: " + getPhase().name() +
         ", Player = " + getCurrentPlayer().getName() +
