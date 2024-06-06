@@ -61,7 +61,7 @@ public class GameController {
                 Space target = board.getNeighbour(player.getSpace(), player.getHeading());
                 if (target != null) {
                     try {
-                        moveToSpace(player, target, player.getHeading());
+                        moveToSpace(player, player.getHeading());
                     } catch (ImpossibleMoveException e) {
                         // we don't do anything here  for now; we just catch the
                         // exception so that we do no pass it on to the caller
@@ -82,8 +82,8 @@ public class GameController {
         player.setHeading(player.getHeading().prev());
     }
 
-    void moveToSpace(@NotNull Player player, @NotNull Space space, @NotNull Heading heading) throws ImpossibleMoveException {
-        assert board.getNeighbour(player.getSpace(), heading) == space; // make sure the move to here is possible in principle
+    void moveToSpace(@NotNull Player player, @NotNull Heading heading) throws ImpossibleMoveException {
+		Space space = board.getNeighbour(player.getSpace(), heading);
 		if (board.isObstructed(player.getSpace(), heading))
 			throw new ImpossibleMoveException(player, space, heading);
         Player other = space.getPlayer();
@@ -93,7 +93,7 @@ public class GameController {
                 // XXX Note that there might be additional problems with
                 //     infinite recursion here (in some special cases)!
                 //     We will come back to that!
-                moveToSpace(other, target, heading);
+                moveToSpace(other, heading);
 
                 // Note that we do NOT embed the above statement in a try catch block, since
                 // the thrown exception is supposed to be passed on to the caller

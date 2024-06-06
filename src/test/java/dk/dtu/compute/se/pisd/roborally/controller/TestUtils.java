@@ -10,13 +10,13 @@ public class TestUtils {
 	public static void assertPossibleMove(GameController gameController, Board board, Player player) {
 		Space target = board.getNeighbour(player.getSpace(), player.getHeading());
 		assertNotNull(target);
-		assertDoesNotThrow(() -> gameController.moveToSpace(player, target, player.getHeading()));
+		assertDoesNotThrow(() -> gameController.moveToSpace(player, player.getHeading()));
 	}
 
 	public static void assertImpossibleMove(GameController gameController, Board board, Player player) {
 		Space target = board.getNeighbour(player.getSpace(), player.getHeading());
 		assertNotNull(target);
 		assertThrows(GameController.ImpossibleMoveException.class, () ->
-			gameController.moveToSpace(player, target, player.getHeading()));
+			gameController.moveToSpace(player, player.getHeading()));
 	}
 }
