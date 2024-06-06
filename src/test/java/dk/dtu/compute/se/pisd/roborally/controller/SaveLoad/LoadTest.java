@@ -1,8 +1,6 @@
 package dk.dtu.compute.se.pisd.roborally.controller.SaveLoad;
 
-import static dk.dtu.compute.se.pisd.roborally.model.Heading.SOUTH;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static dk.dtu.compute.se.pisd.roborally.utils.ArrayCompare.compareArray;
 
 import java.lang.reflect.Field;
@@ -12,8 +10,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 import org.junit.jupiter.api.Test;
-
-import com.mysql.cj.exceptions.AssertionFailedException;
 
 import dk.dtu.compute.se.pisd.roborally.controller.ConveyorBelt;
 import dk.dtu.compute.se.pisd.roborally.controller.PrioAntenna;
@@ -114,7 +110,7 @@ public class LoadTest {
 		// add variables to board for saving and loading successfully
 		Player p = new Player(b, "red", "test player 1", new Command[] {Command.FWD2, Command.FWD1, Command.LEFT, Command.FWD1, Command.FWD1, Command.FWD2, Command.FWD1, Command.RIGHT});
 		p.setSpace(b.getSpace(1, 3));
-		p.setHeading(SOUTH);
+		p.setHeading(Heading.SOUTH);
 
 		b.addPlayer(p);
 		b.setCurrentPlayer(p);
@@ -164,27 +160,24 @@ public class LoadTest {
 				Object def = board_fields[i].get(b_two);
 
 				if (comp == null && def == null) { // Check if both are null
-					throw new AssertionError("The two boards are similar (both null) in variable: " + board_fields[i].getName()); //return true;
+					fail("The two boards are similar (both null) in variable: " + board_fields[i].getName());
 				} else if (comp == null || def == null) {
 					continue;
 				} else { // No null pointers
 					if (def.getClass().isArray()) {
 						try {
-							if (compareArray(def, comp))
-								throw new AssertionError("The two boards are similar in array variable: " + board_fields[i].getName()); //return true;
-						} catch (AssertionFailedException e) {
+							assertFalse(compareArray(def, comp), "The two boards are similar in array variable: " + board_fields[i].getName());
+						} catch (IllegalArgumentException e) {
 							// The comparison has a difference, so we can continue
 						}
 					} else {
-						if (comp.equals(def))
-							throw new AssertionError("The two boards are similar in variable: " + board_fields[i].getName()); //return true;
+						assertNotEquals(def, comp, "The two boards are similar in variable: " + board_fields[i].getName());
 					}
 				}
 			} catch (IllegalAccessException e) {
 				System.out.println("Debug: " + board_fields[i].getName() + " Error: " + e.getMessage());
 			}
 		}
-		//return false;
 	}
 
 }
