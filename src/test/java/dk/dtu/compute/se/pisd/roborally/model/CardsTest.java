@@ -198,13 +198,13 @@ public class CardsTest {
     public void testOptinalGetTurnLeft() {
         
         Command command = Command.OPTION_LEFT_RIGHT;
-        assertEquals(command.LEFT, command.getOptions().get(0));
+        assertEquals(Command.LEFT, command.getOptions().get(0));
     }
 
     @Test
     public void testOptinalGetTurnRight() {
         Command command = Command.OPTION_LEFT_RIGHT;
-        assertEquals(command.RIGHT, command.getOptions().get(1));
+        assertEquals(Command.RIGHT, command.getOptions().get(1));
     }
     
 }

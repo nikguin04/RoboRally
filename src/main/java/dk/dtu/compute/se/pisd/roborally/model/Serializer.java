@@ -75,7 +75,7 @@ public class Serializer {
 			player_object.addProperty("heading", p.getHeading().name());
 
 			JsonArray comcardarr = new JsonArray();
-			for (int i = 0; i < p.NO_CARDS; i++) {
+			for (int i = 0; i < Player.NO_CARDS; i++) {
 				comcardarr.add(context.serialize(p.getCardField(i).getCard().command));
 			}
 			player_object.add("command_cards", comcardarr);

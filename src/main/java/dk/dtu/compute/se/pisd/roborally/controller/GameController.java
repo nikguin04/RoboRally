@@ -168,7 +168,7 @@ public class GameController {
 		CommandCard card = currentPlayer.getProgramField(step).getCard();
 		if (card != null) {
 			Command command = card.command;
-			if (command == command.OPTION_LEFT_RIGHT) {
+			if (command == Command.OPTION_LEFT_RIGHT) {
 				board.setPhase(Phase.PLAYER_INTERACTION);
 				return;
 			}
