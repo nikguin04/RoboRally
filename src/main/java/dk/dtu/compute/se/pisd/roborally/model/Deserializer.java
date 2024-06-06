@@ -12,9 +12,6 @@ import dk.dtu.compute.se.pisd.roborally.controller.SpaceElement;
 import dk.dtu.compute.se.pisd.roborally.controller.StartTile;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class Deserializer {
 	/**

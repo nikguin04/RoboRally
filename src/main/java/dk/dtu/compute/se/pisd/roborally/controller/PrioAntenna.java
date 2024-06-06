@@ -1,18 +1,12 @@
 package dk.dtu.compute.se.pisd.roborally.controller;
 
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import dk.dtu.compute.se.pisd.roborally.model.Board;
-import dk.dtu.compute.se.pisd.roborally.model.Heading;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
 import static dk.dtu.compute.se.pisd.roborally.utils.StringUtils.intarrFromCommaStr;
-
-import static dk.dtu.compute.se.pisd.roborally.model.Heading.*;
-
 
 /**
  * @author Anders Greve Sørensen, s235093@dtu.dk

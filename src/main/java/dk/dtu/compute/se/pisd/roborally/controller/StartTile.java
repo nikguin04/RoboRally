@@ -1,9 +1,6 @@
 package dk.dtu.compute.se.pisd.roborally.controller;
 
-import java.util.Arrays;
-
 import dk.dtu.compute.se.pisd.roborally.model.Board;
-import dk.dtu.compute.se.pisd.roborally.model.Heading;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
 import static dk.dtu.compute.se.pisd.roborally.utils.StringUtils.intarrFromCommaStr;
 

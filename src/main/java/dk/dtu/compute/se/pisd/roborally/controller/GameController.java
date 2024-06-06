@@ -23,9 +23,6 @@ package dk.dtu.compute.se.pisd.roborally.controller;
 
 import dk.dtu.compute.se.pisd.roborally.model.*;
 
-import static dk.dtu.compute.se.pisd.roborally.model.Phase.INITIALISATION;
-
-
 import org.jetbrains.annotations.NotNull;
 
 /**

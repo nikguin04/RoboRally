@@ -7,8 +7,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
-import com.mysql.cj.conf.ConnectionUrl.Type;
-import com.mysql.cj.xdevapi.Expression;
 
 import dk.dtu.compute.se.pisd.roborally.controller.SpaceElement;
 

@@ -3,7 +3,6 @@ package dk.dtu.compute.se.pisd.roborally.controller.SaveLoad;
 import static dk.dtu.compute.se.pisd.roborally.model.Heading.SOUTH;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static dk.dtu.compute.se.pisd.roborally.utils.ArrayCompare.compareArray;
 
 import java.lang.reflect.Field;

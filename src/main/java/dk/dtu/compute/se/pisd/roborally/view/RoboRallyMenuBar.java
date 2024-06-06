@@ -25,7 +25,6 @@ import dk.dtu.compute.se.pisd.roborally.controller.AppController;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextField;
 
 /**
  * ...

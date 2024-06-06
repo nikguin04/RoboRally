@@ -3,7 +3,6 @@ package dk.dtu.compute.se.pisd.roborally.controller;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
 
-
 /**
  * @author Anders Greve Sørensen, s235093@dtu.dk
  */
