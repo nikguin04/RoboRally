@@ -98,7 +98,7 @@ public class Board extends Subject {
 	}
 
 	/**
-	 * attaches a given priority antenna to this board.
+	 * Attaches a given priority antenna to this board.
 	 * @author Anders Greve Sørensen, s235093@dtu.dk.
 	 * @param prioAntenna the priority antenna to be attached to this board.
 	 */
@@ -128,9 +128,9 @@ public class Board extends Subject {
 
 
 	/**
-	 * retrieve this boards list of prioritized players.
+	 * Retrieve this board's list of prioritized players.
 	 * @author Anders Greve Sørensen, s235093@dtu.dk.
-	 * @return the boards list of prioritized players.
+	 * @return the board's list of prioritized players.
 	 */
 	public List<Player> getPrioritizedPlayers() {
 		return priotizedPlayers;
@@ -197,7 +197,7 @@ public class Board extends Subject {
 	 * Get a player from the prioritized player list, given its index.
 	 * @author Anders Greve Sørensen, s235093@dtu.dk.
 	 * @param i the index of the player in the prioritized player list.
-	 * @return the player with index i in this board's prioritized player list. null if index is out of range.
+	 * @return the player with index i in this board's prioritized player list, null if index is out of range.
 	 */
 	public Player getPrioPlayer(int i) {
 		if (i >= 0 && i < priotizedPlayers.size()) {
@@ -312,7 +312,7 @@ public class Board extends Subject {
         //      just calculates the next space in the respective
         //      direction in a cyclic way.
 
-        // XXX an other option (not for now) would be that null represents a hole
+        // XXX another option (not for now) would be that null represents a hole
         //     or the edge of the board in which the players can fall
 
         int x = space.x;

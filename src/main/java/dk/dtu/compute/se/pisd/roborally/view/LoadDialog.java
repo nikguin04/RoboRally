@@ -40,7 +40,7 @@ import javafx.scene.layout.Region;
 
 /**
  * A dialog that shows a load menu to the user where they can pick a path
- * LoadDialog is user tested, and does not reqiuire a unit test.
+ * LoadDialog is user tested, and does not require a unit test.
  *
  * @see Dialog
  * @param <T> The type of the items to show to the user, and the type that is returned
@@ -167,7 +167,7 @@ public class LoadDialog<T> extends Dialog<Board> {
      **************************************************************************/
 
      /**
-	 * @return String, The relative filename of the currently selected file in the drop down menu
+	 * @return String, The relative filename of the currently selected file in the dropdown menu
 	 */
     public final String getSelectedItem() {
         return comboBox.getSelectionModel().getSelectedItem();
@@ -182,14 +182,14 @@ public class LoadDialog<T> extends Dialog<Board> {
     }
 
     /**
-	 * @param item Set the selected item in the drop down menu
+	 * @param item Set the selected item in the dropdown menu
 	 */
     public final void setSelectedItem(String item) {
         comboBox.getSelectionModel().select(item);
     }
 
     /**
-	 * @return ObservableList<String>, List of all items that are available to pick in the drop down meny
+	 * @return ObservableList<String>, List of all items that are available to pick in the dropdown menu
 	 */
     public final ObservableList<String> getItems() {
         return comboBox.getItems();

@@ -19,7 +19,7 @@ import static dk.dtu.compute.se.pisd.roborally.model.Heading.*;
  */
 public class PrioAntenna extends SpaceElement {
 
-	// All these variables are only initialzied when a board uses a priority antenna.
+	// All these variables are only initialised when a board uses a priority antenna.
 	public final int x;
 	public final int y;
 
@@ -38,7 +38,7 @@ public class PrioAntenna extends SpaceElement {
 	/**
 	 * Create a new prio antenna, with set coordinates x,y
 	 * @param x Coordinate x
-	 * @param y Coordiante y
+	 * @param y Coordinate y
 	 */
 	public PrioAntenna(int x, int y) {
 		this.x = x;
@@ -141,7 +141,7 @@ public class PrioAntenna extends SpaceElement {
 		Player prioPlayer = null;
 		Space p1Space = player1.getSpace();
 		Space p2Space = player2.getSpace();
-		// Calculate each players angle with positive x axis in radians in the interval (0, 2π]
+		// Calculate each players angle with positive x-axis in radians in the interval (0, 2π]
 		// Players position is being adjusted to take the prio antennas position into account.
 		double p1Angle = Math.atan2(-(p1Space.y - this.y), p1Space.x - this.x);
 		double p2Angle = Math.atan2(-(p2Space.y - this.y), p2Space.x - this.x);
@@ -151,7 +151,7 @@ public class PrioAntenna extends SpaceElement {
 		if (p2Angle < 0) {
 			p2Angle = p2Angle + 2 * Math.PI;
 		}
-		// Check which player has largest angle with positive x axis, and assign that player prio.
+		// Check which player has the largest angle with positive x-axis, and assign that player prio.
 		// An exception is if the players angle is 0, at which point that player has prio.
 		if (p1Angle == 0) return player1;
 		if (p2Angle == 0) return player2;

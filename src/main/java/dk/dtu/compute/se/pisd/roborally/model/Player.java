@@ -201,7 +201,7 @@ public class Player extends Subject {
         if (obj instanceof Player comp) {
             try {
                 FieldsCompare<Player> fc = new FieldsCompare<Player>();
-                // Dont test player for an equal board, since the player can be identical but on another board.
+                // Don't test player for an equal board, since the player can be identical but on another board.
                 fc.CompareFields(this, comp, List.of("board"));
                 return true;
             } catch (CompareException e) {

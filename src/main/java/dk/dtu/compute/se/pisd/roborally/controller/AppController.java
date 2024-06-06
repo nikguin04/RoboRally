@@ -80,7 +80,7 @@ public class AppController implements Observer {
      *
      * <p>Modifies following variables in Roborally class: {@link Board}, {@link GameController}</p>
      * <p>The dialog box suspends all other use of the Roborally application.
-     * It is a syncronous function which awaits a result from the dialog box on close</p>
+     * It is a synchronous function which awaits a result from the dialog box on close</p>
      * <p>Uses variable {@link #PLAYER_NUMBER_OPTIONS} as {@link List} to choose player number from</p>
      *
      * @see ChoiceDialog
@@ -95,7 +95,7 @@ public class AppController implements Observer {
         if (result.isPresent()) {
             if (gameController != null) {
                 // The UI should not allow this, but in case this happens anyway.
-                // give the user the option to save the game or abort this operation!
+                // Give the user the option to save the game or abort this operation!
                 if (!stopGame()) {
                     return;
                 }
@@ -104,7 +104,7 @@ public class AppController implements Observer {
             // XXX the board should eventually be created programmatically or loaded from a file
             //     here we just create an empty board with the required number of players.
             Board board = new Board(8,8);
-            board.getSpace(2,2).setElement(new ConveyorBelt()); // WARN: TODO: This is for debugging json temporaryly and might be helpful to debug other parts of our program, delete this before production release
+            board.getSpace(2,2).setElement(new ConveyorBelt()); // WARN: TODO: This is for debugging json temporarily and might be helpful to debug other parts of our program, delete this before production release
 			// Add the priority antenna to the board
 			PrioAntenna prioAntenna = new PrioAntenna(5,5);
             board.setPrioAntenna(prioAntenna);
@@ -202,7 +202,7 @@ public class AppController implements Observer {
      *
      * <p>Modifies following variables in Roborally class: {@link Board}, {@link GameController}</p>
      * <p>The dialog box suspends all other use of the Roborally application.
-     * It is a syncronous function which awaits a result from the dialog box on close</p>
+     * It is a synchronous function which awaits a result from the dialog box on close</p>
      *
      * @see LoadDialog
      * @see javafx.scene.control.Dialog
@@ -216,7 +216,7 @@ public class AppController implements Observer {
         if (result.isPresent()) {
             if (gameController != null) {
                 // The UI should not allow this, but in case this happens anyway.
-                // give the user the option to save the game or abort this operation!
+                // Give the user the option to save the game or abort this operation!
                 if (!stopGame()) {
                     return;
                 }
@@ -247,7 +247,7 @@ public class AppController implements Observer {
     public boolean stopGame() {
         if (gameController != null) {
 
-            // here we save the game (without asking the user).
+            // Here we save the game (without asking the user).
             //saveGame();
 
             gameController = null;

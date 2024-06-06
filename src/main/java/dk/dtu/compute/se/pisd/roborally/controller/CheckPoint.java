@@ -22,7 +22,7 @@ public class CheckPoint extends SpaceElement {
 
 	/**
 	 * Instantiate checkpoint with given checkpoint number.
-	 * This works with strings so we can load from json easier
+	 * This works with strings, so we can load from json easier
 	 * @author Niklas Jensen, s235101@dtu.dk
 	 * @param checkPointNr the checkpoint number to be assigned to checkpoint. Players must visit checkpoints
 	 *                     with their numbers in ascending order. So 1 first, then 2, etc.

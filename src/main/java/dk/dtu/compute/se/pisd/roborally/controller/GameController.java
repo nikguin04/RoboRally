@@ -64,7 +64,7 @@ public class GameController {
 					moveToSpace(player, player.getHeading());
 				} catch (ImpossibleMoveException e) {
 					// we don't do anything here  for now; we just catch the
-					// exception so that we do no pass it on to the caller
+					// exception so that we don't pass it on to the caller
 					// (which would be very bad style).
 				}
 			}
@@ -284,7 +284,7 @@ public class GameController {
      * <p>Starts the {@link Phase#PROGRAMMING} Phase</p>
      * <p>If cards are NOT randomized, they have to be provided to the player before calling this function, since no cards will be loaded into the {@link Player} otherwise</p>
      * <p>TODO: Make current player to start align with priority antenna (currently always picking player 0 to begin)</p>
-     * @param RandomizeCards    Determintes whether or not to randomize cards
+     * @param RandomizeCards    Determines whether or not to randomize cards
      * @see CommandCardField
      */
     public void StartProgrammingPhase(Boolean RandomizeCards) {

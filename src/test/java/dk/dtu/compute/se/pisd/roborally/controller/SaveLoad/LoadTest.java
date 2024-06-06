@@ -112,7 +112,7 @@ public class LoadTest {
 
 	public Board CreateTestBoard() throws AssertionError {
 		Board b = new Board(8,8); // initialize totally blank board
-		// add variables to board for saving and loading sucessfully
+		// add variables to board for saving and loading successfully
 		Player p = new Player(b, "red", "test player 1", new Command[] {Command.FWD2, Command.FWD1, Command.LEFT, Command.FWD1, Command.FWD1, Command.FWD2, Command.FWD1, Command.RIGHT});
 		p.setSpace(b.getSpace(1, 3));
 		p.setHeading(SOUTH);
@@ -136,7 +136,7 @@ public class LoadTest {
 
 	public boolean CompareBoard(Board b_one, Board b_two, List<String> ignoreVariables) throws CompareException {
 		FieldsCompare<Board> fc = new FieldsCompare<Board>();
-		// Dont test player for an equal board, since the player can be identical but on another board.
+		// Don't test player for an equal board, since the player can be identical but on another board.
 		fc.CompareFields(b_one, b_two, ignoreVariables);
 		return true;
 
@@ -145,7 +145,7 @@ public class LoadTest {
 	/**
 	 * Very similar to compare board, but returns false is any variable inside board is similar
 	 * Note: This does not check all nested array variables, but only if one of the checks for them fail.
-	 * This essentailly fails if a variable is similar to between b_one and b_two
+	 * This essentially fails if a variable is similar to between b_one and b_two
 	 * Ignores width and height integers, which gets checked by the spaces variable
 	 * @param b_one
 	 * @param b_two

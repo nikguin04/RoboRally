@@ -35,7 +35,7 @@ public class IOUtil {
 
     /**
      * Reads a string from some InputStream. The solution is based
-     * on google's Guava and a solution from Baeldung:
+     * on Google's Guava and a solution from Baeldung:
      * https://www.baeldung.com/convert-input-stream-to-string#guava
      *
      * @param inputStream the input stream
