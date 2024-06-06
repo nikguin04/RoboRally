@@ -104,7 +104,7 @@ public class PrioAntenna extends SpaceElement {
 	 */
 	public Player getprioPlayer(List<Player> listOfPlayers) {
 		Player prioPlayer = null;
-		int prioPlayerManhattenDistance = Integer.MAX_VALUE;
+		int prioPlayerManhattanDistance = Integer.MAX_VALUE;
 
 		for (Player p : listOfPlayers) {
 
@@ -113,15 +113,15 @@ public class PrioAntenna extends SpaceElement {
 				continue;
 			}
 
-			int currentPlayerManhattenDistance = getManhattenDistance(this.x, this.y, p.getSpace().x, p.getSpace().y);
+			int currentPlayerManhattanDistance = getManhattanDistance(this.x, this.y, p.getSpace().x, p.getSpace().y);
 			if (prioPlayer == null) {
 				prioPlayer = p;
-				prioPlayerManhattenDistance = currentPlayerManhattenDistance;
+				prioPlayerManhattanDistance = currentPlayerManhattanDistance;
 			} else {
-				if (currentPlayerManhattenDistance < prioPlayerManhattenDistance) {
+				if (currentPlayerManhattanDistance < prioPlayerManhattanDistance) {
 					prioPlayer = p;
-					prioPlayerManhattenDistance = currentPlayerManhattenDistance;
-				} else if (currentPlayerManhattenDistance == prioPlayerManhattenDistance) {
+					prioPlayerManhattanDistance = currentPlayerManhattanDistance;
+				} else if (currentPlayerManhattanDistance == prioPlayerManhattanDistance) {
 					prioPlayer = prioTieBreak(prioPlayer, p);
 				}
 			}
@@ -164,16 +164,16 @@ public class PrioAntenna extends SpaceElement {
 	}
 
 	/**
-	 * Calculates the manhatten distance from one point to another. Meaning, the amount of spaces
+	 * Calculates the Manhattan distance from one point to another. Meaning, the amount of spaces
 	 * between the two points without going diagonally.
 	 * @author Anders Greve Sørensen, s235093@dtu.dk.
 	 * @param x1 the x coordinate of the first point.
 	 * @param y1 the y coordinate of the first point.
 	 * @param x2 the x coordinate of the second point.
 	 * @param y2 the y coordinate of the second point.
-	 * @return the manhatten distance from one point to another.
+	 * @return the Manhattan distance from one point to another.
 	 */
-	public int getManhattenDistance(int x1, int y1, int x2, int y2) {
+	public int getManhattanDistance(int x1, int y1, int x2, int y2) {
 		return Math.abs(x1 - x2) + Math.abs(y1 - y2);
 	}
 

@@ -10,14 +10,14 @@ public class PrioAntennaTest {
 
 
 	@Test
-	public void testManhattenDistance() {
+	public void testManhattanDistance() {
 		Board board = new Board(8, 8);
 		GameController gameController = new GameController(board);
 		PrioAntenna prioAntenna = new PrioAntenna(5, 5);
 		board.setPrioAntenna(prioAntenna);
-        assertEquals(2, prioAntenna.getManhattenDistance(1, 1, 2, 2));
-		assertEquals(2, prioAntenna.getManhattenDistance(-1, -1, -2, -2));
-		assertEquals(6, prioAntenna.getManhattenDistance(-1, -1, 2, 2));
+        assertEquals(2, prioAntenna.getManhattanDistance(1, 1, 2, 2));
+		assertEquals(2, prioAntenna.getManhattanDistance(-1, -1, -2, -2));
+		assertEquals(6, prioAntenna.getManhattanDistance(-1, -1, 2, 2));
 	}
 
 
