@@ -230,7 +230,7 @@
         "element": ""
       },
       {
-        "walls": ["NORTH", "SOUTH", "EAST", "WEST"],
+        "walls": [],
         "element": "PrioAntenna-5,5"
       },
       {

@@ -27,15 +27,11 @@ public class PrioAntenna extends SpaceElement {
 
 	/**
 	 * Attaches the prio antenna to a board.
-	 * Automatically creates walls at space.
 	 * The {@link Board#prioAntenna} element is not set automatically and needs to be set in the {@link Board} class
 	 * @param board The board to attach this prio antenna to
 	 */
 	public void attachBoard(Board board) {
 		board.getSpace(x, y).setElement(this);
-		// Automatically create walls?
-		board.getSpace(x, y).getWalls().clear();
-		board.getSpace(x, y).getWalls().addAll(Arrays.asList(new Heading[] {Heading.NORTH, Heading.SOUTH, Heading.EAST, Heading.WEST}));
 		this.board = board;
 	}
 
@@ -183,7 +179,7 @@ public class PrioAntenna extends SpaceElement {
 
 	@Override
 	public boolean doAction(GameController gameController, Space space) {
-		throw new UnsupportedOperationException("Unimplemented method 'doAction' for priotiry antenna. This point should never be reached as priority antenna should have walls. If you get this message, there is a flaw in the game move logic");
+		throw new UnsupportedOperationException("Unimplemented method 'doAction' for priority antenna. This point should never be reached as the priority antenna is solid. If you get this message, there is a flaw in the game move logic");
 	}
 
 	@Override
