@@ -40,33 +40,30 @@ public class LoadTest {
 		CompletableFuture<CompareException> passed = new CompletableFuture<>();
 		//passed.completeOnTimeout(new AssertionFailedException("Timeout"), 5000, TimeUnit.MILLISECONDS);
 
-		Platform.startup(new Runnable() {
-			@Override
-			public void run() {
-				Board testboard = CreateTestBoard();
+		Platform.startup(() -> {
+			Board testboard = CreateTestBoard();
 
-				// TODO: Save test board and load
+			// TODO: Save test board and load
 
-				LoadDialog<Board> ld;
-				try {
-					ld = new LoadDialog<>();
-				} catch (Exception e) {
-					passed.complete(new CompareException("Could not open load dialog, check deserializer"));
-					return; // for warning messages
-				}
-				ld.LoadBoardFromFile("gamedata/TempTest.json");
-				Board loadedBoard = ld.getCurrentBoard();
-				List<String> ignoreVariables = Arrays.asList(
-					"step",
-					"stepMode");
-				try {
-					CompareBoard(testboard, loadedBoard, ignoreVariables);
-					passed.complete(null);
-				} catch (CompareException ae) {
-					passed.complete(ae);
-				}
-
+			LoadDialog<Board> ld;
+			try {
+				ld = new LoadDialog<>();
+			} catch (Exception e) {
+				passed.complete(new CompareException("Could not open load dialog, check deserializer"));
+				return; // for warning messages
 			}
+			ld.LoadBoardFromFile("gamedata/TempTest.json");
+			Board loadedBoard = ld.getCurrentBoard();
+			List<String> ignoreVariables = Arrays.asList(
+				"step",
+				"stepMode");
+			try {
+				CompareBoard(testboard, loadedBoard, ignoreVariables);
+				passed.complete(null);
+			} catch (CompareException ae) {
+				passed.complete(ae);
+			}
+
 		});
 		assertNull(passed.get());
 	}

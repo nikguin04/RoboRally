@@ -237,7 +237,7 @@ public class LoadDialog<T> extends Dialog<Board> {
         getDialogPane().setContent(grid);
 
 
-        Platform.runLater(() -> comboBox.requestFocus());
+        Platform.runLater(comboBox::requestFocus);
     }
 
     /**
