@@ -67,8 +67,7 @@ public class CheckPoint extends SpaceElement {
 
 	@Override
     public boolean equals(Object obj) {
-        if (obj instanceof CheckPoint) {
-            CheckPoint comp = ((CheckPoint)obj);
+        if (obj instanceof CheckPoint comp) {
             return this.checkPointNr == comp.checkPointNr;
 		}
 		return false;

@@ -98,8 +98,7 @@ public class Space extends Subject {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Space) {
-            Space comp = ((Space)obj);
+        if (obj instanceof Space comp) {
             boolean same = true;
             if (this.element != null && comp.element != null)
                 same = same && this.element.getClass() == comp.element.getClass();

@@ -198,9 +198,7 @@ public class Player extends Subject {
 
     @Override
     public boolean equals(Object obj) { // TODO: This should be made as the board, where all variables are checked
-        if (obj instanceof Player) {
-            Player comp = ((Player)obj);
-
+        if (obj instanceof Player comp) {
             try {
                 FieldsCompare<Player> fc = new FieldsCompare<Player>();
                 // Dont test player for an equal board, since the player can be identical but on another board.
