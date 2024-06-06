@@ -138,8 +138,7 @@ public class Deserializer {
 		public Command deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
 			throws JsonParseException {
 			JsonObject obj = json.getAsJsonObject();
-			Command c = Command.valueOf(obj.get("command").getAsString());
-			return c;
+			return Command.valueOf(obj.get("command").getAsString());
 		}
 	}
 

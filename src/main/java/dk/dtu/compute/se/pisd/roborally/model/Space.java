@@ -102,12 +102,12 @@ public class Space extends Subject {
             Space comp = ((Space)obj);
             boolean same = true;
             if (this.element != null && comp.element != null)
-                same = (!same) ? false : this.element.getClass() == comp.element.getClass();
-            else if (this.element == null || comp.element == null)
-                same = (!same) ? false : this.element == null && comp.element == null;
-            same = (!same) ? false : this.walls.equals(comp.walls);
-            same = (!same) ? false : this.x == comp.x;
-            same = (!same) ? false : this.y == comp.y;
+                same = same && this.element.getClass() == comp.element.getClass();
+            else
+                same = same && this.element == null && comp.element == null;
+            same = same && this.walls.equals(comp.walls);
+            same = same && this.x == comp.x;
+            same = same && this.y == comp.y;
             return same;
         }
         return false;

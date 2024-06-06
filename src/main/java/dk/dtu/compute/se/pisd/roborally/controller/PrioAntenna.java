@@ -184,6 +184,6 @@ public class PrioAntenna extends SpaceElement {
 
 	@Override
 	public String getArgument() {
-        return String.valueOf(x + "," + y);
+        return x + "," + y;
     }
 }

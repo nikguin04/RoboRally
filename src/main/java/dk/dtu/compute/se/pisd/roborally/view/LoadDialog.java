@@ -131,7 +131,7 @@ public class LoadDialog<T> extends Dialog<Board> {
         });
         comboBox.setMinWidth(MIN_WIDTH);
         if (files != null) {
-			String arr[] = new String[files.size()];
+			String[] arr = new String[files.size()];
 			files.toArray(arr);
             comboBox.getItems().addAll(arr);
         }

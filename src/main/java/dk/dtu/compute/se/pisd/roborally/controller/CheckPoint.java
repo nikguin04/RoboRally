@@ -33,8 +33,7 @@ public class CheckPoint extends SpaceElement {
 
 	private int sToInt(String s) {
 		try {
-			int parse = Integer.parseInt(s);
-			return parse;
+			return Integer.parseInt(s);
 		} catch (NumberFormatException e) {
 			System.out.println("Parsed number was not int, defaulting to 0");
 			return 0;
