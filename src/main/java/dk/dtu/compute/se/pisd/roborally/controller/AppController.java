@@ -105,7 +105,7 @@ public class AppController implements Observer {
             //     here we just create an empty board with the required number of players.
             Board board = new Board(8,8);
             board.getSpace(2,2).setElement(new ConveyorBelt()); // WARN: TODO: This is for debugging json temporaryly and might be helpful to debug other parts of our program, delete this before production release
-			// Add prioAntenna to board, and set walls on its space.
+			// Add the priority antenna to the board
 			PrioAntenna prioAntenna = new PrioAntenna(5,5);
             board.setPrioAntenna(prioAntenna);
 
@@ -114,7 +114,7 @@ public class AppController implements Observer {
                 StartTile startTile = new StartTile(i,0);
                 board.setStartTile(startTile);
             }
-		
+
 
             // Set Player on startTile
             gameController = new GameController(board);
@@ -139,7 +139,7 @@ public class AppController implements Observer {
                 if(x == 1){
                     break;
                 }
-             
+
             }
 
             // XXX: V2
