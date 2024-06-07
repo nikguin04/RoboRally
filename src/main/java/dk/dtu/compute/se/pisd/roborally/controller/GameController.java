@@ -25,6 +25,8 @@ import dk.dtu.compute.se.pisd.roborally.model.*;
 
 import static dk.dtu.compute.se.pisd.roborally.model.Phase.INITIALISATION;
 
+import java.util.List;
+import java.util.Random;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -318,6 +320,30 @@ public class GameController {
                 }
             }
         }
+    }
+
+    public void StartUpgradePhase() {
+        board.setPhase(Phase.UPGRADE);
+        board.setCurrentPlayer(board.getPlayer(0));
+
+        // Refresh shop:
+            // Check if shop is already full == refresh
+            // else, just fill shop with cards equal to player count
+        List<Integer> upgradeShopCards = board.getUpgradeShopCards();
+
+        if (upgradeShopCards.size() == board.getPlayersNumber()) { // Remove all cards from shop if no cards were purchased last round
+            upgradeShopCards.clear();
+        }
+        int size = upgradeShopCards.size();
+        for (int i = 0; i < board.getPlayersNumber() - size; i++) { // Iterate over numbers of cards missing from shop
+            upgradeShopCards.add((int)Math.floor(Math.random()*100)); // Add new card to shop (CURRENTLY JUST A PLACEHOLDER INT)
+        }
+
+
+        // Priority of upgrade shop is equal to priority antenna
+
+
+
     }
 
 

@@ -144,7 +144,8 @@ public class AppController implements Observer {
 
             // XXX: V2
             // board.setCurrentPlayer(board.getPlayer(0));
-            gameController.StartProgrammingPhase(true);
+            //gameController.StartProgrammingPhase(true);
+            gameController.StartUpgradePhase(); // Replaces start of programming phase
 
             roboRally.createBoardView(gameController);
         }

@@ -66,6 +66,8 @@ public class Board extends Subject {
 
     private int move_count = 0;
 
+    private List<Integer> upgradeShopCards = new ArrayList<>(); // TODO: Integer placeholder for the upgrade shop until we make actual card class
+
     public Board(int width, int height) {
 		this.width = width;
         this.height = height;
@@ -295,6 +297,10 @@ public class Board extends Subject {
     public Player getNextPlayer() {
 		return this.getPlayer((this.getPlayerNumber(this.getCurrentPlayer()) + 1) % this.getPlayersNumber());
 	}
+
+    public List<Integer> getUpgradeShopCards() {
+        return upgradeShopCards;
+    }
 
     /**
      * Returns the neighbour of the given space of the board in the given heading.
