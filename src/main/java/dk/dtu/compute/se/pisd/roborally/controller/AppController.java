@@ -33,6 +33,7 @@ import dk.dtu.compute.se.pisd.roborally.model.Serializer;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
 import dk.dtu.compute.se.pisd.roborally.view.LoadDialog;
 import dk.dtu.compute.se.pisd.roborally.view.SaveDialog;
+import dk.dtu.compute.se.pisd.roborallyserver.model.Lobby;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -40,6 +41,10 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceDialog;
 
 import org.jetbrains.annotations.NotNull;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
 
 import com.google.gson.GsonBuilder;
 import com.google.gson.Gson;
@@ -50,6 +55,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import static dk.dtu.compute.se.pisd.roborally.RoboRally.SERVER_HTTPURL;
 
 /**
  * ...
@@ -97,6 +103,18 @@ public class AppController implements Observer {
                     return;
                 }
             }
+
+
+            { // New lobby testing:
+                RestTemplate restTemplate = new RestTemplate();
+                Lobby lobby = new Lobby((Long)null, Long.valueOf(0), Long.valueOf(0));
+                HttpEntity<Lobby> request = new HttpEntity<>(lobby);
+                ResponseEntity<Lobby> response = restTemplate
+                    .exchange(SERVER_HTTPURL + "lobbies/newlobby", HttpMethod.POST, request, Lobby.class);
+                lobby = response.getBody();
+
+            } // End new lobby testing:
+
 
             // XXX the board should eventually be created programmatically or loaded from a file
             //     here we just create an empty board with the required number of players.

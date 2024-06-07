@@ -41,6 +41,8 @@ public class RoboRally extends Application {
 
     private static final int MIN_APP_WIDTH = 600;
 
+    public static final String SERVER_HTTPURL = "http://localhost:8080/";
+
     private Stage stage;
     private BorderPane boardRoot;
 
