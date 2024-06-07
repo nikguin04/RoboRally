@@ -31,6 +31,7 @@ import dk.dtu.compute.se.pisd.roborally.model.Command;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.model.Serializer;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
+import dk.dtu.compute.se.pisd.roborally.net.LobbyRest;
 import dk.dtu.compute.se.pisd.roborally.view.LoadDialog;
 import dk.dtu.compute.se.pisd.roborally.view.SaveDialog;
 import dk.dtu.compute.se.pisd.roborallyserver.model.Lobby;
@@ -104,21 +105,11 @@ public class AppController implements Observer {
                 }
             }
 
-
-            { // New lobby testing:
-                RestTemplate restTemplate = new RestTemplate();
-                Lobby lobby = new Lobby((Long)null, Long.valueOf(0), Long.valueOf(0));
-                HttpEntity<Lobby> request = new HttpEntity<>(lobby);
-                ResponseEntity<Lobby> response = restTemplate
-                    .exchange(SERVER_HTTPURL + "lobbies/newlobby", HttpMethod.POST, request, Lobby.class);
-                lobby = response.getBody();
-
-            } // End new lobby testing:
-
-
             // XXX the board should eventually be created programmatically or loaded from a file
             //     here we just create an empty board with the required number of players.
-            Board board = new Board(8,8);
+            Lobby lobby = LobbyRest.requestNewLobby(0);
+            Board board = new Board(8,8, lobby);
+
             board.getSpace(2,2).setElement(new ConveyorBelt()); // WARN: TODO: This is for debugging json temporarily and might be helpful to debug other parts of our program, delete this before production release
 			// Add the priority antenna to the board
 			PrioAntenna prioAntenna = new PrioAntenna(5,5);

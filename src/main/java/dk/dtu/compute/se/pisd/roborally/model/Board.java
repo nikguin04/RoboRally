@@ -24,6 +24,7 @@ package dk.dtu.compute.se.pisd.roborally.model;
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.controller.PrioAntenna;
 import dk.dtu.compute.se.pisd.roborally.controller.StartTile;
+import dk.dtu.compute.se.pisd.roborallyserver.model.Lobby;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -43,6 +44,7 @@ public class Board extends Subject {
     public final int width;
 
     public final int height;
+    public final Lobby lobby;
 
     private Integer gameId;
 
@@ -66,9 +68,13 @@ public class Board extends Subject {
 
     private int move_count = 0;
 
-    public Board(int width, int height) {
+    public Board(int width, int height) { // TODO: DELETE THIS AND MAKE SURE EVERYTHING HAS A PROPER LOBBY!!!
+        this(width, height, new Lobby());
+    }
+    public Board(int width, int height, Lobby lobby) {
 		this.width = width;
         this.height = height;
+        this.lobby = lobby;
         spaces = new Space[width][height];
         for (int x = 0; x < width; x++) {
             for(int y = 0; y < height; y++) {
