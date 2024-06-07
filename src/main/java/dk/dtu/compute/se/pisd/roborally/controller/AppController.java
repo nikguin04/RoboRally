@@ -32,6 +32,7 @@ import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.model.Serializer;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
 import dk.dtu.compute.se.pisd.roborally.net.LobbyRest;
+import dk.dtu.compute.se.pisd.roborally.net.PlayerRest;
 import dk.dtu.compute.se.pisd.roborally.view.LoadDialog;
 import dk.dtu.compute.se.pisd.roborally.view.SaveDialog;
 import dk.dtu.compute.se.pisd.roborallyserver.model.Lobby;
@@ -108,6 +109,8 @@ public class AppController implements Observer {
             // XXX the board should eventually be created programmatically or loaded from a file
             //     here we just create an empty board with the required number of players.
             Lobby lobby = LobbyRest.requestNewLobby(0);
+            Player p1 = PlayerRest.PushPlayerToLobby(0, "Player 1");
+            Player p2 = PlayerRest.PushPlayerToLobby(0, "Player 2");
             Board board = new Board(8,8, lobby);
 
             board.getSpace(2,2).setElement(new ConveyorBelt()); // WARN: TODO: This is for debugging json temporarily and might be helpful to debug other parts of our program, delete this before production release
