@@ -39,8 +39,7 @@ public abstract class SpaceElement {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof SpaceElement) {
-            SpaceElement comp = ((SpaceElement)obj);
+        if (obj instanceof SpaceElement comp) {
             return this.getClass().equals(obj.getClass());
         }
         return false;

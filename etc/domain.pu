@@ -2,7 +2,7 @@
 
 class Player {
     String name
-    Cards[] playerPrgrammingCards
+    Cards[] playerProgrammingCards
     Cards[] playerDamageCards
     int checkpointTokens
     int energyCubes

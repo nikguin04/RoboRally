@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static dk.dtu.compute.se.pisd.roborally.controller.TestUtils.*;
 
 public class WallTest {

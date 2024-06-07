@@ -5,7 +5,7 @@
 Before you begin, ensure you have met the following requirements:
 
 * You have installed the latest version of **Java Development Kit (JDK 17)** and **Java Runtime Environment (JRE 17)**.
-* You have a **Windows/Linux/Mac** machine. This guide is OS agnostic.
+* You have a **Windows/Linux/Mac** machine. This guide is OS-agnostic.
 * You have installed **Maven**.
 * You have installed **JavaFX**.
 

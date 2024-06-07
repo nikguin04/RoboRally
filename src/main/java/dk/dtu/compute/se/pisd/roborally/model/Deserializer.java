@@ -12,9 +12,6 @@ import dk.dtu.compute.se.pisd.roborally.controller.SpaceElement;
 import dk.dtu.compute.se.pisd.roborally.controller.StartTile;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class Deserializer {
 	/**
@@ -138,8 +135,7 @@ public class Deserializer {
 		public Command deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
 			throws JsonParseException {
 			JsonObject obj = json.getAsJsonObject();
-			Command c = Command.valueOf(obj.get("command").getAsString());
-			return c;
+			return Command.valueOf(obj.get("command").getAsString());
 		}
 	}
 

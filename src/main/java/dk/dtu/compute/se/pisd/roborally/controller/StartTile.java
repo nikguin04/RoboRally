@@ -1,14 +1,11 @@
 package dk.dtu.compute.se.pisd.roborally.controller;
 
-import java.util.Arrays;
-
 import dk.dtu.compute.se.pisd.roborally.model.Board;
-import dk.dtu.compute.se.pisd.roborally.model.Heading;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
 import static dk.dtu.compute.se.pisd.roborally.utils.StringUtils.intarrFromCommaStr;
 
 public class StartTile extends SpaceElement {
-    // All these variables are only initialzied when a board uses a StartTile.
+    // All these variables are only initialised when a board uses a StartTile.
 	public final int x;
 	public final int y;
 
@@ -27,7 +24,7 @@ public class StartTile extends SpaceElement {
     /**
 	 * Create a new StartTile, with set coordinates x,y
 	 * @param x Coordinate x
-	 * @param y Coordiante y
+	 * @param y Coordinate y
 	 */
 	public StartTile(int x, int y) {
 		this.x = x;
@@ -51,6 +48,6 @@ public class StartTile extends SpaceElement {
 
 	@Override
 	public String getArgument() {
-        return String.valueOf(x + "," + y);
+        return x + "," + y;
     }
 }

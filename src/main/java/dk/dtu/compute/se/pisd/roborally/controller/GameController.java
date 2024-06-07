@@ -23,9 +23,6 @@ package dk.dtu.compute.se.pisd.roborally.controller;
 
 import dk.dtu.compute.se.pisd.roborally.model.*;
 
-import static dk.dtu.compute.se.pisd.roborally.model.Phase.INITIALISATION;
-
-
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -55,22 +52,21 @@ public class GameController {
         moveAmt(player, 3);
     }
 
-    public void moveAmt(@NotNull Player player, int amount) {
-        if (player.board == board) {
-            for (int i = 0; i < amount; i++) {
-                Space target = board.getNeighbour(player.getSpace(), player.getHeading());
-                if (target != null) {
-                    try {
-                        moveToSpace(player, target, player.getHeading());
-                    } catch (ImpossibleMoveException e) {
-                        // we don't do anything here  for now; we just catch the
-                        // exception so that we do no pass it on to the caller
-                        // (which would be very bad style).
-                    }
-                }
-            }
-        }
-    }
+	public void moveAmt(@NotNull Player player, int amount) {
+		if (player.board != board) return;
+		for (int i = 0; i < amount; i++) {
+			Space target = board.getNeighbour(player.getSpace(), player.getHeading());
+			if (target != null) {
+				try {
+					moveToSpace(player, player.getHeading());
+				} catch (ImpossibleMoveException e) {
+					// we don't do anything here  for now; we just catch the
+					// exception so that we don't pass it on to the caller
+					// (which would be very bad style).
+				}
+			}
+		}
+	}
 
     // TODO Assignment A3
     public void turnRight(@NotNull Player player) {
@@ -82,18 +78,18 @@ public class GameController {
         player.setHeading(player.getHeading().prev());
     }
 
-    void moveToSpace(@NotNull Player player, @NotNull Space space, @NotNull Heading heading) throws ImpossibleMoveException {
-        assert board.getNeighbour(player.getSpace(), heading) == space; // make sure the move to here is possible in principle
+    void moveToSpace(@NotNull Player player, @NotNull Heading heading) throws ImpossibleMoveException {
+		Space space = board.getNeighbour(player.getSpace(), heading);
 		if (board.isObstructed(player.getSpace(), heading))
 			throw new ImpossibleMoveException(player, space, heading);
         Player other = space.getPlayer();
-        if (other != null){
+        if (other != null) {
             Space target = board.getNeighbour(space, heading);
             if (target != null) {
                 // XXX Note that there might be additional problems with
                 //     infinite recursion here (in some special cases)!
                 //     We will come back to that!
-                moveToSpace(other, target, heading);
+                moveToSpace(other, heading);
 
                 // Note that we do NOT embed the above statement in a try catch block, since
                 // the thrown exception is supposed to be passed on to the caller
@@ -161,133 +157,122 @@ public class GameController {
         } while (board.getPhase() == Phase.ACTIVATION && !board.isStepMode());
     }
 
-    private void executeNextStep() {
+	private void executeNextStep() {
 		Player currentPlayer = board.getCurrentPlayer();
-        if (board.getPhase() == Phase.ACTIVATION && currentPlayer != null) {
-            int step = board.getStep();
-            if (step >= 0 && step < Player.NO_REGISTERS) {
-                CommandCard card = currentPlayer.getProgramField(step).getCard();
-                if (card != null) {
-                    Command command = card.command;
-                    if (command == command.OPTION_LEFT_RIGHT){
-                        board.setPhase(Phase.PLAYER_INTERACTION);
-                        return;
-                    }
-                    executeCommand(currentPlayer, command);
-                    currentPlayer.setLastCardPlayed(card);
-                }
+		assert board.getPhase() == Phase.ACTIVATION && currentPlayer != null;
+		int step = board.getStep();
+		assert step >= 0 && step < Player.NO_REGISTERS;
+		CommandCard card = currentPlayer.getProgramField(step).getCard();
+		if (card != null) {
+			Command command = card.command;
+			if (command == Command.OPTION_LEFT_RIGHT) {
+				board.setPhase(Phase.PLAYER_INTERACTION);
+				return;
+			}
+			executeCommand(currentPlayer, command);
+			currentPlayer.setLastCardPlayed(card);
+		}
 
-				// After any player move, check space of all players, if checkpoint, activate checkpoint.
-				for (Player p : board.getPlayers()) {
-					if (p.getSpace().getElement() instanceof CheckPoint) {
-						p.getSpace().getElement().doAction(this, p.getSpace());
-					}
+		// After any player move, check space of all players, if checkpoint, activate checkpoint.
+		for (Player p : board.getPlayers()) {
+			if (p.getSpace().getElement() instanceof CheckPoint) {
+				p.getSpace().getElement().doAction(this, p.getSpace());
+			}
+		}
+
+		int nextPlayerNumber = board.getPrioPlayerNumber(currentPlayer) + 1;
+		if (nextPlayerNumber < board.getPlayersNumber()) {
+			board.setCurrentPlayer(board.getPrioPlayer(nextPlayerNumber));
+		} else {
+			// For some reason, we can't just get a list of players???
+			for (int i = 0; i < board.getPlayersNumber(); i++) {
+				Space space = board.getPlayer(i).getSpace();
+				SpaceElement element = space.getElement();
+				if (element == null) continue;
+				// TODO We should probably handle activation order
+				element.doAction(this, space);
+			}
+			step++;
+			// Each time all players have made a move, recalculate priority
+			board.getPrioAntenna().updatePlayerPrio();
+			if (step < Player.NO_REGISTERS) {
+				makeProgramFieldsVisible(step);
+				board.setStep(step);
+				board.setCurrentPlayer(board.getPrioPlayer(0));
+			} else {
+				StartProgrammingPhase(true);
+			}
+		}
+	}
+
+	private void executeCommand(@NotNull Player player, Command command) {
+		if (player == null || player.board != board || command == null) return;
+
+		// XXX This is a very simplistic way of dealing with some basic cards and
+		//     their execution. This should eventually be done in a more elegant way
+		//     (this concerns the way cards are modelled as well as the way they are executed).
+		//     player.setLastCardPlayed(currentCard); function calls the setLastCardPlayed and
+		//     copies the latest card for the Again card to use.
+		//
+
+		CommandCard currentCard = new CommandCard(command);
+		switch (command) {
+			case FWD1 -> {
+				this.moveForward(player);
+				player.setLastCardPlayed(currentCard);
+			}
+			case RIGHT -> {
+				this.turnRight(player);
+				player.setLastCardPlayed(currentCard);
+			}
+			case LEFT -> {
+				this.turnLeft(player);
+				player.setLastCardPlayed(currentCard);
+			}
+			case FWD2 -> {
+				this.fastForward(player);
+			}
+			case FWD3 -> {
+				this.fastfastForward(player);
+			}
+			case Back -> {
+				this.turnLeft(player);
+				this.turnLeft(player);
+				this.moveForward(player);
+				this.turnLeft(player);
+				this.turnLeft(player);
+				player.setLastCardPlayed(currentCard);
+			}
+			case UTRN -> {
+				this.turnLeft(player);
+				this.turnLeft(player);
+				player.setLastCardPlayed(currentCard);
+			}
+			case OPTION_LEFT_RIGHT -> {
+				board.setPhase(Phase.PLAYER_INTERACTION);
+				player.setLastCardPlayed(currentCard);
+			}
+			case AGAN -> {
+				CommandCard lastCard = player.getLastCardPlayed();
+				if (lastCard != null && lastCard.command != Command.AGAN) {
+					executeCommand(player, lastCard.command);
 				}
-
-                int nextPlayerNumber = board.getPrioPlayerNumber(currentPlayer) + 1;
-                if (nextPlayerNumber < board.getPlayersNumber()) {
-                    board.setCurrentPlayer(board.getPrioPlayer(nextPlayerNumber));
-                } else {
-					// For some reason, we can't just get a list of players???
-					for (int i = 0; i < board.getPlayersNumber(); i++) {
-						Space space = board.getPlayer(i).getSpace();
-						SpaceElement element = space.getElement();
-						if (element == null) continue;
-						// TODO We should probably handle activation order
-						element.doAction(this, space);
-					}
-                    step++;
-					// Each time all players have made a move, recalculate priority
-					board.getPrioAntenna().updatePlayerPrio();
-                    if (step < Player.NO_REGISTERS) {
-                        makeProgramFieldsVisible(step);
-                        board.setStep(step);
-						board.setCurrentPlayer(board.getPrioPlayer(0));
-                    } else {
-                        StartProgrammingPhase(true);
-                    }
-                }
-            } else {
-                // this should not happen
-                assert false;
-            }
-        } else {
-            // this should not happen
-            assert false;
-        }
-    }
-
-    private void executeCommand(@NotNull Player player, Command command) {
-        if (player != null && player.board == board && command != null) {
-            // XXX This is a very simplistic way of dealing with some basic cards and
-            //     their execution. This should eventually be done in a more elegant way
-            //     (this concerns the way cards are modelled as well as the way they are executed).
-            //     player.setLastCardPlayed(currentCard); function calls the setLastCardPlayed and
-            //     copies the latest card for the Again card to use.
-            //
-
-            CommandCard currentCard = new CommandCard(command);
-            switch (command) {
-                case FWD1:
-                    this.moveForward(player);
-                    player.setLastCardPlayed(currentCard);
-                    break;
-                case RIGHT:
-                    this.turnRight(player);
-                    player.setLastCardPlayed(currentCard);
-                    break;
-                case LEFT:
-                    this.turnLeft(player);
-                    player.setLastCardPlayed(currentCard);
-                    break;
-                case FWD2:
-                    this.fastForward(player);
-                    break;
-                case FWD3:
-                    this.fastfastForward(player);
-                    break;
-                case Back:
-                    this.turnLeft(player);
-                    this.turnLeft(player);
-                    this.moveForward(player);
-                    this.turnLeft(player);
-                    this.turnLeft(player);
-                    player.setLastCardPlayed(currentCard);
-                    break;
-                case UTRN:
-                    this.turnLeft(player);
-                    this.turnLeft(player);
-                    player.setLastCardPlayed(currentCard);
-                    break;
-                case OPTION_LEFT_RIGHT:
-                    board.setPhase(Phase.PLAYER_INTERACTION);
-                    player.setLastCardPlayed(currentCard);
-
-                    break;
-                case AGAN:
-                    CommandCard lastCard = player.getLastCardPlayed();
-                    if (lastCard != null && lastCard.command != Command.AGAN) {
-                        executeCommand(player, lastCard.command);
-
-                    }
-                    player.setLastCardPlayed(currentCard);
-                    break;
-                    default:
-                    // DO NOTHING (for now)
-            }
-        }
-    }
+				player.setLastCardPlayed(currentCard);
+			}
+			default -> {
+				// DO NOTHING (for now)
+			}
+		}
+	}
 
     public boolean moveCards(@NotNull CommandCardField source, @NotNull CommandCardField target) {
         CommandCard sourceCard = source.getCard();
         CommandCard targetCard = target.getCard();
-        if (sourceCard != null && targetCard == null) {
-            target.setCard(sourceCard);
-            source.setCard(null);
-            return true;
-        } else {
-            return false;
-        }
+        if (sourceCard == null || targetCard == null)
+			return false;
+        target.setCard(sourceCard);
+        source.setCard(null);
+        return true;
     }
 
 
@@ -296,7 +281,7 @@ public class GameController {
      * <p>Starts the {@link Phase#PROGRAMMING} Phase</p>
      * <p>If cards are NOT randomized, they have to be provided to the player before calling this function, since no cards will be loaded into the {@link Player} otherwise</p>
      * <p>TODO: Make current player to start align with priority antenna (currently always picking player 0 to begin)</p>
-     * @param RandomizeCards    Determintes whether or not to randomize cards
+     * @param RandomizeCards    Determines whether or not to randomize cards
      * @see CommandCardField
      */
     public void StartProgrammingPhase(Boolean RandomizeCards) {
@@ -305,17 +290,16 @@ public class GameController {
         board.setStep(0);
         for (int i = 0; i < board.getPlayersNumber(); i++) {
             Player player = board.getPlayer(i);
-            if (player != null) {
-                for (int j = 0; j < Player.NO_REGISTERS; j++) {
-                    CommandCardField field = player.getProgramField(j);
-                    field.setCard(null);
-                    field.setVisible(true);
-                }
-                for (int j = 0; j < Player.NO_CARDS; j++) {
-                    CommandCardField field = player.getCardField(j);
-                    if (RandomizeCards) field.setCard(generateRandomCommandCard());
-                    field.setVisible(true);
-                }
+            if (player == null) continue;
+            for (int j = 0; j < Player.NO_REGISTERS; j++) {
+                CommandCardField field = player.getProgramField(j);
+                field.setCard(null);
+                field.setVisible(true);
+            }
+            for (int j = 0; j < Player.NO_CARDS; j++) {
+                CommandCardField field = player.getCardField(j);
+                if (RandomizeCards) field.setCard(generateRandomCommandCard());
+                field.setVisible(true);
             }
         }
     }

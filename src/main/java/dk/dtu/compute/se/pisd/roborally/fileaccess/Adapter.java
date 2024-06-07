@@ -34,7 +34,7 @@ import com.google.gson.JsonSerializer;
 
 /**
  * A generic type adapter for Gson, which deals with structures, where
- * a statically typed element can have dynamic sub-types. The solution is a
+ * a statically typed element can have dynamic subtypes. The solution is a
  * simple adaptation of <a href="https://github.com/mperdikeas/json-polymorphism"
  * >https://github.com/mperdikeas/json-polymorphism</a>, which can be used
  * in a generic way. The type parameter <code>E</code> refers to the top of

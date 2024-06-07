@@ -1,9 +1,6 @@
 package dk.dtu.compute.se.pisd.roborally.controller.SaveLoad;
 
-import static dk.dtu.compute.se.pisd.roborally.model.Heading.SOUTH;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static dk.dtu.compute.se.pisd.roborally.utils.ArrayCompare.compareArray;
 
 import java.lang.reflect.Field;
@@ -13,8 +10,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 import org.junit.jupiter.api.Test;
-
-import com.mysql.cj.exceptions.AssertionFailedException;
 
 import dk.dtu.compute.se.pisd.roborally.controller.ConveyorBelt;
 import dk.dtu.compute.se.pisd.roborally.controller.PrioAntenna;
@@ -40,33 +35,30 @@ public class LoadTest {
 		CompletableFuture<CompareException> passed = new CompletableFuture<>();
 		//passed.completeOnTimeout(new AssertionFailedException("Timeout"), 5000, TimeUnit.MILLISECONDS);
 
-		Platform.startup(new Runnable() {
-			@Override
-			public void run() {
-				Board testboard = CreateTestBoard();
+		Platform.startup(() -> {
+			Board testboard = CreateTestBoard();
 
-				// TODO: Save test board and load
+			// TODO: Save test board and load
 
-				LoadDialog<Board> ld;
-				try {
-					ld = new LoadDialog<>();
-				} catch (Exception e) {
-					passed.complete(new CompareException("Could not open load dialog, check deserializer"));
-					return; // for warning messages
-				}
-				ld.LoadBoardFromFile("gamedata/TempTest.json");
-				Board loadedBoard = ld.getCurrentBoard();
-				List<String> ignoreVariables = Arrays.asList(
-					"step",
-					"stepMode");
-				try {
-					CompareBoard(testboard, loadedBoard, ignoreVariables);
-					passed.complete(null);
-				} catch (CompareException ae) {
-					passed.complete(ae);
-				}
-
+			LoadDialog<Board> ld;
+			try {
+				ld = new LoadDialog<>();
+			} catch (Exception e) {
+				passed.complete(new CompareException("Could not open load dialog, check deserializer"));
+				return; // for warning messages
 			}
+			ld.LoadBoardFromFile("gamedata/TempTest.json");
+			Board loadedBoard = ld.getCurrentBoard();
+			List<String> ignoreVariables = Arrays.asList(
+				"step",
+				"stepMode");
+			try {
+				CompareBoard(testboard, loadedBoard, ignoreVariables);
+				passed.complete(null);
+			} catch (CompareException ae) {
+				passed.complete(ae);
+			}
+
 		});
 		assertNull(passed.get());
 	}
@@ -115,10 +107,10 @@ public class LoadTest {
 
 	public Board CreateTestBoard() throws AssertionError {
 		Board b = new Board(8,8); // initialize totally blank board
-		// add variables to board for saving and loading sucessfully
+		// add variables to board for saving and loading successfully
 		Player p = new Player(b, "red", "test player 1", new Command[] {Command.FWD2, Command.FWD1, Command.LEFT, Command.FWD1, Command.FWD1, Command.FWD2, Command.FWD1, Command.RIGHT});
 		p.setSpace(b.getSpace(1, 3));
-		p.setHeading(SOUTH);
+		p.setHeading(Heading.SOUTH);
 
 		b.addPlayer(p);
 		b.setCurrentPlayer(p);
@@ -139,7 +131,7 @@ public class LoadTest {
 
 	public boolean CompareBoard(Board b_one, Board b_two, List<String> ignoreVariables) throws CompareException {
 		FieldsCompare<Board> fc = new FieldsCompare<Board>();
-		// Dont test player for an equal board, since the player can be identical but on another board.
+		// Don't test player for an equal board, since the player can be identical but on another board.
 		fc.CompareFields(b_one, b_two, ignoreVariables);
 		return true;
 
@@ -148,7 +140,7 @@ public class LoadTest {
 	/**
 	 * Very similar to compare board, but returns false is any variable inside board is similar
 	 * Note: This does not check all nested array variables, but only if one of the checks for them fail.
-	 * This essentailly fails if a variable is similar to between b_one and b_two
+	 * This essentially fails if a variable is similar to between b_one and b_two
 	 * Ignores width and height integers, which gets checked by the spaces variable
 	 * @param b_one
 	 * @param b_two
@@ -168,27 +160,24 @@ public class LoadTest {
 				Object def = board_fields[i].get(b_two);
 
 				if (comp == null && def == null) { // Check if both are null
-					throw new AssertionError("The two boards are similar (both null) in variable: " + board_fields[i].getName()); //return true;
+					fail("The two boards are similar (both null) in variable: " + board_fields[i].getName());
 				} else if (comp == null || def == null) {
 					continue;
 				} else { // No null pointers
 					if (def.getClass().isArray()) {
 						try {
-							if (compareArray(def, comp))
-								throw new AssertionError("The two boards are similar in array variable: " + board_fields[i].getName()); //return true;
-						} catch (AssertionFailedException e) {
+							assertFalse(compareArray(def, comp), "The two boards are similar in array variable: " + board_fields[i].getName());
+						} catch (IllegalArgumentException e) {
 							// The comparison has a difference, so we can continue
 						}
 					} else {
-						if (comp.equals(def))
-							throw new AssertionError("The two boards are similar in variable: " + board_fields[i].getName()); //return true;
+						assertNotEquals(def, comp, "The two boards are similar in variable: " + board_fields[i].getName());
 					}
 				}
 			} catch (IllegalAccessException e) {
 				System.out.println("Debug: " + board_fields[i].getName() + " Error: " + e.getMessage());
 			}
 		}
-		//return false;
 	}
 
 }

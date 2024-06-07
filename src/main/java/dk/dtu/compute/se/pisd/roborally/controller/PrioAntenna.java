@@ -1,25 +1,19 @@
 package dk.dtu.compute.se.pisd.roborally.controller;
 
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import dk.dtu.compute.se.pisd.roborally.model.Board;
-import dk.dtu.compute.se.pisd.roborally.model.Heading;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
 import static dk.dtu.compute.se.pisd.roborally.utils.StringUtils.intarrFromCommaStr;
-
-import static dk.dtu.compute.se.pisd.roborally.model.Heading.*;
-
 
 /**
  * @author Anders Greve Sørensen, s235093@dtu.dk
  */
 public class PrioAntenna extends SpaceElement {
 
-	// All these variables are only initialzied when a board uses a priority antenna.
+	// All these variables are only initialised when a board uses a priority antenna.
 	public final int x;
 	public final int y;
 
@@ -38,7 +32,7 @@ public class PrioAntenna extends SpaceElement {
 	/**
 	 * Create a new prio antenna, with set coordinates x,y
 	 * @param x Coordinate x
-	 * @param y Coordiante y
+	 * @param y Coordinate y
 	 */
 	public PrioAntenna(int x, int y) {
 		this.x = x;
@@ -104,7 +98,7 @@ public class PrioAntenna extends SpaceElement {
 	 */
 	public Player getprioPlayer(List<Player> listOfPlayers) {
 		Player prioPlayer = null;
-		int prioPlayerManhattenDistance = Integer.MAX_VALUE;
+		int prioPlayerManhattanDistance = Integer.MAX_VALUE;
 
 		for (Player p : listOfPlayers) {
 
@@ -113,15 +107,15 @@ public class PrioAntenna extends SpaceElement {
 				continue;
 			}
 
-			int currentPlayerManhattenDistance = getManhattenDistance(this.x, this.y, p.getSpace().x, p.getSpace().y);
+			int currentPlayerManhattanDistance = getManhattanDistance(this.x, this.y, p.getSpace().x, p.getSpace().y);
 			if (prioPlayer == null) {
 				prioPlayer = p;
-				prioPlayerManhattenDistance = currentPlayerManhattenDistance;
+				prioPlayerManhattanDistance = currentPlayerManhattanDistance;
 			} else {
-				if (currentPlayerManhattenDistance < prioPlayerManhattenDistance) {
+				if (currentPlayerManhattanDistance < prioPlayerManhattanDistance) {
 					prioPlayer = p;
-					prioPlayerManhattenDistance = currentPlayerManhattenDistance;
-				} else if (currentPlayerManhattenDistance == prioPlayerManhattenDistance) {
+					prioPlayerManhattanDistance = currentPlayerManhattanDistance;
+				} else if (currentPlayerManhattanDistance == prioPlayerManhattanDistance) {
 					prioPlayer = prioTieBreak(prioPlayer, p);
 				}
 			}
@@ -141,7 +135,7 @@ public class PrioAntenna extends SpaceElement {
 		Player prioPlayer = null;
 		Space p1Space = player1.getSpace();
 		Space p2Space = player2.getSpace();
-		// Calculate each players angle with positive x axis in radians in the interval (0, 2π]
+		// Calculate each players angle with positive x-axis in radians in the interval (0, 2π]
 		// Players position is being adjusted to take the prio antennas position into account.
 		double p1Angle = Math.atan2(-(p1Space.y - this.y), p1Space.x - this.x);
 		double p2Angle = Math.atan2(-(p2Space.y - this.y), p2Space.x - this.x);
@@ -151,7 +145,7 @@ public class PrioAntenna extends SpaceElement {
 		if (p2Angle < 0) {
 			p2Angle = p2Angle + 2 * Math.PI;
 		}
-		// Check which player has largest angle with positive x axis, and assign that player prio.
+		// Check which player has the largest angle with positive x-axis, and assign that player prio.
 		// An exception is if the players angle is 0, at which point that player has prio.
 		if (p1Angle == 0) return player1;
 		if (p2Angle == 0) return player2;
@@ -164,16 +158,16 @@ public class PrioAntenna extends SpaceElement {
 	}
 
 	/**
-	 * Calculates the manhatten distance from one point to another. Meaning, the amount of spaces
+	 * Calculates the Manhattan distance from one point to another. Meaning, the amount of spaces
 	 * between the two points without going diagonally.
 	 * @author Anders Greve Sørensen, s235093@dtu.dk.
 	 * @param x1 the x coordinate of the first point.
 	 * @param y1 the y coordinate of the first point.
 	 * @param x2 the x coordinate of the second point.
 	 * @param y2 the y coordinate of the second point.
-	 * @return the manhatten distance from one point to another.
+	 * @return the Manhattan distance from one point to another.
 	 */
-	public int getManhattenDistance(int x1, int y1, int x2, int y2) {
+	public int getManhattanDistance(int x1, int y1, int x2, int y2) {
 		return Math.abs(x1 - x2) + Math.abs(y1 - y2);
 	}
 
@@ -184,6 +178,6 @@ public class PrioAntenna extends SpaceElement {
 
 	@Override
 	public String getArgument() {
-        return String.valueOf(x + "," + y);
+        return x + "," + y;
     }
 }

@@ -7,8 +7,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
-import com.mysql.cj.conf.ConnectionUrl.Type;
-import com.mysql.cj.xdevapi.Expression;
 
 import dk.dtu.compute.se.pisd.roborally.controller.SpaceElement;
 
@@ -38,7 +36,7 @@ public class Serializer {
 			// maybe dont save current player, we should only let player save at start/end of a phase
 			jsonObject.addProperty("current_playerindex", board.getPlayerNumber(board.getCurrentPlayer()));
 			jsonObject.addProperty("phase", board.getPhase().name());
-			//jsonObject.addProperty("step", "null"); // dont save step, we should only let player save at start/end of a phase
+			//jsonObject.addProperty("step", "null"); // Don't save step, we should only let player save at start/end of a phase
 			jsonObject.addProperty("move_count", board.getMoveCount());
 			jsonObject.addProperty("gameId", board.getGameId());
 
@@ -62,7 +60,7 @@ public class Serializer {
 	 * <p>JSON serializer for type {@link Player}</p>
 	 * <p>SERIALIZING VARIABLES:</p>
 	 * <p>Serializes {@link Player#name}, {@link Player#color}, {@link Player#heading}</p>
-	 * <p>Serialized {@link Player#space} as a {@link String} coordinate with two numbers comma seperated, ex: "3,5"</p>
+	 * <p>Serialized {@link Player#space} as a {@link String} coordinate with two numbers comma separated, ex: "3,5"</p>
 	 * <p>Serializes {@link Player#cards} array with {@link CommandSerializer}. The {@link CommandCardField} types, gets converted to {@link Command} types, to avoid storing unnecessary variables from {@link CommandCardField}</p>
 	 */
 	public static class PlayerSerializer implements JsonSerializer<Player> {
@@ -75,11 +73,11 @@ public class Serializer {
 			player_object.addProperty("heading", p.getHeading().name());
 
 			JsonArray comcardarr = new JsonArray();
-			for (int i = 0; i < p.NO_CARDS; i++) {
+			for (int i = 0; i < Player.NO_CARDS; i++) {
 				comcardarr.add(context.serialize(p.getCardField(i).getCard().command));
 			}
 			player_object.add("command_cards", comcardarr);
-			// Dont include stuff like program since saving during a move should not be allowed
+			// Don't include stuff like program since saving during a move should not be allowed
             return player_object;
         }
     }
@@ -95,7 +93,7 @@ public class Serializer {
         public JsonElement serialize(Command com, java.lang.reflect.Type typeOfSrc, JsonSerializationContext context) {
 			JsonObject com_object = new JsonObject();
 			com_object.addProperty("command", com.name());
-			// Dont include stuff like program since saving during a move should not be allowed
+			// Don't include stuff like program since saving during a move should not be allowed
             return com_object;
         }
 	}

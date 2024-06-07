@@ -44,9 +44,7 @@ public class CommandCard extends Subject {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof CommandCard) {
-            CommandCard cc = ((CommandCard)obj);
-
+        if (obj instanceof CommandCard cc) {
             return this.command.equals(cc.command);
         }
         return false;

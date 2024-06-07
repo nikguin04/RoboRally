@@ -10,9 +10,9 @@ object Player {
     int energyReserve
     Vector2 facingDirection
 }
-note left : For keeping infomation of all players
+note left : For keeping information of all players
 object Board
-note right : Central class for inferfacing with, and\ncontrolling all of our classes and objects
+note right : Central class for interfacing with, and\ncontrolling all of our classes and objects
 Board "1" *-- "2..4" Player
 
 
