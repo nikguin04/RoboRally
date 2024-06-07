@@ -14,10 +14,10 @@ import static dk.dtu.compute.se.pisd.roborallyserver.controller.PlayerController
 public class PlayerRest {
 
 	public static final RestTemplate restTemplate = new RestTemplate();
-	public static Player PushPlayerToLobby(int lobby_id, String player_name) {
+	public static Lobby PushPlayerToLobby(Long lobby_id, String player_name) {
 		HttpEntity<NewPlayerBody> request = new HttpEntity<>(new NewPlayerBody(player_name, lobby_id));
-		ResponseEntity<Player> response = restTemplate
-			.exchange(SERVER_HTTPURL + "players/newplayer", HttpMethod.POST, request, Player.class);
+		ResponseEntity<Lobby> response = restTemplate
+			.exchange(SERVER_HTTPURL + "players/newplayer", HttpMethod.POST, request, Lobby.class);
 		return response.getBody();
 	}
 

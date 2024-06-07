@@ -48,5 +48,5 @@ public class PlayerController {
 
 	}
 
-    public static record NewPlayerBody (String name, int lobby_id) {};
+    public static record NewPlayerBody (String name, Long lobby_id) {};
 }

@@ -109,8 +109,10 @@ public class AppController implements Observer {
             // XXX the board should eventually be created programmatically or loaded from a file
             //     here we just create an empty board with the required number of players.
             Lobby lobby = LobbyRest.requestNewLobby(0);
-            Player p1 = PlayerRest.PushPlayerToLobby(0, "Player 1");
-            Player p2 = PlayerRest.PushPlayerToLobby(0, "Player 2");
+            PlayerRest.PushPlayerToLobby(lobby.getId(), "Player 1");
+            PlayerRest.PushPlayerToLobby(lobby.getId(), "Player 2");
+            // The pushes return the lobby, make sure it is the same lobby as in the lobby variable (check id or something)
+
             Board board = new Board(8,8, lobby);
 
             board.getSpace(2,2).setElement(new ConveyorBelt()); // WARN: TODO: This is for debugging json temporarily and might be helpful to debug other parts of our program, delete this before production release
