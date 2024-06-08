@@ -18,7 +18,7 @@ public class MovesPlayed {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int stepid;
+	private long stepid;
 
     private Long rounds;
 
@@ -43,7 +43,7 @@ public class MovesPlayed {
 	}
 
 	@ManyToOne
-	@JoinColumn(name = "Players_id", nullable = false)
+	@JoinColumn(name = "players_id", nullable = false)
 	@JsonIgnore
 	private ServerPlayer player;
 	// Only return the lobby id and not the lobby object itself

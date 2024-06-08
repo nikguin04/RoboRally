@@ -8,5 +8,5 @@ import dk.dtu.compute.se.pisd.roborallyserver.model.Lobby;
 import dk.dtu.compute.se.pisd.roborallyserver.model.ServerPlayer;
 
 public interface PlayerRepository extends JpaRepository<ServerPlayer, Long> {
-
+	public ServerPlayer findPlayerById(long id);
 }
