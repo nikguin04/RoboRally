@@ -32,10 +32,12 @@ import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.model.Serializer;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
 import dk.dtu.compute.se.pisd.roborally.net.LobbyRest;
+import dk.dtu.compute.se.pisd.roborally.net.MovePlayedRest;
 import dk.dtu.compute.se.pisd.roborally.net.PlayerRest;
 import dk.dtu.compute.se.pisd.roborally.view.LoadDialog;
 import dk.dtu.compute.se.pisd.roborally.view.SaveDialog;
 import dk.dtu.compute.se.pisd.roborallyserver.model.Lobby;
+import dk.dtu.compute.se.pisd.roborallyserver.model.MovesPlayed;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -111,6 +113,7 @@ public class AppController implements Observer {
             Lobby lobby = LobbyRest.requestNewLobby(0);
             PlayerRest.PushPlayerToLobby(lobby.getId(), "Player 1");
             PlayerRest.PushPlayerToLobby(lobby.getId(), "Player 2");
+			MovePlayedRest.requestNewMove(Long.valueOf(0), 5, "Hello", "Fucka", "Loser", "Winner", "Letsgo", lobby.getId(),Long.valueOf(0)); //Get playerID
             // The pushes return the lobby, make sure it is the same lobby as in the lobby variable (check id or something)
 
             Board board = new Board(8,8, lobby);
