@@ -48,6 +48,11 @@ public class RoboRallyMenuBar extends MenuBar {
 
     private MenuItem exitApp;
 
+    private Menu networkMenu;
+    private MenuItem newLobby;
+    private MenuItem joinLobby;
+
+
 
 
 
@@ -78,6 +83,20 @@ public class RoboRallyMenuBar extends MenuBar {
 
         controlMenu.setOnShowing(e -> update());
         controlMenu.setOnShown(e -> this.updateBounds());
+
+
+        networkMenu = new Menu("Network");
+        this.getMenus().add(networkMenu);
+
+        newLobby = new MenuItem("New Lobby");
+        newLobby.setOnAction( e -> this.appController.newLobby() );
+        networkMenu.getItems().add(newLobby);
+
+        joinLobby = new MenuItem("Join Lobby");
+        joinLobby.setOnAction( e -> this.appController.joinLobby() );
+        networkMenu.getItems().add(joinLobby);
+
+
         update();
     }
 

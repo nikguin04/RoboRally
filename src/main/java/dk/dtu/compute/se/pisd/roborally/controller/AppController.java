@@ -38,6 +38,7 @@ import dk.dtu.compute.se.pisd.roborally.view.LoadDialog;
 import dk.dtu.compute.se.pisd.roborally.view.SaveDialog;
 import dk.dtu.compute.se.pisd.roborallyserver.model.Lobby;
 import dk.dtu.compute.se.pisd.roborallyserver.model.MovesPlayed;
+import dk.dtu.compute.se.pisd.roborallyserver.model.ServerPlayer;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -56,6 +57,7 @@ import com.google.gson.Gson;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -110,13 +112,15 @@ public class AppController implements Observer {
 
             // XXX the board should eventually be created programmatically or loaded from a file
             //     here we just create an empty board with the required number of players.
-            Lobby lobby = LobbyRest.requestNewLobby(0);
-            PlayerRest.PushPlayerToLobby(lobby.getId(), "Player 1");
-            PlayerRest.PushPlayerToLobby(lobby.getId(), "Player 2");
-			MovePlayedRest.requestNewMove(Long.valueOf(0), 5, "Hello", "Fucka", "Loser", "Winner", "Letsgo", lobby.getId(),Long.valueOf(0)); //Get playerID
+            /*
+                Lobby lobby = LobbyRest.requestNewLobby(0);
+                PlayerRest.PushPlayerToLobby(lobby.getId(), "Player 1");
+                PlayerRest.PushPlayerToLobby(lobby.getId(), "Player 2");
+                MovePlayedRest.requestNewMove(Long.valueOf(0), 5, "Hello", "Fucka", "Loser", "Winner", "Letsgo", lobby.getId(),Long.valueOf(0)); //Get playerID
+            */
             // The pushes return the lobby, make sure it is the same lobby as in the lobby variable (check id or something)
 
-            Board board = new Board(8,8, lobby);
+            Board board = new Board(8,8, null);
 
             board.getSpace(2,2).setElement(new ConveyorBelt()); // WARN: TODO: This is for debugging json temporarily and might be helpful to debug other parts of our program, delete this before production release
 			// Add the priority antenna to the board
@@ -161,6 +165,31 @@ public class AppController implements Observer {
             gameController.StartProgrammingPhase(true);
 
             roboRally.createBoardView(gameController);
+        }
+    }
+
+    public void newLobby() {
+        Lobby lobby = LobbyRest.requestNewLobby(0);
+
+        ServerPlayer splayer = PlayerRest.PushPlayerToLobby(lobby.getId(), "Player a");
+
+        roboRally.createLobbyView(lobby, splayer);
+
+    }
+
+    public void joinLobby() {
+        List<Integer> availableLobbies = new ArrayList<>();
+        availableLobbies.add(0);
+        availableLobbies.add(1);
+        availableLobbies.add(2);
+
+        ChoiceDialog<Integer> dialog = new ChoiceDialog<>(0, PLAYER_NUMBER_OPTIONS);
+        dialog.setTitle("Select lobby");
+        dialog.setHeaderText("Select number of players");
+        Optional<Integer> result = dialog.showAndWait();
+
+        if (result.isPresent()) {
+
         }
     }
 
