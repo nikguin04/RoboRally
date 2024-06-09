@@ -36,5 +36,11 @@ public class LobbyRest {
 		return response.getBody();
 	}
 
+	public static Lobby[] requestJoinableLobbies() {
+		ResponseEntity<Lobby[]> response = restTemplate
+			.getForEntity(SERVER_HTTPURL + "lobbies/joinable", Lobby[].class);
+		return response.getBody();
+	}
+
 
 }

@@ -179,8 +179,11 @@ public class AppController implements Observer {
 
     public void joinLobby() {
         List<Integer> availableLobbies = new ArrayList<>();
-        availableLobbies.add(1);
-        //availableLobbies.add(2);
+
+        Lobby[] joinableLobbies = LobbyRest.requestJoinableLobbies();
+        for (Lobby l: joinableLobbies) {
+            availableLobbies.add(l.getId().intValue());
+        }
 
         ChoiceDialog<Integer> dialog = new ChoiceDialog<>(0, availableLobbies);
         dialog.setTitle("Select lobby");

@@ -45,6 +45,13 @@ public class LobbyController {
         return ResponseEntity.ok(playerList );
     }
 
+    // TODO: Make function to return only joinable lobbies for client
+    @GetMapping("/joinable")
+    public ResponseEntity<List<Lobby>> getJoinableLobbies(){
+        return ResponseEntity.ok(lobbyRepository.findAll());
+    }
+
+
 	@PostMapping("/newlobby")
 	public ResponseEntity<Lobby> newLobby(@RequestBody Lobby lobby) {
 

@@ -80,6 +80,9 @@ public class LobbyView extends VBox implements ViewObserver {
 
 
         List<ServerPlayer> pList = List.of(LobbyRest.requestPlayersByLobbyId(lobby.getId()));
+        // Edit local player name with appendix: (you)
+        for (ServerPlayer sp: pList)
+            if (sp.getId().equals(splayer.getId())) { sp.setName(sp.getName() + " (you)");}
         playersFetched.setAll(pList);
 
 
