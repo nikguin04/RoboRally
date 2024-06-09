@@ -179,17 +179,18 @@ public class AppController implements Observer {
 
     public void joinLobby() {
         List<Integer> availableLobbies = new ArrayList<>();
-        availableLobbies.add(0);
         availableLobbies.add(1);
-        availableLobbies.add(2);
+        //availableLobbies.add(2);
 
-        ChoiceDialog<Integer> dialog = new ChoiceDialog<>(0, PLAYER_NUMBER_OPTIONS);
+        ChoiceDialog<Integer> dialog = new ChoiceDialog<>(0, availableLobbies);
         dialog.setTitle("Select lobby");
-        dialog.setHeaderText("Select number of players");
+        dialog.setHeaderText("Select lobby id to join");
         Optional<Integer> result = dialog.showAndWait();
 
         if (result.isPresent()) {
-
+            Lobby lobby = new Lobby(Long.valueOf(result.get()), Long.valueOf(0), Long.valueOf(0)); // TODO: TEMP VARIABLE, add actual lobby fetching
+            ServerPlayer splayer = PlayerRest.PushPlayerToLobby(lobby.getId(), "Player a");
+            roboRally.createLobbyView(lobby, splayer);
         }
     }
 

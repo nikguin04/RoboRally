@@ -24,14 +24,23 @@ package dk.dtu.compute.se.pisd.roborally.view;
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.controller.GameController;
 import dk.dtu.compute.se.pisd.roborally.model.*;
+import dk.dtu.compute.se.pisd.roborally.net.LobbyRest;
 import dk.dtu.compute.se.pisd.roborallyserver.model.Lobby;
 import dk.dtu.compute.se.pisd.roborallyserver.model.ServerPlayer;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+
+import java.util.List;
+
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -42,7 +51,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public class LobbyView extends VBox implements ViewObserver {
 
-    private ListView<String> playerListView;
+    private TableView<ServerPlayer> playerListView;
+    ObservableList<ServerPlayer> playersFetched;
 
     private Label lobbyLabel;
     private Label statusLabel;
@@ -57,8 +67,22 @@ public class LobbyView extends VBox implements ViewObserver {
 
         lobbyLabel = new Label("Welcome to the Roborally lobby");
 
-        playerListView = new ListView<String>();
-        playerListView.getItems().add(splayer.getName());
+        playersFetched = FXCollections.observableArrayList();
+        playerListView = new TableView<ServerPlayer>();
+        playerListView.setItems(playersFetched);
+
+        TableColumn<ServerPlayer,String> nameCol = new TableColumn<ServerPlayer,String>("Player name");
+        nameCol.setCellValueFactory(new PropertyValueFactory<ServerPlayer,String>("name"));
+        TableColumn<ServerPlayer,Integer> idCol = new TableColumn<ServerPlayer,Integer>("Player id");
+        idCol.setCellValueFactory(new PropertyValueFactory<ServerPlayer,Integer>("id"));
+
+        playerListView.getColumns().setAll(nameCol, idCol);
+
+
+        List<ServerPlayer> pList = List.of(LobbyRest.requestPlayersByLobbyId(lobby.getId()));
+        playersFetched.setAll(pList);
+
+
         statusLabel = new Label("<no status>");
 
         this.getChildren().add(lobbyLabel);
@@ -67,9 +91,11 @@ public class LobbyView extends VBox implements ViewObserver {
 
     }
 
+
     @Override
     public void updateView(Subject subject) {
-        // TODO: Request new lobby info with REST
+        // TODO: Make this update view tick every once in a whilem and request new lobby info with REST
+
     }
 
 

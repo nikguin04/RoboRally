@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -39,9 +40,9 @@ public class LobbyController {
     }
 
     @GetMapping("/players")
-    public ResponseEntity<List<ServerPlayer>> getPlayersInLobby(){
-        List<ServerPlayer> playerList = playerRepository.findByLobbyID(Long.valueOf(1));
-        return ResponseEntity.ok(playerList);
+    public ResponseEntity<List<ServerPlayer>> getPlayersInLobby(@RequestParam(required=true,value="id") Long id){
+        List<ServerPlayer> playerList = playerRepository.findByLobbyID(id);
+        return ResponseEntity.ok(playerList );
     }
 
 	@PostMapping("/newlobby")
