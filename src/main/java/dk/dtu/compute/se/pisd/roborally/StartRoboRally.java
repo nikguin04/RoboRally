@@ -21,6 +21,9 @@
  */
 package dk.dtu.compute.se.pisd.roborally;
 
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableScheduling;
+
 /**
  * This is a class for starting up the RoboRally application. This is a
  * workaround for a strange quirk in the Open JavaFX project launcher,
@@ -30,6 +33,8 @@ package dk.dtu.compute.se.pisd.roborally;
  *
  * @author Ekkart Kindler, ekki@dtu.dk
  */
+@SpringBootApplication
+@EnableScheduling
 public class StartRoboRally {
 
     public static void main(String[] args) {

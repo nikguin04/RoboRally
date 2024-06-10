@@ -21,27 +21,25 @@
  */
 package dk.dtu.compute.se.pisd.roborally.view;
 
+import java.util.List;
+
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
-import dk.dtu.compute.se.pisd.roborally.controller.GameController;
-import dk.dtu.compute.se.pisd.roborally.model.*;
+import dk.dtu.compute.se.pisd.roborally.controller.LobbyNetworkScheduler;
 import dk.dtu.compute.se.pisd.roborally.net.LobbyRest;
 import dk.dtu.compute.se.pisd.roborallyserver.model.Lobby;
 import dk.dtu.compute.se.pisd.roborallyserver.model.ServerPlayer;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-
-import java.util.List;
-
-import org.jetbrains.annotations.NotNull;
+import javafx.util.Duration;
 
 /**
  * ...
@@ -49,6 +47,8 @@ import org.jetbrains.annotations.NotNull;
  * @author Ekkart Kindler, ekki@dtu.dk
  *
  */
+
+@Component
 public class LobbyView extends VBox implements ViewObserver {
 
     private TableView<ServerPlayer> playerListView;
@@ -78,13 +78,10 @@ public class LobbyView extends VBox implements ViewObserver {
 
         playerListView.getColumns().setAll(nameCol, idCol);
 
-
-        List<ServerPlayer> pList = List.of(LobbyRest.requestPlayersByLobbyId(lobby.getId()));
-        // Edit local player name with appendix: (you)
-        for (ServerPlayer sp: pList)
-            if (sp.getId().equals(splayer.getId())) { sp.setName(sp.getName() + " (you)");}
-        playersFetched.setAll(pList);
-
+        //updatePlayersInLobby();
+        LobbyNetworkScheduler service = new LobbyNetworkScheduler(this);
+        service.setPeriod(Duration.seconds(1));
+        service.start();
 
         statusLabel = new Label("<no status>");
 
@@ -100,6 +97,16 @@ public class LobbyView extends VBox implements ViewObserver {
         // TODO: Make this update view tick every once in a whilem and request new lobby info with REST
 
     }
+
+	public void updatePlayersInLobby() {
+        Platform.runLater(() -> {
+            List<ServerPlayer> pList = List.of(LobbyRest.requestPlayersByLobbyId(lobby.getId()));
+            // Edit local player name with appendix: (you)
+            for (ServerPlayer sp: pList)
+                if (sp.getId().equals(splayer.getId())) { sp.setName(sp.getName() + " (you)");}
+            playersFetched.setAll(pList);
+        });
+	}
 
 
 }
