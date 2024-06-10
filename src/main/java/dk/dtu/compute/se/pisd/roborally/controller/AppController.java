@@ -211,6 +211,8 @@ public class AppController implements Observer {
 
 		if (result.isPresent()) {
 			playerName = result.get();
+		} else {
+			playerName = dialog.getDefaultValue();
 		}
 	}
 
