@@ -89,10 +89,6 @@ public class RoboRallyMenuBar extends MenuBar {
         networkMenu = new Menu("Network");
         this.getMenus().add(networkMenu);
 
-        changeName = new MenuItem("Change Name");
-        changeName.setOnAction( e -> this.appController.changeName() );
-        networkMenu.getItems().add(changeName);
-
         newLobby = new MenuItem("New Lobby");
         newLobby.setOnAction( e -> this.appController.newLobby() );
         networkMenu.getItems().add(newLobby);
@@ -101,6 +97,9 @@ public class RoboRallyMenuBar extends MenuBar {
         joinLobby.setOnAction( e -> this.appController.joinLobby() );
         networkMenu.getItems().add(joinLobby);
 
+        changeName = new MenuItem("Change Name");
+        changeName.setOnAction( e -> this.appController.changeName() );
+        networkMenu.getItems().add(changeName);
 
         update();
     }
