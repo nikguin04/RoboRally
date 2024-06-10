@@ -32,12 +32,10 @@ import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.model.Serializer;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
 import dk.dtu.compute.se.pisd.roborally.net.LobbyRest;
-import dk.dtu.compute.se.pisd.roborally.net.MovePlayedRest;
 import dk.dtu.compute.se.pisd.roborally.net.PlayerRest;
 import dk.dtu.compute.se.pisd.roborally.view.LoadDialog;
 import dk.dtu.compute.se.pisd.roborally.view.SaveDialog;
 import dk.dtu.compute.se.pisd.roborallyserver.model.Lobby;
-import dk.dtu.compute.se.pisd.roborallyserver.model.MovesPlayed;
 import dk.dtu.compute.se.pisd.roborallyserver.model.ServerPlayer;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
@@ -47,10 +45,6 @@ import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.TextInputDialog;
 
 import org.jetbrains.annotations.NotNull;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RestTemplate;
 
 import com.google.gson.GsonBuilder;
 import com.google.gson.Gson;
@@ -192,7 +186,7 @@ public class AppController implements Observer {
             }
             
         } catch (Exception e) {
-                        // This is the list of available lobbies view when joining 
+            // This is the list of available lobbies view when joining 
             List<Integer> availableLobbies = new ArrayList<>();
     
             Lobby[] joinableLobbies = LobbyRest.requestJoinableLobbies();
@@ -210,9 +204,8 @@ public class AppController implements Observer {
                 ServerPlayer splayer = PlayerRest.PushPlayerToLobby(lobby.getId(), playerName);
                 roboRally.createLobbyView(lobby, splayer);
             }
-        
-        
-        
+            // TODO Make it so that if two players join at the samme time and the lobby is full, the second player is not added
+
             }
 
     }

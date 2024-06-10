@@ -6,8 +6,6 @@ import dk.dtu.compute.se.pisd.roborallyserver.model.ServerPlayer;
 import dk.dtu.compute.se.pisd.roborallyserver.repository.LobbyRepository;
 import dk.dtu.compute.se.pisd.roborallyserver.repository.PlayerRepository;
 
-import org.apache.catalina.connector.Response;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -54,9 +52,7 @@ public class LobbyController {
 
 	@PostMapping("/newlobby")
 	public ResponseEntity<Lobby> newLobby(@RequestBody Lobby lobby) {
-
         lobbyRepository.saveAndFlush(lobby);
 		return ResponseEntity.ok(lobby); // lobbyRepository.save(lobby)
-
 	}
 }
