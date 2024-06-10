@@ -19,7 +19,7 @@ public class MovesPlayedController {
 	private LobbyRepository lobbyRepository;
 	private PlayerRepository playerRepository;
 
-    public MovesPlayedController(MovesPlayedRepository movesPlayedRepository, LobbyRepository lobbyRepository) {
+    public MovesPlayedController(MovesPlayedRepository movesPlayedRepository, LobbyRepository lobbyRepository, PlayerRepository playerRepository) {
         this.movesPlayedRepository = movesPlayedRepository;
 		this.lobbyRepository = lobbyRepository;
 		this.playerRepository = playerRepository;
@@ -40,12 +40,12 @@ public class MovesPlayedController {
 		Lobby lobby = lobbyRepository.findLobbyById(nmp.lobby_id);
 		ServerPlayer player = playerRepository.findPlayerById(nmp.player_id);
 
-		MovesPlayed played = new MovesPlayed((Long)null, lobby.getRounds(), nmp.move1, nmp.move2, nmp.move3, nmp.move4, nmp.move5, lobby, player);
+		MovesPlayed played = new MovesPlayed(lobby.getRounds(), nmp.move1, nmp.move2, nmp.move3, nmp.move4, nmp.move5, lobby, player);
 
 
 		movesPlayedRepository.saveAndFlush(played);
 		return ResponseEntity.ok(lobby); // lobbyRepository.save(lobby)
 
 	}
-	public static record NewMovesPlayBody (Long StepId, int rounds, String move1, String move2, String move3, String move4, String move5, Long lobby_id, long player_id) {};
+	public static record NewMovesPlayBody (int rounds, String move1, String move2, String move3, String move4, String move5, Long lobby_id, long player_id) {};
 }

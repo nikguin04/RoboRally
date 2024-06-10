@@ -1,5 +1,7 @@
 package dk.dtu.compute.se.pisd.roborallyserver.model;
 
+import java.io.Serializable;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import dk.dtu.compute.se.pisd.roborallyserver.model.ServerPlayer;
@@ -14,13 +16,11 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@IdClass(MovesPlayed.class)
 public class MovesPlayed {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long stepid;
-
-    private Long rounds;
+	private Long rounds;
 
 	private String move1;
 
@@ -45,6 +45,7 @@ public class MovesPlayed {
 	@ManyToOne
 	@JoinColumn(name = "players_id", nullable = false)
 	@JsonIgnore
+	@Id
 	private ServerPlayer player;
 	// Only return the lobby id and not the lobby object itself
 	@Transient
@@ -52,7 +53,9 @@ public class MovesPlayed {
 		return player.getId();
 	}
 
+}
 
-
-
+class MovesPlayedKey implements Serializable {
+	private Long rounds;
+	private ServerPlayer player;
 }

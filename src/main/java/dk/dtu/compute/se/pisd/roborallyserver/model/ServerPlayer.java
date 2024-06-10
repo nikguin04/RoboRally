@@ -1,10 +1,14 @@
 package dk.dtu.compute.se.pisd.roborallyserver.model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.UUID;
 
+import org.springframework.boot.autoconfigure.integration.IntegrationProperties.RSocket.Server;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.Embeddable;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -27,7 +31,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ServerPlayer {
+@Embeddable
+public class ServerPlayer implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,4 +51,11 @@ public class ServerPlayer {
         return lobby.getId();
     }
 
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) { return true; }
+        if (!(other instanceof ServerPlayer)) { return false; }
+        ServerPlayer p = (ServerPlayer) other;
+        return p.getId().equals(getId());
+    }
 }
