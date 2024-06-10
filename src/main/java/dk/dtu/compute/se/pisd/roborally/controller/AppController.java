@@ -44,6 +44,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceDialog;
+import javafx.scene.control.TextInputDialog;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpEntity;
@@ -75,6 +76,7 @@ public class AppController implements Observer {
     final private List<String> PLAYER_COLORS = Arrays.asList("red", "green", "blue", "orange", "grey", "magenta");
 
     final private RoboRally roboRally;
+    private String playerName = "Player";
 
     private GameController gameController;
 
@@ -171,7 +173,7 @@ public class AppController implements Observer {
     public void newLobby() {
         Lobby lobby = LobbyRest.requestNewLobby(0);
 
-        ServerPlayer splayer = PlayerRest.PushPlayerToLobby(lobby.getId(), "Player a");
+        ServerPlayer splayer = PlayerRest.PushPlayerToLobby(lobby.getId(), playerName);
 
         roboRally.createLobbyView(lobby, splayer);
 
@@ -185,15 +187,28 @@ public class AppController implements Observer {
             availableLobbies.add(l.getId().intValue());
         }
 
-        ChoiceDialog<Integer> dialog = new ChoiceDialog<>(0, availableLobbies);
+        ChoiceDialog<Integer> dialog = new ChoiceDialog<>(null, availableLobbies);
         dialog.setTitle("Select lobby");
         dialog.setHeaderText("Select lobby id to join");
         Optional<Integer> result = dialog.showAndWait();
 
         if (result.isPresent()) {
             Lobby lobby = new Lobby(Long.valueOf(result.get()), Long.valueOf(0), Long.valueOf(0)); // TODO: TEMP VARIABLE, add actual lobby fetching
-            ServerPlayer splayer = PlayerRest.PushPlayerToLobby(lobby.getId(), "Player a");
+            ServerPlayer splayer = PlayerRest.PushPlayerToLobby(lobby.getId(), playerName);
             roboRally.createLobbyView(lobby, splayer);
+        }
+    }
+
+    public void changeName() {
+
+
+        TextInputDialog tid = new TextInputDialog("Player");
+        tid.setTitle("Choose new name");
+        tid.setHeaderText("Please input your wanted name");
+        Optional<String> result = tid.showAndWait();
+
+        if (result.isPresent()) {
+            playerName = result.get();
         }
     }
 
