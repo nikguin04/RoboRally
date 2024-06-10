@@ -76,7 +76,7 @@ public class AppController implements Observer {
     final private List<String> PLAYER_COLORS = Arrays.asList("red", "green", "blue", "orange", "grey", "magenta");
 
     final private RoboRally roboRally;
-    private String playerName = "Player";
+    private String playerName = null;
 
     private GameController gameController;
 
@@ -171,6 +171,8 @@ public class AppController implements Observer {
     }
 
     public void newLobby() {
+		if (playerName == null) changeName();
+
         Lobby lobby = LobbyRest.requestNewLobby(0);
 
         ServerPlayer splayer = PlayerRest.PushPlayerToLobby(lobby.getId(), playerName);
@@ -180,6 +182,8 @@ public class AppController implements Observer {
     }
 
     public void joinLobby() {
+		if (playerName == null) changeName();
+
         List<Integer> availableLobbies = new ArrayList<>();
 
         Lobby[] joinableLobbies = LobbyRest.requestJoinableLobbies();
@@ -199,18 +203,16 @@ public class AppController implements Observer {
         }
     }
 
-    public void changeName() {
+	public void changeName() {
+		TextInputDialog dialog = new TextInputDialog(playerName != null ? playerName : "Player");
+		dialog.setTitle("Choose new name");
+		dialog.setHeaderText("Please input your wanted name");
+		Optional<String> result = dialog.showAndWait();
 
-
-        TextInputDialog tid = new TextInputDialog("Player");
-        tid.setTitle("Choose new name");
-        tid.setHeaderText("Please input your wanted name");
-        Optional<String> result = tid.showAndWait();
-
-        if (result.isPresent()) {
-            playerName = result.get();
-        }
-    }
+		if (result.isPresent()) {
+			playerName = result.get();
+		}
+	}
 
 	/**
 	 *Start up a dialog with user and
