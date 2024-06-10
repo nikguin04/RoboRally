@@ -32,11 +32,13 @@ import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.model.Serializer;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
 import dk.dtu.compute.se.pisd.roborally.net.LobbyRest;
+import dk.dtu.compute.se.pisd.roborally.net.MapsRest;
 import dk.dtu.compute.se.pisd.roborally.net.MovePlayedRest;
 import dk.dtu.compute.se.pisd.roborally.net.PlayerRest;
 import dk.dtu.compute.se.pisd.roborally.view.LoadDialog;
 import dk.dtu.compute.se.pisd.roborally.view.SaveDialog;
 import dk.dtu.compute.se.pisd.roborallyserver.model.Lobby;
+import dk.dtu.compute.se.pisd.roborallyserver.model.Maps;
 import dk.dtu.compute.se.pisd.roborallyserver.model.MovesPlayed;
 import dk.dtu.compute.se.pisd.roborallyserver.model.ServerPlayer;
 import javafx.application.Platform;
@@ -83,7 +85,6 @@ public class AppController implements Observer {
     public AppController(@NotNull RoboRally roboRally) {
         this.roboRally = roboRally;
     }
-
     /**
      * <p>Start a new game with players in default positions,
      * the user gets a popup dialog where they can select amount of players in new game.
