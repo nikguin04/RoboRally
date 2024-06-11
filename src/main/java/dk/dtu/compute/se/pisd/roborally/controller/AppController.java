@@ -113,7 +113,7 @@ public class AppController implements Observer {
             board.setPrioAntenna(prioAntenna);
 
             // Set the startTile on the board
-            for(int i = 0; i < PLAYER_NUMBER_OPTIONS.get(0); i++){
+            for(int i = 0; i < PLAYER_NUMBER_OPTIONS.get(0); i++){ //TODO Make this so that the number of players is the number of players in the lobbey 
                 StartTile startTile = new StartTile(i,0);
                 board.setStartTile(startTile);
             }
@@ -196,9 +196,10 @@ public class AppController implements Observer {
         // Add the priority antenna to the board
         PrioAntenna prioAntenna = new PrioAntenna(5,5);
         board.setPrioAntenna(prioAntenna);
+        int no = players.length;
 
         // Set the startTile on the board
-        for(int i = 0; i < PLAYER_NUMBER_OPTIONS.get(0); i++){
+        for(int i = 0; i < no; i++){
             StartTile startTile = new StartTile(i,0);
             board.setStartTile(startTile);
         }
@@ -206,7 +207,6 @@ public class AppController implements Observer {
 
         // Set Player on startTile
         gameController = new GameController(board);
-        int no = players.length;
         Player player;
         int i = 0;
         int x = 0;
