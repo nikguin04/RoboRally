@@ -188,27 +188,27 @@ public class AppController implements Observer {
         try {
             TextInputDialog textdialog = new TextInputDialog("Lobby ID");
             Optional<String> resultForStringInput = textdialog.showAndWait();
-            
+
             if (resultForStringInput.isPresent()) {
                 Lobby lobby = new Lobby(Long.valueOf(resultForStringInput.get()), Long.valueOf(0), Long.valueOf(0)); // TODO: TEMP VARIABLE, add actual lobby fetching
                 ServerPlayer splayer = PlayerRest.PushPlayerToLobby(lobby.getId(), playerName);
                 roboRally.createLobbyView(lobby, splayer);
             }
-            
+
         } catch (Exception e) {
-            // This is the list of available lobbies view when joining 
+            // This is the list of available lobbies view when joining
             List<Integer> availableLobbies = new ArrayList<>();
 
             Lobby[] joinableLobbies = LobbyRest.requestJoinableLobbies();
             for (Lobby l: joinableLobbies) {
                 availableLobbies.add(l.getId().intValue());
             }
-    
+
             ChoiceDialog<Integer> choicedialog = new ChoiceDialog<>(null, availableLobbies);
             choicedialog.setTitle("Select lobby");
             choicedialog.setHeaderText("Select lobby id to join");
             Optional<Integer> result = choicedialog.showAndWait();
-    
+
             if (result.isPresent()) {
                 Lobby lobby = new Lobby(Long.valueOf(result.get()), Long.valueOf(0), Long.valueOf(0)); // TODO: TEMP VARIABLE, add actual lobby fetching
                 ServerPlayer splayer = PlayerRest.PushPlayerToLobby(lobby.getId(), playerName);
