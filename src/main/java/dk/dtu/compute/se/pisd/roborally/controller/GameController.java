@@ -173,6 +173,20 @@ public class GameController {
 			currentPlayer.setLastCardPlayed(card);
 		}
 
+		handleAfterStep();
+	}
+
+	public void executeCommandOptionAndContinue(Command command){
+		board.setPhase(Phase.ACTIVATION);
+		executeCommand(board.getCurrentPlayer(), command);
+
+		handleAfterStep();
+	}
+
+	private void handleAfterStep() {
+		Player currentPlayer = board.getCurrentPlayer();
+		int step = board.getStep();
+
 		// After any player move, check space of all players, if checkpoint, activate checkpoint.
 		for (Player p : board.getPlayers()) {
 			if (p.getSpace().getElement() instanceof CheckPoint cp) {
@@ -281,39 +295,6 @@ public class GameController {
                 field.setVisible(true);
             }
         }
-    }
-
-
-    public void executeCommandOptionAndContinue(Command command){
-        Player currentPlayer = board.getCurrentPlayer();
-        board.setPhase(Phase.ACTIVATION);
-        executeCommand(board.getCurrentPlayer(), command);
-        int step = board.getStep();
-        int nextPlayerNumber = board.getPrioPlayerNumber(currentPlayer) + 1;
-        if (nextPlayerNumber < board.getPlayersNumber()) {
-            board.setCurrentPlayer(board.getPrioPlayer(nextPlayerNumber));
-        } else {
-            // For some reason, we can't just get a list of players???
-            for (int i = 0; i < board.getPlayersNumber(); i++) {
-                Space space = board.getPlayer(i).getSpace();
-                SpaceElement element = space.getElement();
-                if (element == null) continue;
-                // TODO We should probably handle activation order
-                element.doAction(this, space);
-            }
-            step++;
-            // Each time all players have made a move, recalculate priority
-            board.getPrioAntenna().updatePlayerPrio();
-            if (step < Player.NO_REGISTERS) {
-                makeProgramFieldsVisible(step);
-                board.setStep(step);
-                board.setCurrentPlayer(board.getPrioPlayer(0));
-            } else {
-                StartProgrammingPhase(true);
-            }
-        }
-
-        // executeNextStep();
     }
 
     private CommandCard generateRandomCommandCard() {
