@@ -38,13 +38,19 @@ import dk.dtu.compute.se.pisd.roborally.view.SaveDialog;
 import dk.dtu.compute.se.pisd.roborallyserver.model.Lobby;
 import dk.dtu.compute.se.pisd.roborallyserver.model.ServerPlayer;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.DialogPane;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.layout.VBox;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -181,43 +187,59 @@ public class AppController implements Observer {
         Dialog dialog = new Dialog<>();
         dialog.setTitle("Join Lobby");
         dialog.getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
+        dialog.getDialogPane().autosize();
+        
+        
+        List<Integer> availableLobbies = new ArrayList<>();
+
+        Lobby[] joinableLobbies = LobbyRest.requestJoinableLobbies();
+        for (Lobby l: joinableLobbies) {
+            availableLobbies.add(l.getId().intValue());
+        }
+            
+        ObservableList<String> lobbynames = FXCollections.observableArrayList();
+    
+        for(int i = 0; i < availableLobbies.size(); i++){
+            lobbynames.add("Lobby " + availableLobbies.get(i));
+        }
+    
+        ListView<String> listView = new ListView<String>(lobbynames);
+        VBox layout = new VBox(10);
+        layout.setPadding(new Insets(5, 5, 5, 50));
+        layout.getChildren().addAll(listView);
+    
+        dialog.getDialogPane().setContent(layout);
+    
+        // The Textinput for the connection.        
+        // TextField textfield = new TextField();
+        // String resultForStringInput = textfield.getText();
+            
+        // if (resultForStringInput != null && !resultForStringInput.isEmpty()) {
+        //     Lobby lobby = new Lobby(Long.valueOf(resultForStringInput), Long.valueOf(0), Long.valueOf(0)); // TODO: TEMP VARIABLE, add actual lobby fetching
+        //     ServerPlayer splayer = PlayerRest.PushPlayerToLobby(lobby.getId(), playerName);
+        //     roboRally.createLobbyView(lobby, splayer);
+        
+        // The choicedialog for the connection. 
+
+        // This is the list of available lobbies view when joining 
+
+
+        // ListView<Integer> choicedialog = new ListView<>(null, availableLobbies);
+        // choicedialog.setTitle("Select lobby");
+        // choicedialog.setHeaderText("Select lobby id to join");
+        // Optional<Integer> result = choicedialog.showAndWait();
+
+        // if (result.isPresent()) {
+        //     Lobby lobby = new Lobby(Long.valueOf(result.get()), Long.valueOf(0), Long.valueOf(0)); // TODO: TEMP VARIABLE, add actual lobby fetching
+        //     ServerPlayer splayer = PlayerRest.PushPlayerToLobby(lobby.getId(), playerName);
+        //     roboRally.createLobbyView(lobby, splayer);
+        // }
+        // dialog.getDialogPane().setContent(choicedialog.getDialogPane().getContent());
+        
+        // dialog.getDialogPane().setContent(textfield);
+        // TODO Make it so that if two players join at the samme time and the lobby is full, the second player is not added
+        
         dialog.show();
-
-
-
-        try {
-            TextInputDialog textdialog = new TextInputDialog("Lobby ID");
-            Optional<String> resultForStringInput = textdialog.showAndWait();
-            
-            if (resultForStringInput.isPresent()) {
-                Lobby lobby = new Lobby(Long.valueOf(resultForStringInput.get()), Long.valueOf(0), Long.valueOf(0)); // TODO: TEMP VARIABLE, add actual lobby fetching
-                ServerPlayer splayer = PlayerRest.PushPlayerToLobby(lobby.getId(), playerName);
-                roboRally.createLobbyView(lobby, splayer);
-            }
-            
-        } catch (Exception e) {
-            // This is the list of available lobbies view when joining 
-            List<Integer> availableLobbies = new ArrayList<>();
-
-            Lobby[] joinableLobbies = LobbyRest.requestJoinableLobbies();
-            for (Lobby l: joinableLobbies) {
-                availableLobbies.add(l.getId().intValue());
-            }
-    
-            ChoiceDialog<Integer> choicedialog = new ChoiceDialog<>(null, availableLobbies);
-            choicedialog.setTitle("Select lobby");
-            choicedialog.setHeaderText("Select lobby id to join");
-            Optional<Integer> result = choicedialog.showAndWait();
-    
-            if (result.isPresent()) {
-                Lobby lobby = new Lobby(Long.valueOf(result.get()), Long.valueOf(0), Long.valueOf(0)); // TODO: TEMP VARIABLE, add actual lobby fetching
-                ServerPlayer splayer = PlayerRest.PushPlayerToLobby(lobby.getId(), playerName);
-                roboRally.createLobbyView(lobby, splayer);
-            }
-            // TODO Make it so that if two players join at the samme time and the lobby is full, the second player is not added
-
-            }
-
     }
 
     public void changeName() {
