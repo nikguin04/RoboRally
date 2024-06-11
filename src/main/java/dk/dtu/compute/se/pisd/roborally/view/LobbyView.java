@@ -53,7 +53,7 @@ import javafx.util.Duration;
 public class LobbyView extends VBox implements ViewObserver {
 
     private TableView<ServerPlayer> playerListView;
-    ObservableList<ServerPlayer> playersFetched;
+    LobbyNetworkScheduler lns;
 
     private Label lobbyLabel;
     private Label statusLabel;
@@ -71,9 +71,9 @@ public class LobbyView extends VBox implements ViewObserver {
 
         lobbyLabel = new Label("Welcome to the Roborally lobby");
 
-        playersFetched = FXCollections.observableArrayList();
+        lns = new LobbyNetworkScheduler(this);
         playerListView = new TableView<ServerPlayer>();
-        playerListView.setItems(playersFetched);
+        playerListView.setItems(lns.playersFetched);
 
         TableColumn<ServerPlayer,String> nameCol = new TableColumn<ServerPlayer,String>("Player name");
         nameCol.setCellValueFactory(new PropertyValueFactory<ServerPlayer,String>("name"));
@@ -82,10 +82,10 @@ public class LobbyView extends VBox implements ViewObserver {
 
         playerListView.getColumns().setAll(nameCol, idCol);
 
-        //updatePlayersInLobby();
-        LobbyNetworkScheduler service = new LobbyNetworkScheduler(this);
-        service.setPeriod(Duration.seconds(1));
-        service.start();
+        lns.updatePlayersInLobby();
+
+        lns.setPeriod(Duration.seconds(1));
+        lns.start();
 
 
         startButton = new Button("Start game");
@@ -109,15 +109,12 @@ public class LobbyView extends VBox implements ViewObserver {
 
     }
 
-	public void updatePlayersInLobby() {
-        Platform.runLater(() -> {
-            List<ServerPlayer> pList = List.of(LobbyRest.requestPlayersByLobbyId(lobby.getId()));
-            // Edit local player name with appendix: (you)
-            for (ServerPlayer sp: pList)
-                if (sp.getId().equals(splayer.getId())) { sp.setName(sp.getName() + " (you)");}
-            playersFetched.setAll(pList);
-        });
-	}
+    public Long getLobbyId() {
+        return lobby.getId();
+    }
+    public Long getPlayerId() {
+        return splayer.getId();
+    }
 
 
 }
