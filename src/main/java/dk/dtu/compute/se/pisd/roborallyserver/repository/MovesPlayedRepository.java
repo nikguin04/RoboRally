@@ -6,6 +6,6 @@ import dk.dtu.compute.se.pisd.roborallyserver.model.Lobby;
 
 import dk.dtu.compute.se.pisd.roborallyserver.model.MovesPlayed;
 
-public interface MovesPlayedRepository extends JpaRepository<MovesPlayed, Long> {
+public interface MovesPlayedRepository extends JpaRepository<MovesPlayed, MovesPlayed.MovesPlayedKey> {
 
 }

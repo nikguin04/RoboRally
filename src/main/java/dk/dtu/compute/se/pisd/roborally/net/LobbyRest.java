@@ -19,7 +19,7 @@ public class LobbyRest {
 
 	public static final RestTemplate restTemplate = new RestTemplate();
 	public static Lobby requestNewLobby(int board_map_id) {
-		Lobby lobby = new Lobby((Long)null, Long.valueOf(0), Long.valueOf(board_map_id));
+		Lobby lobby = new Lobby((Long)null, Long.valueOf(0), Long.valueOf(board_map_id), false);
 		HttpEntity<Lobby> request = new HttpEntity<>(lobby);
 		ResponseEntity<Lobby> response = restTemplate
 			.exchange(SERVER_HTTPURL + "lobbies/newlobby", HttpMethod.POST, request, Lobby.class);
@@ -39,6 +39,15 @@ public class LobbyRest {
 	public static Lobby[] requestJoinableLobbies() {
 		ResponseEntity<Lobby[]> response = restTemplate
 			.getForEntity(SERVER_HTTPURL + "lobbies/joinable", Lobby[].class);
+		return response.getBody();
+	}
+
+	public static String requestStartGame(Lobby lobby) { // Dont return success or not, the client should poll itself to find out if game has started
+		Map<String, String> uriVariables = new HashMap<>();
+        uriVariables.put("id", String.valueOf(lobby.getId()));
+
+		ResponseEntity<String> response = restTemplate
+			.getForEntity(SERVER_HTTPURL + "lobbies/startgame?id={id}", String.class, uriVariables);
 		return response.getBody();
 	}
 

@@ -197,7 +197,7 @@ public class AppController implements Observer {
         Optional<Integer> result = dialog.showAndWait();
 
         if (result.isPresent()) {
-            Lobby lobby = new Lobby(Long.valueOf(result.get()), Long.valueOf(0), Long.valueOf(0)); // TODO: TEMP VARIABLE, add actual lobby fetching
+            Lobby lobby = new Lobby(Long.valueOf(result.get()), Long.valueOf(0), Long.valueOf(0), false); // TODO: TEMP VARIABLE, add actual lobby fetching
             ServerPlayer splayer = PlayerRest.PushPlayerToLobby(lobby.getId(), playerName);
             roboRally.createLobbyView(lobby, splayer);
         }

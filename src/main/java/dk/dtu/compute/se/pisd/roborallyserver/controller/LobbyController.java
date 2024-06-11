@@ -8,6 +8,7 @@ import dk.dtu.compute.se.pisd.roborallyserver.repository.PlayerRepository;
 
 import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -59,4 +60,17 @@ public class LobbyController {
 		return ResponseEntity.ok(lobby); // lobbyRepository.save(lobby)
 
 	}
+
+    @GetMapping("/startgame")
+    public ResponseEntity<String> startGameForLobby(@RequestParam(required=true,value="id") Long id) {
+        Lobby lobby = lobbyRepository.findLobbyById(id);
+        if (!lobby.isGame_started()) {
+            lobby.setGame_started(true);
+            lobbyRepository.saveAndFlush(lobby);
+            return ResponseEntity.ok("");
+        } else {
+            return ResponseEntity.status(HttpStatusCode.valueOf(400)).build();
+        }
+    }
+
 }

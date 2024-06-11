@@ -34,6 +34,7 @@ import dk.dtu.compute.se.pisd.roborallyserver.model.ServerPlayer;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -56,6 +57,9 @@ public class LobbyView extends VBox implements ViewObserver {
 
     private Label lobbyLabel;
     private Label statusLabel;
+
+    private Button startButton;
+
     private Lobby lobby;
     private ServerPlayer splayer;
 
@@ -83,10 +87,17 @@ public class LobbyView extends VBox implements ViewObserver {
         service.setPeriod(Duration.seconds(1));
         service.start();
 
+
+        startButton = new Button("Start game");
+        startButton.setOnAction( e -> LobbyRest.requestStartGame(lobby) );
+
+
+
         statusLabel = new Label("<no status>");
 
         this.getChildren().add(lobbyLabel);
         this.getChildren().add(playerListView);
+        this.getChildren().addAll(startButton);
         this.getChildren().add(statusLabel);
 
     }
