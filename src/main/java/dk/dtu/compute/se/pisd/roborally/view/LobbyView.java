@@ -53,25 +53,18 @@ import javafx.util.Duration;
 public class LobbyView extends VBox implements ViewObserver {
 
     private TableView<ServerPlayer> playerListView;
-    LobbyNetworkScheduler lns;
 
     private Label lobbyLabel;
     private Label statusLabel;
 
     private Button startButton;
 
-    private Lobby lobby;
-    private ServerPlayer splayer;
 
+    public LobbyView(LobbyNetworkScheduler lns) {
 
-    public LobbyView(Lobby lobby, ServerPlayer splayer) {
-
-        this.lobby = lobby;
-        this.splayer = splayer;
 
         lobbyLabel = new Label("Welcome to the Roborally lobby");
 
-        lns = new LobbyNetworkScheduler(this);
         playerListView = new TableView<ServerPlayer>();
         playerListView.setItems(lns.playersFetched);
 
@@ -89,7 +82,7 @@ public class LobbyView extends VBox implements ViewObserver {
 
 
         startButton = new Button("Start game");
-        startButton.setOnAction( e -> LobbyRest.requestStartGame(lobby) );
+        startButton.setOnAction( e -> lns.requestStartGame() );
 
 
 
@@ -107,13 +100,6 @@ public class LobbyView extends VBox implements ViewObserver {
     public void updateView(Subject subject) {
         // TODO: Make this update view tick every once in a whilem and request new lobby info with REST
 
-    }
-
-    public Long getLobbyId() {
-        return lobby.getId();
-    }
-    public Long getPlayerId() {
-        return splayer.getId();
     }
 
 

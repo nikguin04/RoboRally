@@ -51,5 +51,13 @@ public class LobbyRest {
 		return response.getBody();
 	}
 
+	public static Lobby requestLobbyById(Long id) {
+		Map<String, String> uriVariables = new HashMap<>();
+        uriVariables.put("id", String.valueOf(id));
+
+		ResponseEntity<Lobby>response = restTemplate
+			.getForEntity(SERVER_HTTPURL + "lobbies/getlobby?id={id}", Lobby.class, uriVariables);
+		return response.getBody();
+	}
 
 }
