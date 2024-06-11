@@ -191,6 +191,11 @@ public class GameController {
 		for (Player p : board.getPlayers()) {
 			if (p.getSpace().getElement() instanceof CheckPoint cp) {
 				cp.doAction(this, p.getSpace());
+				int numCheckpoints = board.getNumCheckpoints();
+				if (numCheckpoints > 0 && p.getCheckPointCounter() == numCheckpoints) {
+					board.setWinner(p);
+					board.setPhase(Phase.GAME_OVER);
+				}
 			}
 		}
 
