@@ -42,6 +42,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceDialog;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.TextInputDialog;
 
 import org.jetbrains.annotations.NotNull;
@@ -175,6 +177,14 @@ public class AppController implements Observer {
 
     public void joinLobby() {
         // This is the textform to join a lobby by a string or id
+
+        Dialog dialog = new Dialog<>();
+        dialog.setTitle("Join Lobby");
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
+        dialog.show();
+
+
+
         try {
             TextInputDialog textdialog = new TextInputDialog("Lobby ID");
             Optional<String> resultForStringInput = textdialog.showAndWait();
@@ -188,16 +198,16 @@ public class AppController implements Observer {
         } catch (Exception e) {
             // This is the list of available lobbies view when joining 
             List<Integer> availableLobbies = new ArrayList<>();
-    
+
             Lobby[] joinableLobbies = LobbyRest.requestJoinableLobbies();
             for (Lobby l: joinableLobbies) {
                 availableLobbies.add(l.getId().intValue());
             }
     
-            ChoiceDialog<Integer> dialog = new ChoiceDialog<>(null, availableLobbies);
-            dialog.setTitle("Select lobby");
-            dialog.setHeaderText("Select lobby id to join");
-            Optional<Integer> result = dialog.showAndWait();
+            ChoiceDialog<Integer> choicedialog = new ChoiceDialog<>(null, availableLobbies);
+            choicedialog.setTitle("Select lobby");
+            choicedialog.setHeaderText("Select lobby id to join");
+            Optional<Integer> result = choicedialog.showAndWait();
     
             if (result.isPresent()) {
                 Lobby lobby = new Lobby(Long.valueOf(result.get()), Long.valueOf(0), Long.valueOf(0)); // TODO: TEMP VARIABLE, add actual lobby fetching
