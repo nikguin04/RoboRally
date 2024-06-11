@@ -159,8 +159,8 @@ public class GameController {
 
 	private void executeNextStep() {
 		Player currentPlayer = board.getCurrentPlayer();
-		assert board.getPhase() == Phase.ACTIVATION && currentPlayer != null;
 		int step = board.getStep();
+		assert board.getPhase() == Phase.ACTIVATION && currentPlayer != null;
 		assert step >= 0 && step < Player.NO_REGISTERS;
 		CommandCard card = currentPlayer.getProgramField(step).getCard();
 		if (card != null) {
@@ -175,8 +175,8 @@ public class GameController {
 
 		// After any player move, check space of all players, if checkpoint, activate checkpoint.
 		for (Player p : board.getPlayers()) {
-			if (p.getSpace().getElement() instanceof CheckPoint) {
-				p.getSpace().getElement().doAction(this, p.getSpace());
+			if (p.getSpace().getElement() instanceof CheckPoint cp) {
+				cp.doAction(this, p.getSpace());
 			}
 		}
 
@@ -211,53 +211,32 @@ public class GameController {
 		// XXX This is a very simplistic way of dealing with some basic cards and
 		//     their execution. This should eventually be done in a more elegant way
 		//     (this concerns the way cards are modelled as well as the way they are executed).
-		//     player.setLastCardPlayed(currentCard); function calls the setLastCardPlayed and
-		//     copies the latest card for the Again card to use.
-		//
 
-		CommandCard currentCard = new CommandCard(command);
 		switch (command) {
-			case FWD1 -> {
-				this.moveForward(player);
-				player.setLastCardPlayed(currentCard);
-			}
-			case RIGHT -> {
-				this.turnRight(player);
-				player.setLastCardPlayed(currentCard);
-			}
-			case LEFT -> {
-				this.turnLeft(player);
-				player.setLastCardPlayed(currentCard);
-			}
-			case FWD2 -> {
-				this.fastForward(player);
-			}
-			case FWD3 -> {
-				this.fastfastForward(player);
-			}
+			case LEFT  -> this.turnLeft(player);
+			case RIGHT -> this.turnRight(player);
+			case FWD1  -> this.moveForward(player);
+			case FWD2  -> this.fastForward(player);
+			case FWD3  -> this.fastfastForward(player);
 			case Back -> {
 				this.turnLeft(player);
 				this.turnLeft(player);
 				this.moveForward(player);
 				this.turnLeft(player);
 				this.turnLeft(player);
-				player.setLastCardPlayed(currentCard);
 			}
 			case UTRN -> {
 				this.turnLeft(player);
 				this.turnLeft(player);
-				player.setLastCardPlayed(currentCard);
 			}
 			case OPTION_LEFT_RIGHT -> {
 				board.setPhase(Phase.PLAYER_INTERACTION);
-				player.setLastCardPlayed(currentCard);
 			}
 			case AGAN -> {
 				CommandCard lastCard = player.getLastCardPlayed();
 				if (lastCard != null && lastCard.command != Command.AGAN) {
 					executeCommand(player, lastCard.command);
 				}
-				player.setLastCardPlayed(currentCard);
 			}
 			default -> {
 				// DO NOTHING (for now)
