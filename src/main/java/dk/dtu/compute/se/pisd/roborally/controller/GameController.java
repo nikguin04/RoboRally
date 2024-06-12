@@ -305,6 +305,7 @@ public class GameController {
                 field.setVisible(true);
             }
         }
+		MoveNetworkScheduler mns = new MoveNetworkScheduler(board.lobby, splayer);
     }
 
 

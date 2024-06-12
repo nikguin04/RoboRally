@@ -41,17 +41,23 @@ public class MovesPlayedController {
 		counter++;
 		Lobby lobby = lobbyRepository.findLobbyById(nmp.lobby_id);
 		ServerPlayer player = playerRepository.findPlayerById(nmp.player_id);
-		int playerCount = playerRepository.countPlayersInLobby(nmp.lobby_id);
-		if(counter >= playerCount){
-			
-		}
 		MovesPlayed played = new MovesPlayed(lobby.getRounds(), nmp.move1, nmp.move2, nmp.move3, nmp.move4, nmp.move5, lobby, player);
-
-
 
 		movesPlayedRepository.saveAndFlush(played);
 		return ResponseEntity.ok(lobby); // lobbyRepository.save(lobby)
 
 	}
+
+	@PostMapping("/finishedprogramming")
+	public ResponseEntity<MovesPlayed> isFinishedProgramming(){
+
+		int playerCount = playerRepository.countPlayersInLobby();
+		if(counter >= playerCount){
+
+			return ResponseEntity.ok();
+		}
+		return null;
+	}
+
 	public static record NewMovesPlayBody (int rounds, String move1, String move2, String move3, String move4, String move5, Long lobby_id, long player_id) {};
 }
