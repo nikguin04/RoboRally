@@ -24,6 +24,7 @@ package dk.dtu.compute.se.pisd.roborally.controller;
 import dk.dtu.compute.se.pisd.roborally.model.*;
 import dk.dtu.compute.se.pisd.roborallyserver.model.ServerPlayer;
 
+import javafx.util.Duration;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -306,6 +307,8 @@ public class GameController {
             }
         }
 		MoveNetworkScheduler mns = new MoveNetworkScheduler(board.lobby, splayer);
+		mns.setPeriod(Duration.seconds(1));
+		mns.start();
     }
 
 

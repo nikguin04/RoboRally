@@ -37,17 +37,19 @@ private ServerPlayer splayer;
 		};
 	}
 
-	public void UpdatePlayersCard(){
+	public void UpdatePlayersCard() {
 		Platform.runLater(() -> {
 			List<MovesPlayed> playerMovesList = List.of();
 
-			final RestTemplate restTemplate = new RestTemplate();
-			public static MovesPlayed isProgrammingPhaseDone() {
-				HttpEntity<MovesPlayedController.NewMovesPlayBody> request = new HttpEntity<>(new MovesPlayedController.NewMovesPlayBody(round, move1, move2, move3, move4, move5, lobby_id, player_id));
-				ResponseEntity<MovesPlayed> response = restTemplate
-					.exchange(SERVER_HTTPURL + "movesplayed/finishedprogramming", HttpMethod.GET, request, MovesPlayed.class);
-				return response.getBody();
+			MovesPlayed move = isFinishedProgramming();
+			System.out.println(move);
 		});
 	}
-}
+
+	public static MovesPlayed isFinishedProgramming() {
+		final RestTemplate restTemplate = new RestTemplate();
+		ResponseEntity<MovesPlayed> response = restTemplate
+			.exchange(SERVER_HTTPURL + "movesplayed/finishedprogramming", HttpMethod.GET, null, MovesPlayed.class);
+		return response.getBody();
+	}
 }
