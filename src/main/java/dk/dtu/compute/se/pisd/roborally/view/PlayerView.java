@@ -24,6 +24,7 @@ package dk.dtu.compute.se.pisd.roborally.view;
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.controller.GameController;
 import dk.dtu.compute.se.pisd.roborally.model.*;
+import dk.dtu.compute.se.pisd.roborally.net.MovePlayedRest;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -91,7 +92,11 @@ public class PlayerView extends Tab implements ViewObserver {
         //      refactored.
 
         finishButton = new Button("Finish Programming");
-        finishButton.setOnAction( e -> gameController.finishProgrammingPhase());
+//        finishButton.setOnAction( e -> gameController.finishProgrammingPhase());
+		finishButton.setOnAction( e -> MovePlayedRest.requestNewMove(gameController.board.lobby.getRounds().intValue(), player.getProgramField(0).getCardName(),
+			player.getProgramField(1).getCardName(), player.getProgramField(2).getCardName(), player.getProgramField(3).getCardName(),
+			player.getProgramField(4).getCardName(), gameController.board.lobby.getId(), 1L));
+
 
         executeButton = new Button("Execute Program");
         executeButton.setOnAction( e-> gameController.executePrograms());
@@ -198,8 +203,8 @@ public class PlayerView extends Tab implements ViewObserver {
                 }
                 playerInteractionPanel.getChildren().clear();
 
-                if (player.board.getCurrentPlayer() == player) { 
-                    // TODO Assignment A3: these buttons should be shown only when there is  
+                if (player.board.getCurrentPlayer() == player) {
+                    // TODO Assignment A3: these buttons should be shown only when there is
                     //      an interactive command card, and the buttons should represent
                     //      the player's choices of the interactive command card. The
                     //      following is just a mockup showing two options

@@ -113,7 +113,7 @@ public class AppController implements Observer {
             board.setPrioAntenna(prioAntenna);
 
             // Set the startTile on the board
-            for(int i = 0; i < PLAYER_NUMBER_OPTIONS.get(0); i++){ //TODO Make this so that the number of players is the number of players in the lobbey 
+            for(int i = 0; i < PLAYER_NUMBER_OPTIONS.get(0); i++){ //TODO Make this so that the number of players is the number of players in the lobbey
                 StartTile startTile = new StartTile(i,0);
                 board.setStartTile(startTile);
             }
@@ -190,7 +190,7 @@ public class AppController implements Observer {
         // TODO: This is copy pasted code from newgame, eventually make following code work together with newgame so we dont repeat ourselves
 
 
-        Board board = new Board(8,8, null);
+        Board board = new Board(8,8, lobby);
 
         board.getSpace(2,2).setElement(new ConveyorBelt()); // WARN: TODO: This is for debugging json temporarily and might be helpful to debug other parts of our program, delete this before production release
         // Add the priority antenna to the board
