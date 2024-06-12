@@ -107,7 +107,11 @@ public class AppController implements Observer {
 
             Board board = new Board(8,8, null);
 
-            board.getSpace(2,2).setElement(new ConveyorBelt()); // WARN: TODO: This is for debugging json temporarily and might be helpful to debug other parts of our program, delete this before production release
+			// TODO: This is very temporary for debugging, delete this when proper boards are loaded
+			board.getSpace(2,2).setElement(new ConveyorBelt());
+			board.getSpace(2,4).setElement(new CheckPoint(1));
+			board.getSpace(4,5).setElement(new CheckPoint(2));
+			board.setNumCheckpoints(2);
 			// Add the priority antenna to the board
 			PrioAntenna prioAntenna = new PrioAntenna(5,5);
             board.setPrioAntenna(prioAntenna);

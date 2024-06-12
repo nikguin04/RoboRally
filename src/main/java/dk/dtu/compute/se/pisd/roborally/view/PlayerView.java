@@ -29,8 +29,14 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
+import javafx.scene.text.TextFlow;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -43,6 +49,7 @@ public class PlayerView extends Tab implements ViewObserver {
 
     private Player player;
 
+	private StackPane overlayPane;
     private VBox top;
 
     private Label programLabel;
@@ -67,8 +74,9 @@ public class PlayerView extends Tab implements ViewObserver {
         super(player.getName());
         this.setStyle("-fx-text-base-color: " + player.getColor() + ";");
 
-        top = new VBox();
-        this.setContent(top);
+		top = new VBox();
+		overlayPane = new StackPane(top);
+		this.setContent(overlayPane);
 
         this.gameController = gameController;
         this.player = player;
@@ -137,90 +145,101 @@ public class PlayerView extends Tab implements ViewObserver {
         }
     }
 
-    @Override
-    public void updateView(Subject subject) {
-        if (subject == player.board) {
-            for (int i = 0; i < Player.NO_REGISTERS; i++) {
-                CardFieldView cardFieldView = programCardViews[i];
-                if (cardFieldView != null) {
-                    if (player.board.getPhase() == Phase.PROGRAMMING ) {
-                        cardFieldView.setBackground(CardFieldView.BG_DEFAULT);
-                    } else {
-                        if (i < player.board.getStep()) {
-                            cardFieldView.setBackground(CardFieldView.BG_DONE);
-                        } else if (i == player.board.getStep()) {
-                            if (player.board.getCurrentPlayer() == player) {
-                                cardFieldView.setBackground(CardFieldView.BG_ACTIVE);
-                            } else if (player.board.getPrioPlayerNumber(player.board.getCurrentPlayer()) > player.board.getPrioPlayerNumber(player)) {
-                                cardFieldView.setBackground(CardFieldView.BG_DONE);
-                            } else {
-                                cardFieldView.setBackground(CardFieldView.BG_DEFAULT);
-                            }
-                        } else {
-                            cardFieldView.setBackground(CardFieldView.BG_DEFAULT);
-                        }
-                    }
-                }
-            }
+	@Override
+	public void updateView(Subject subject) {
+		if (subject != player.board) return;
 
-            if (player.board.getPhase() != Phase.PLAYER_INTERACTION) {
-                if (!programPane.getChildren().contains(buttonPanel)) {
-                    programPane.getChildren().remove(playerInteractionPanel);
-                    programPane.add(buttonPanel, Player.NO_REGISTERS, 0);
-                }
-                switch (player.board.getPhase()) {
-                    case INITIALISATION:
-                        finishButton.setDisable(true);
-                        // XXX just to make sure that there is a way for the player to get
-                        //     from the initialization phase to the programming phase somehow!
-                        executeButton.setDisable(false);
-                        stepButton.setDisable(true);
-                        break;
+		for (int i = 0; i < Player.NO_REGISTERS; i++) {
+			CardFieldView cardFieldView = programCardViews[i];
+			if (cardFieldView == null) continue;
+			Background background;
+			if (player.board.getPhase() == Phase.PROGRAMMING) {
+				background = CardFieldView.BG_DEFAULT;
+			} else if (i > player.board.getStep()) {
+				background = CardFieldView.BG_DEFAULT;
+			} else if (i < player.board.getStep()) {
+				background = CardFieldView.BG_DONE;
+			} else {
+				if (player.board.getCurrentPlayer() == player) {
+					background = CardFieldView.BG_ACTIVE;
+				} else if (player.board.getPrioPlayerNumber(player.board.getCurrentPlayer()) > player.board.getPrioPlayerNumber(player)) {
+					background = CardFieldView.BG_DONE;
+				} else {
+					background = CardFieldView.BG_DEFAULT;
+				}
+			}
+			cardsPane.setBackground(background);
+		}
 
-                    case PROGRAMMING:
-                        finishButton.setDisable(false);
-                        executeButton.setDisable(true);
-                        stepButton.setDisable(true);
-                        break;
+		if (player.board.getPhase() != Phase.PLAYER_INTERACTION) {
+			if (!programPane.getChildren().contains(buttonPanel)) {
+				programPane.getChildren().remove(playerInteractionPanel);
+				programPane.add(buttonPanel, Player.NO_REGISTERS, 0);
+			}
+			switch (player.board.getPhase()) {
+				case INITIALISATION -> {
+					finishButton.setDisable(true);
+					// XXX just to make sure that there is a way for the player to get
+					//     from the initialization phase to the programming phase somehow!
+					executeButton.setDisable(false);
+					stepButton.setDisable(true);
+				}
+				case PROGRAMMING -> {
+					finishButton.setDisable(false);
+					executeButton.setDisable(true);
+					stepButton.setDisable(true);
+				}
+				case ACTIVATION -> {
+					finishButton.setDisable(true);
+					executeButton.setDisable(false);
+					stepButton.setDisable(false);
+				}
+				default -> {
+					finishButton.setDisable(true);
+					executeButton.setDisable(true);
+					stepButton.setDisable(true);
+				}
+			}
+			if (player.board.getPhase() == Phase.GAME_OVER) {
+				Player winner = player.board.getWinner();
+				Text playerName = new Text(winner.getName());
+				Text text = new Text(" won!");
+				TextFlow flow = new TextFlow(playerName, text);
+				playerName.setFill(Color.valueOf(winner.getColor()));
+				flow.setStyle("-fx-font-size: 4em;");
+				flow.setTextAlignment(TextAlignment.CENTER);
+				// VBox required to vertically centre text
+				VBox box = new VBox(flow);
+				box.setAlignment(Pos.CENTER);
+				overlayPane.getChildren().add(box);
+				// Decrease the opacity of everything else to make the text clearer
+				// and to further mark that the game is over
+				top.setOpacity(0.25);
+			}
+		} else {
+			if (!programPane.getChildren().contains(playerInteractionPanel)) {
+				programPane.getChildren().remove(buttonPanel);
+				programPane.add(playerInteractionPanel, Player.NO_REGISTERS, 0);
+			}
+			playerInteractionPanel.getChildren().clear();
 
-                    case ACTIVATION:
-                        finishButton.setDisable(true);
-                        executeButton.setDisable(false);
-                        stepButton.setDisable(false);
-                        break;
+			if (player.board.getCurrentPlayer() == player) {
+				// TODO Assignment A3: these buttons should be shown only when there is
+				//      an interactive command card, and the buttons should represent
+				//      the player's choices of the interactive command card. The
+				//      following is just a mockup showing two options
+				// TODO EMIL
+				Button optionButton = new Button(player.getProgramField(player.board.getStep()).getCard().command.getOptions().get(0).displayName);
+				optionButton.setOnAction(e -> gameController.executeCommandOptionAndContinue(player.getProgramField(player.board.getStep()).getCard().command.getOptions().get(0)));
+				optionButton.setDisable(false);
+				playerInteractionPanel.getChildren().add(optionButton);
 
-                    default:
-                        finishButton.setDisable(true);
-                        executeButton.setDisable(true);
-                        stepButton.setDisable(true);
-                }
-
-
-            } else {
-                if (!programPane.getChildren().contains(playerInteractionPanel)) {
-                    programPane.getChildren().remove(buttonPanel);
-                    programPane.add(playerInteractionPanel, Player.NO_REGISTERS, 0);
-                }
-                playerInteractionPanel.getChildren().clear();
-
-                if (player.board.getCurrentPlayer() == player) {
-                    // TODO Assignment A3: these buttons should be shown only when there is
-                    //      an interactive command card, and the buttons should represent
-                    //      the player's choices of the interactive command card. The
-                    //      following is just a mockup showing two options
-                    // TODO EMIL
-                    Button optionButton = new Button(player.getProgramField(player.board.getStep()).getCard().command.getOptions().get(0).displayName);
-                    optionButton.setOnAction( e -> gameController.executeCommandOptionAndContinue(player.getProgramField(player.board.getStep()).getCard().command.getOptions().get(0)));
-                    optionButton.setDisable(false);
-                    playerInteractionPanel.getChildren().add(optionButton);
-
-                    optionButton = new Button(player.getProgramField(player.board.getStep()).getCard().command.getOptions().get(1).displayName);
-                    optionButton.setOnAction( e -> gameController.executeCommandOptionAndContinue(player.getProgramField(player.board.getStep()).getCard().command.getOptions().get(1)));
-                    optionButton.setDisable(false);
-                    playerInteractionPanel.getChildren().add(optionButton);
-                }
-            }
-        }
-    }
+				optionButton = new Button(player.getProgramField(player.board.getStep()).getCard().command.getOptions().get(1).displayName);
+				optionButton.setOnAction(e -> gameController.executeCommandOptionAndContinue(player.getProgramField(player.board.getStep()).getCard().command.getOptions().get(1)));
+				optionButton.setDisable(false);
+				playerInteractionPanel.getChildren().add(optionButton);
+			}
+		}
+	}
 
 }
