@@ -24,6 +24,7 @@ package dk.dtu.compute.se.pisd.roborally;
 import dk.dtu.compute.se.pisd.roborally.controller.AppController;
 import dk.dtu.compute.se.pisd.roborally.controller.GameController;
 import dk.dtu.compute.se.pisd.roborally.controller.LobbyNetworkScheduler;
+import dk.dtu.compute.se.pisd.roborally.controller.NetworkController;
 import dk.dtu.compute.se.pisd.roborally.view.BoardView;
 import dk.dtu.compute.se.pisd.roborally.view.LobbyView;
 import dk.dtu.compute.se.pisd.roborally.view.RoboRallyMenuBar;
@@ -49,6 +50,8 @@ public class RoboRally extends Application {
 
     private Stage stage;
     private BorderPane boardRoot;
+
+	private NetworkController network;
 
     @Override
     public void init() throws Exception {
@@ -81,13 +84,13 @@ public class RoboRally extends Application {
         stage.show();
     }
 
-    public void createBoardView(GameController gameController) {
+    public void createBoardView(GameController gameController, NetworkController networkController) {
         // if present, remove old BoardView
         boardRoot.getChildren().clear();
-
+//		this.network = networkController;
         if (gameController != null) {
             // create and add view for new board
-            BoardView boardView = new BoardView(gameController);
+            BoardView boardView = new BoardView(gameController, networkController);
             boardRoot.setCenter(boardView);
         }
 

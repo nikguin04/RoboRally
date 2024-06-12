@@ -23,6 +23,7 @@ package dk.dtu.compute.se.pisd.roborally.view;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.controller.GameController;
+import dk.dtu.compute.se.pisd.roborally.controller.NetworkController;
 import dk.dtu.compute.se.pisd.roborally.model.*;
 import javafx.event.EventHandler;
 import javafx.scene.control.Label;
@@ -42,19 +43,23 @@ public class BoardView extends VBox implements ViewObserver {
     private Board board;
 
     private GridPane mainBoardPane;
+
     private SpaceView[][] spaces;
 
     private PlayersView playersView;
 
     private Label statusLabel;
 
+	private NetworkController network;
+
     private SpaceEventHandler spaceEventHandler;
 
-    public BoardView(@NotNull GameController gameController) {
+    public BoardView(@NotNull GameController gameController, NetworkController networkController) {
         board = gameController.board;
+		this.network = networkController;
 
         mainBoardPane = new GridPane();
-        playersView = new PlayersView(gameController);
+        playersView = new PlayersView(gameController, network);
         statusLabel = new Label("<no status>");
 
         this.getChildren().add(mainBoardPane);

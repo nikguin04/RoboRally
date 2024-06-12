@@ -29,6 +29,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import dk.dtu.compute.se.pisd.roborally.view.PlayerView;
 import org.jetbrains.annotations.NotNull;
 
 import com.google.gson.Gson;
@@ -70,6 +71,8 @@ public class AppController implements Observer {
     private String playerName = null;
 
     private GameController gameController;
+	private NetworkController network;
+	//private Player player;
 
     public AppController(@NotNull RoboRally roboRally) {
         this.roboRally = roboRally;
@@ -121,6 +124,7 @@ public class AppController implements Observer {
 
             // Set Player on startTile
             gameController = new GameController(board);
+
             int no = result.get();
             Player player;
             int i = 0;
@@ -137,6 +141,7 @@ public class AppController implements Observer {
                         board.addPrioPlayer(player);
                         player.setSpace(board.getSpace(g, j));
                         i += 1;
+
                     }
                 }
                 if(x == 1){
@@ -144,12 +149,12 @@ public class AppController implements Observer {
                 }
 
             }
-
+			network = new NetworkController(gameController, board.getCurrentPlayer());
             // XXX: V2
             // board.setCurrentPlayer(board.getPlayer(0));
             gameController.StartProgrammingPhase(true);
 
-            roboRally.createBoardView(gameController);
+            roboRally.createBoardView(gameController, network);
         }
     }
 
@@ -207,6 +212,7 @@ public class AppController implements Observer {
 
         // Set Player on startTile
         gameController = new GameController(board);
+
         Player player;
         int i = 0;
         int x = 0;
@@ -228,12 +234,12 @@ public class AppController implements Observer {
                 break;
             }
         }
-
+		this.network = new NetworkController(gameController, board.getCurrentPlayer());
         // XXX: V2
         // board.setCurrentPlayer(board.getPlayer(0));
         gameController.StartProgrammingPhase(true);
 
-        roboRally.createBoardView(gameController);
+        roboRally.createBoardView(gameController, network);
     }
 
 	public void changeName() {
@@ -331,7 +337,7 @@ public class AppController implements Observer {
         gameController = new GameController(board);
 
         gameController.StartProgrammingPhase(false); // TODO: Make sure to load the correct phase here
-        roboRally.createBoardView(gameController);
+        roboRally.createBoardView(gameController, network);
     }
 
     /**
@@ -350,7 +356,7 @@ public class AppController implements Observer {
             //saveGame();
 
             gameController = null;
-            roboRally.createBoardView(null);
+            roboRally.createBoardView(null, null);
             return true;
         }
         return false;
