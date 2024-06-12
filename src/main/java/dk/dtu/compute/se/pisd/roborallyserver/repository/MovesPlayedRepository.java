@@ -8,4 +8,8 @@ import dk.dtu.compute.se.pisd.roborallyserver.model.MovesPlayed;
 
 public interface MovesPlayedRepository extends JpaRepository<MovesPlayed, MovesPlayed.MovesPlayedKey> {
 
+	@Query("select MovesPlayed from MovesPlayed where MovesPlayed.player = ? and MovesPlayed.lobby = ? and rounds = ?")
+	public MovesPlayed getMovesPlayedById(int id, int lobbyid, int round);
+
+
 }

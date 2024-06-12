@@ -5,9 +5,11 @@ import dk.dtu.compute.se.pisd.roborallyserver.model.ServerPlayer;
 import dk.dtu.compute.se.pisd.roborallyserver.repository.LobbyRepository;
 import dk.dtu.compute.se.pisd.roborallyserver.repository.MovesPlayedRepository;
 import dk.dtu.compute.se.pisd.roborallyserver.repository.PlayerRepository;
+import org.apache.catalina.Server;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -47,16 +49,23 @@ public class MovesPlayedController {
 		return ResponseEntity.ok(lobby); // lobbyRepository.save(lobby)
 
 	}
-
 	@PostMapping("/finishedprogramming")
-	public ResponseEntity<MovesPlayed> isFinishedProgramming(){
+	public ResponseEntity<List<MovesPlayed>> isFinishedProgramming(@RequestBody NewMovesPlayBody nmp){
 
-		int playerCount = playerRepository.countPlayersInLobby();
+		Lobby lobby = lobbyRepository.findLobbyById(nmp.lobby_id);
+		int playerCount = playerRepository.countPlayersInLobby(nmp.lobby_id);
+		List<ServerPlayer> sPlayers = playerRepository.findByLobbyID(nmp.lobby_id);
 		if(counter >= playerCount){
-
-			return ResponseEntity.ok();
+			List<MovesPlayed> playerMovesList = new ArrayList<MovesPlayed>();
+			for (ServerPlayer p : sPlayers) {
+				MovesPlayed mvs = movesPlayedRepository.getMovesPlayedById(p.getId().intValue(), nmp.lobby_id.intValue(), lobby.getRounds().intValue());
+				playerMovesList.add(mvs);
+			}
+			return ResponseEntity.ok(playerMovesList);
 		}
-		return null;
+		else {
+			return ResponseEntity.ok(null);
+		}
 	}
 
 	public static record NewMovesPlayBody (int rounds, String move1, String move2, String move3, String move4, String move5, Long lobby_id, long player_id) {};
