@@ -123,8 +123,7 @@ public class AppController implements Observer {
 
 
             // Set Player on startTile
-            gameController = new GameController(board);
-
+            gameController = new GameController(board, new ServerPlayer(0l, "", null));
             int no = result.get();
             Player player;
             int i = 0;
@@ -136,12 +135,11 @@ public class AppController implements Observer {
                         break;
                     }
                     if(board.getSpace(g, j).getElement() instanceof StartTile){
-                        player = new Player(board, PLAYER_COLORS.get(i), "Player " + (i+1));
+                        player = new Player(board, PLAYER_COLORS.get(i), "Player " + (i+1), 0l); // hardcoded 0 for netowork id since this is offline game
                         board.addPlayer(player);
                         board.addPrioPlayer(player);
                         player.setSpace(board.getSpace(g, j));
                         i += 1;
-
                     }
                 }
                 if(x == 1){
@@ -191,7 +189,7 @@ public class AppController implements Observer {
         }
     }
 
-    public void initGameFromLobbyStart(Lobby lobby, ServerPlayer[] players) {
+    public void initGameFromLobbyStart(Lobby lobby, ServerPlayer[] players, ServerPlayer splayer) {
         // TODO: This is copy pasted code from newgame, eventually make following code work together with newgame so we dont repeat ourselves
 
 
@@ -211,8 +209,7 @@ public class AppController implements Observer {
 
 
         // Set Player on startTile
-        gameController = new GameController(board);
-
+        gameController = new GameController(board, splayer);
         Player player;
         int i = 0;
         int x = 0;
@@ -223,7 +220,7 @@ public class AppController implements Observer {
                     break;
                 }
                 if(board.getSpace(g, j).getElement() instanceof StartTile){
-                    player = new Player(board, PLAYER_COLORS.get(i), players[i].getName());
+                    player = new Player(board, PLAYER_COLORS.get(i), players[i].getName(), players[i].getId());
                     board.addPlayer(player);
                     board.addPrioPlayer(player);
                     player.setSpace(board.getSpace(g, j));
@@ -334,7 +331,7 @@ public class AppController implements Observer {
 
     private void loadBoardIntoGame(Board board) {
 
-        gameController = new GameController(board);
+        gameController = new GameController(board, new ServerPlayer(0l, "", null));
 
         gameController.StartProgrammingPhase(false); // TODO: Make sure to load the correct phase here
         roboRally.createBoardView(gameController, network);
@@ -356,7 +353,7 @@ public class AppController implements Observer {
             //saveGame();
 
             gameController = null;
-            roboRally.createBoardView(null, null);
+            roboRally.createBoardView(null);
             return true;
         }
         return false;

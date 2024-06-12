@@ -54,6 +54,8 @@ public class Player extends Subject {
 	private int checkPointCounter;
 	private CommandCard lastCardPlayed;
 
+    private Long playerNetworkID;
+
     /**
      * {@inheritDoc}
      * @param board         Board on which player is located and interacts with
@@ -62,13 +64,14 @@ public class Player extends Subject {
      *
      * @see Player#Player(Board, String, String, Command[])  Player() - For creating a player with predefined commands
      */
-    public Player(@NotNull Board board, String color, @NotNull String name) {
-        this(board, color, name, null);
+    public Player(@NotNull Board board, String color, @NotNull String name, @NotNull Long playerNetworkID) {
+        this(board, color, name, null, playerNetworkID);
         for (int i = 0; i < this.cards.length; i++) {
             this.cards[i] = new CommandCardField(this);
         }
 
     }
+
 
     /**
      * Creates player
@@ -79,10 +82,11 @@ public class Player extends Subject {
      *
      * @see Player#Player(Board, String, String)  Player() - For creating a player with blank commands
      */
-    public Player(@NotNull Board board, String color, @NotNull String name, Command[] Commands) {
+    public Player(@NotNull Board board, String color, @NotNull String name, Command[] Commands, @NotNull Long playerNetworkID) {
         this.board = board;
         this.name = name;
         this.color = color;
+        this.playerNetworkID = playerNetworkID;
 
         this.space = null;
 		checkPointCounter = 0;
@@ -195,6 +199,10 @@ public class Player extends Subject {
         this.lastCardPlayed = card;
     }
 
+    public Long getNetworkId() {
+        return this.playerNetworkID;
+    }
+
 
     @Override
     public boolean equals(Object obj) { // TODO: This should be made as the board, where all variables are checked
@@ -210,4 +218,5 @@ public class Player extends Subject {
         }
         return false;
     }
+
 }
