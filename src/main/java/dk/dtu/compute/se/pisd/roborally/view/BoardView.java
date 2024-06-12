@@ -21,17 +21,28 @@
  */
 package dk.dtu.compute.se.pisd.roborally.view;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.jetbrains.annotations.NotNull;
+
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.controller.GameController;
-import dk.dtu.compute.se.pisd.roborally.model.*;
+import dk.dtu.compute.se.pisd.roborally.model.Board;
+import dk.dtu.compute.se.pisd.roborally.model.Phase;
+import dk.dtu.compute.se.pisd.roborally.model.Space;
+import dk.dtu.compute.se.pisd.roborally.model.Player.PlayerStatus;
+import dk.dtu.compute.se.pisd.roborallyserver.model.ServerPlayer;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.event.EventHandler;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import org.jetbrains.annotations.NotNull;
+import javafx.scene.paint.Color;
 
 /**
  * ...
@@ -46,6 +57,8 @@ public class BoardView extends VBox implements ViewObserver {
     private HBox gameCenteredBox;
     private VBox infoPane;
     private Label infoLabel;
+    private Label mapLabel;
+    private List<Label> playerStatusLabels;
 
 
     private GridPane mainBoardPane;
@@ -63,8 +76,20 @@ public class BoardView extends VBox implements ViewObserver {
         mainBoardPane = new GridPane();
         playersView = new PlayersView(gameController);
         statusLabel = new Label("<no status>");
+
         infoLabel = new Label("Hello from right side");
-        infoPane = new VBox(infoLabel);
+        mapLabel = new Label(String.valueOf("Current map id: " + gameController.lobby.getBoard_map_id()));
+        playerStatusLabels = new ArrayList<Label>();
+        for (int i = 0; i < gameController.players.length; i++) {
+            ServerPlayer p = gameController.players[i];
+            Label l = new Label();
+            l.textProperty().bind(Bindings.format("%s (%s)", p.getName(), gameController.board.getPlayer(i).playerStatus));
+            l.setTextFill(Color.valueOf(gameController.board.getPlayer(i).getColor()));
+            playerStatusLabels.add(l);
+        }
+        infoPane = new VBox(infoLabel, mapLabel);
+        infoPane.getChildren().addAll(playerStatusLabels);
+
         gameCenteredBox = new HBox(mainBoardPane, infoPane);
 
         this.getChildren().add(gameCenteredBox);

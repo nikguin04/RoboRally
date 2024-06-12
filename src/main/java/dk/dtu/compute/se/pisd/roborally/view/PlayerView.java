@@ -24,6 +24,7 @@ package dk.dtu.compute.se.pisd.roborally.view;
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.controller.GameController;
 import dk.dtu.compute.se.pisd.roborally.model.*;
+import dk.dtu.compute.se.pisd.roborally.model.Player.PlayerStatus;
 import dk.dtu.compute.se.pisd.roborally.net.MovePlayedRest;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -93,10 +94,10 @@ public class PlayerView extends Tab implements ViewObserver {
 
         finishButton = new Button("Finish Programming");
 //        finishButton.setOnAction( e -> gameController.finishProgrammingPhase());
-		finishButton.setOnAction( e -> MovePlayedRest.requestNewMove(gameController.board.lobby.getRounds().intValue(), player.getProgramField(0).getCardName(),
+		/*finishButton.setOnAction( e -> MovePlayedRest.requestNewMove(gameController.board.lobby.getRounds().intValue(), player.getProgramField(0).getCardName(),
 			player.getProgramField(1).getCardName(), player.getProgramField(2).getCardName(), player.getProgramField(3).getCardName(),
-			player.getProgramField(4).getCardName(), gameController.board.lobby.getId(), 1L));
-        //finishButton.setOnAction(e -> this.setText(player.getName() + "(ready)") );
+			player.getProgramField(4).getCardName(), gameController.board.lobby.getId(), 1L));*/
+        finishButton.setOnAction(e -> player.playerStatus.set(PlayerStatus.READY) );
 
 
         executeButton = new Button("Execute Program");

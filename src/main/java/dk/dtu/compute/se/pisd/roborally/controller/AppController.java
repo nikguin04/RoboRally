@@ -120,7 +120,7 @@ public class AppController implements Observer {
 
 
             // Set Player on startTile
-            gameController = new GameController(board, new ServerPlayer(0l, "", null));
+            gameController = new GameController(board, new ServerPlayer(0l, "", null), null, null);
             int no = result.get();
             Player player;
             int i = 0;
@@ -206,7 +206,7 @@ public class AppController implements Observer {
 
 
         // Set Player on startTile
-        gameController = new GameController(board, splayer);
+        gameController = new GameController(board, splayer, lobby, players);
         Player player;
         int i = 0;
         int x = 0;
@@ -328,7 +328,7 @@ public class AppController implements Observer {
 
     private void loadBoardIntoGame(Board board) {
 
-        gameController = new GameController(board, new ServerPlayer(0l, "", null));
+        gameController = new GameController(board, new ServerPlayer(0l, "", null), null, null);
 
         gameController.StartProgrammingPhase(false); // TODO: Make sure to load the correct phase here
         roboRally.createBoardView(gameController);
