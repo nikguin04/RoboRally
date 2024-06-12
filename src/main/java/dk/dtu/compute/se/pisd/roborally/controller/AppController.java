@@ -72,7 +72,7 @@ public class AppController implements Observer {
 
     private GameController gameController;
 	private NetworkController network;
-	//private Player player;
+	private ServerPlayer sPlayer;
 
     public AppController(@NotNull RoboRally roboRally) {
         this.roboRally = roboRally;
@@ -149,7 +149,7 @@ public class AppController implements Observer {
                 }
 
             }
-			network = new NetworkController(gameController, board.getCurrentPlayer());
+			network = new NetworkController(gameController);
             // XXX: V2
             // board.setCurrentPlayer(board.getPlayer(0));
             gameController.StartProgrammingPhase(true);
@@ -234,7 +234,7 @@ public class AppController implements Observer {
                 break;
             }
         }
-		this.network = new NetworkController(gameController, board.getCurrentPlayer());
+		this.network = new NetworkController(gameController);
         // XXX: V2
         // board.setCurrentPlayer(board.getPlayer(0));
         gameController.StartProgrammingPhase(true);
