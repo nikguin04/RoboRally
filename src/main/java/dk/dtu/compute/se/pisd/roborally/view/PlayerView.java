@@ -30,7 +30,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
+import javafx.scene.text.TextFlow;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -43,6 +48,7 @@ public class PlayerView extends Tab implements ViewObserver {
 
     private Player player;
 
+	private StackPane overlayPane;
     private VBox top;
 
     private Label programLabel;
@@ -67,8 +73,9 @@ public class PlayerView extends Tab implements ViewObserver {
         super(player.getName());
         this.setStyle("-fx-text-base-color: " + player.getColor() + ";");
 
-        top = new VBox();
-        this.setContent(top);
+		top = new VBox();
+		overlayPane = new StackPane(top);
+		this.setContent(overlayPane);
 
         this.gameController = gameController;
         this.player = player;
@@ -187,6 +194,22 @@ public class PlayerView extends Tab implements ViewObserver {
 					executeButton.setDisable(true);
 					stepButton.setDisable(true);
 				}
+			}
+			if (player.board.getPhase() == Phase.GAME_OVER) {
+				Player winner = player.board.getWinner();
+				Text playerName = new Text(winner.getName());
+				Text text = new Text(" won!");
+				TextFlow flow = new TextFlow(playerName, text);
+				playerName.setFill(Color.valueOf(winner.getColor()));
+				flow.setStyle("-fx-font-size: 4em;");
+				flow.setTextAlignment(TextAlignment.CENTER);
+				// VBox required to vertically centre text
+				VBox box = new VBox(flow);
+				box.setAlignment(Pos.CENTER);
+				overlayPane.getChildren().add(box);
+				// Decrease the opacity of everything else to make the text clearer
+				// and to further mark that the game is over
+				top.setOpacity(0.25);
 			}
 		} else {
 			if (!programPane.getChildren().contains(playerInteractionPanel)) {
