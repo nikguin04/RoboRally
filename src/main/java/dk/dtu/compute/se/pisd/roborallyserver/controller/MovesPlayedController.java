@@ -18,6 +18,7 @@ public class MovesPlayedController {
     private MovesPlayedRepository movesPlayedRepository;
 	private LobbyRepository lobbyRepository;
 	private PlayerRepository playerRepository;
+	int counter = 0;
 
     public MovesPlayedController(MovesPlayedRepository movesPlayedRepository, LobbyRepository lobbyRepository, PlayerRepository playerRepository) {
         this.movesPlayedRepository = movesPlayedRepository;
@@ -37,10 +38,15 @@ public class MovesPlayedController {
 
 	@PostMapping("/newmovesplayed")
 	public ResponseEntity<Lobby> newMovesPlayed(@RequestBody NewMovesPlayBody nmp) {
+		counter++;
 		Lobby lobby = lobbyRepository.findLobbyById(nmp.lobby_id);
 		ServerPlayer player = playerRepository.findPlayerById(nmp.player_id);
-
+		int playerCount = playerRepository.countPlayersInLobby(nmp.lobby_id);
+		if(counter >= playerCount){
+			
+		}
 		MovesPlayed played = new MovesPlayed(lobby.getRounds(), nmp.move1, nmp.move2, nmp.move3, nmp.move4, nmp.move5, lobby, player);
+
 
 
 		movesPlayedRepository.saveAndFlush(played);

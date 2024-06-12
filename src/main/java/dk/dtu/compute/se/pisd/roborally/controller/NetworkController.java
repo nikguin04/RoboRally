@@ -6,11 +6,8 @@ import dk.dtu.compute.se.pisd.roborally.controller.GameController;
 
 public class NetworkController {
 	private GameController gameController;
-	//ServerPlayer serverPlayer;
-
 	public NetworkController(GameController gameController) {
 		this.gameController = gameController;
-		//this.serverPlayer = serverPlayer;
 	}
 
 	public void sendData(Player player){
