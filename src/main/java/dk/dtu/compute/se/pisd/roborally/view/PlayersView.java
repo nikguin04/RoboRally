@@ -43,14 +43,18 @@ public class PlayersView extends TabPane implements ViewObserver {
         board = gameController.board;
 
         this.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
+        PlayerView focus = null;
 
         playerViews = new PlayerView[board.getPlayersNumber()];
         for (int i = 0; i < board.getPlayersNumber();  i++) {
             playerViews[i] = new PlayerView(gameController, board.getPlayer(i));
             this.getTabs().add(playerViews[i]);
+            if (gameController.splayer.getId() != board.getPlayer(i).getNetworkId()) { playerViews[i].setDisable(true); }
+            else { focus = playerViews[i]; }
         }
         board.attach(this);
         update(board);
+        this.getSelectionModel().select(focus); // We can only focus after the board attach, therefore we store the PlayerView focus till after the attach is called
     }
 
     @Override

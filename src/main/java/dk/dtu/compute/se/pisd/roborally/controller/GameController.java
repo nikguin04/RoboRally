@@ -22,6 +22,7 @@
 package dk.dtu.compute.se.pisd.roborally.controller;
 
 import dk.dtu.compute.se.pisd.roborally.model.*;
+import dk.dtu.compute.se.pisd.roborallyserver.model.ServerPlayer;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -34,9 +35,11 @@ import org.jetbrains.annotations.NotNull;
 public class GameController {
 
     final public Board board;
+    final public ServerPlayer splayer;
 
-    public GameController(Board board) {
+    public GameController(Board board, ServerPlayer splayer) {
         this.board = board;
+        this.splayer = splayer;
     }
 
     public void moveForward(@NotNull Player player) {

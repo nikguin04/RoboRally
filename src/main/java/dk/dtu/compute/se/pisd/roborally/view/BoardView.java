@@ -28,6 +28,8 @@ import javafx.event.EventHandler;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 
@@ -40,6 +42,11 @@ import org.jetbrains.annotations.NotNull;
 public class BoardView extends VBox implements ViewObserver {
 
     private Board board;
+
+    private HBox gameCenteredBox;
+    private VBox infoPane;
+    private Label infoLabel;
+
 
     private GridPane mainBoardPane;
     private SpaceView[][] spaces;
@@ -56,8 +63,11 @@ public class BoardView extends VBox implements ViewObserver {
         mainBoardPane = new GridPane();
         playersView = new PlayersView(gameController);
         statusLabel = new Label("<no status>");
+        infoLabel = new Label("Hello from right side");
+        infoPane = new VBox(infoLabel);
+        gameCenteredBox = new HBox(mainBoardPane, infoPane);
 
-        this.getChildren().add(mainBoardPane);
+        this.getChildren().add(gameCenteredBox);
         this.getChildren().add(playersView);
         this.getChildren().add(statusLabel);
 
