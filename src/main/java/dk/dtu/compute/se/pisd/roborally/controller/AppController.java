@@ -31,15 +31,26 @@ import dk.dtu.compute.se.pisd.roborally.model.Command;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.model.Serializer;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
+import dk.dtu.compute.se.pisd.roborally.net.LobbyRest;
+import dk.dtu.compute.se.pisd.roborally.net.MovePlayedRest;
+import dk.dtu.compute.se.pisd.roborally.net.PlayerRest;
 import dk.dtu.compute.se.pisd.roborally.view.LoadDialog;
 import dk.dtu.compute.se.pisd.roborally.view.SaveDialog;
+import dk.dtu.compute.se.pisd.roborallyserver.model.Lobby;
+import dk.dtu.compute.se.pisd.roborallyserver.model.MovesPlayed;
+import dk.dtu.compute.se.pisd.roborallyserver.model.ServerPlayer;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceDialog;
+import javafx.scene.control.TextInputDialog;
 
 import org.jetbrains.annotations.NotNull;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
 
 import com.google.gson.GsonBuilder;
 import com.google.gson.Gson;
@@ -47,9 +58,11 @@ import com.google.gson.Gson;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import static dk.dtu.compute.se.pisd.roborally.RoboRally.SERVER_HTTPURL;
 
 /**
  * ...
@@ -63,6 +76,7 @@ public class AppController implements Observer {
     final private List<String> PLAYER_COLORS = Arrays.asList("red", "green", "blue", "orange", "grey", "magenta");
 
     final private RoboRally roboRally;
+    private String playerName = null;
 
     private GameController gameController;
 
@@ -100,7 +114,16 @@ public class AppController implements Observer {
 
             // XXX the board should eventually be created programmatically or loaded from a file
             //     here we just create an empty board with the required number of players.
-            Board board = new Board(8,8);
+            /*
+                Lobby lobby = LobbyRest.requestNewLobby(0);
+                PlayerRest.PushPlayerToLobby(lobby.getId(), "Player 1");
+                PlayerRest.PushPlayerToLobby(lobby.getId(), "Player 2");
+                MovePlayedRest.requestNewMove(Long.valueOf(0), 5, "Hello", "Fucka", "Loser", "Winner", "Letsgo", lobby.getId(),Long.valueOf(0)); //Get playerID
+            */
+            // The pushes return the lobby, make sure it is the same lobby as in the lobby variable (check id or something)
+
+            Board board = new Board(8,8, null);
+
             board.getSpace(2,2).setElement(new ConveyorBelt()); // WARN: TODO: This is for debugging json temporarily and might be helpful to debug other parts of our program, delete this before production release
 			// Add the priority antenna to the board
 			PrioAntenna prioAntenna = new PrioAntenna(5,5);
@@ -146,6 +169,52 @@ public class AppController implements Observer {
             roboRally.createBoardView(gameController);
         }
     }
+
+    public void newLobby() {
+		if (playerName == null) changeName();
+
+        Lobby lobby = LobbyRest.requestNewLobby(0);
+
+        ServerPlayer splayer = PlayerRest.PushPlayerToLobby(lobby.getId(), playerName);
+
+        roboRally.createLobbyView(lobby, splayer);
+
+    }
+
+    public void joinLobby() {
+		if (playerName == null) changeName();
+
+        List<Integer> availableLobbies = new ArrayList<>();
+
+        Lobby[] joinableLobbies = LobbyRest.requestJoinableLobbies();
+        for (Lobby l: joinableLobbies) {
+            availableLobbies.add(l.getId().intValue());
+        }
+
+        ChoiceDialog<Integer> dialog = new ChoiceDialog<>(null, availableLobbies);
+        dialog.setTitle("Select lobby");
+        dialog.setHeaderText("Select lobby id to join");
+        Optional<Integer> result = dialog.showAndWait();
+
+        if (result.isPresent()) {
+            Lobby lobby = new Lobby(Long.valueOf(result.get()), Long.valueOf(0), Long.valueOf(0)); // TODO: TEMP VARIABLE, add actual lobby fetching
+            ServerPlayer splayer = PlayerRest.PushPlayerToLobby(lobby.getId(), playerName);
+            roboRally.createLobbyView(lobby, splayer);
+        }
+    }
+
+	public void changeName() {
+		TextInputDialog dialog = new TextInputDialog(playerName != null ? playerName : "Player");
+		dialog.setTitle("Choose new name");
+		dialog.setHeaderText("Please input your wanted name");
+		Optional<String> result = dialog.showAndWait();
+
+		if (result.isPresent()) {
+			playerName = result.get();
+		} else {
+			playerName = dialog.getDefaultValue();
+		}
+	}
 
 	/**
 	 *Start up a dialog with user and

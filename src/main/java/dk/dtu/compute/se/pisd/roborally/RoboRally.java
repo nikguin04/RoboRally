@@ -24,7 +24,10 @@ package dk.dtu.compute.se.pisd.roborally;
 import dk.dtu.compute.se.pisd.roborally.controller.AppController;
 import dk.dtu.compute.se.pisd.roborally.controller.GameController;
 import dk.dtu.compute.se.pisd.roborally.view.BoardView;
+import dk.dtu.compute.se.pisd.roborally.view.LobbyView;
 import dk.dtu.compute.se.pisd.roborally.view.RoboRallyMenuBar;
+import dk.dtu.compute.se.pisd.roborallyserver.model.Lobby;
+import dk.dtu.compute.se.pisd.roborallyserver.model.ServerPlayer;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -40,6 +43,8 @@ import javafx.stage.Stage;
 public class RoboRally extends Application {
 
     private static final int MIN_APP_WIDTH = 600;
+
+    public static final String SERVER_HTTPURL = "http://localhost:8080/";
 
     private Stage stage;
     private BorderPane boardRoot;
@@ -85,6 +90,15 @@ public class RoboRally extends Application {
             boardRoot.setCenter(boardView);
         }
 
+        stage.sizeToScene();
+    }
+
+    public void createLobbyView(Lobby lobby, ServerPlayer splayer) {
+        boardRoot.getChildren().clear();
+        LobbyView lobbyView = new LobbyView(lobby, splayer);
+        boardRoot.setCenter(lobbyView);
+
+        // dont know if i need this
         stage.sizeToScene();
     }
 
