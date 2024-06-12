@@ -3,8 +3,8 @@ package dk.dtu.compute.se.pisd.roborallyserver.model;
 import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
-import dk.dtu.compute.se.pisd.roborallyserver.model.ServerPlayer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,7 +16,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@IdClass(MovesPlayed.class)
+@IdClass(MovesPlayed.MovesPlayedKey.class)
 public class MovesPlayed {
 
     @Id
@@ -53,9 +53,9 @@ public class MovesPlayed {
 		return player.getId();
 	}
 
-}
-
-class MovesPlayedKey implements Serializable {
-	private Long rounds;
-	private ServerPlayer player;
+	@Embeddable
+	public static class MovesPlayedKey implements Serializable {
+		private Long rounds;
+		private ServerPlayer player;
+	}
 }

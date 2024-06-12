@@ -34,6 +34,7 @@ import dk.dtu.compute.se.pisd.roborallyserver.model.ServerPlayer;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -52,24 +53,20 @@ import javafx.util.Duration;
 public class LobbyView extends VBox implements ViewObserver {
 
     private TableView<ServerPlayer> playerListView;
-    ObservableList<ServerPlayer> playersFetched;
 
     private Label lobbyLabel;
     private Label statusLabel;
-    private Lobby lobby;
-    private ServerPlayer splayer;
+
+    private Button startButton;
 
 
-    public LobbyView(Lobby lobby, ServerPlayer splayer) {
+    public LobbyView(LobbyNetworkScheduler lns) {
 
-        this.lobby = lobby;
-        this.splayer = splayer;
 
         lobbyLabel = new Label("Welcome to the Roborally lobby");
 
-        playersFetched = FXCollections.observableArrayList();
         playerListView = new TableView<ServerPlayer>();
-        playerListView.setItems(playersFetched);
+        playerListView.setItems(lns.playersFetched);
 
         TableColumn<ServerPlayer,String> nameCol = new TableColumn<ServerPlayer,String>("Player name");
         nameCol.setCellValueFactory(new PropertyValueFactory<ServerPlayer,String>("name"));
@@ -78,15 +75,22 @@ public class LobbyView extends VBox implements ViewObserver {
 
         playerListView.getColumns().setAll(nameCol, idCol);
 
-        //updatePlayersInLobby();
-        LobbyNetworkScheduler service = new LobbyNetworkScheduler(this);
-        service.setPeriod(Duration.seconds(1));
-        service.start();
+        lns.updatePlayersInLobby();
+
+        lns.setPeriod(Duration.seconds(1));
+        lns.start();
+
+
+        startButton = new Button("Start game");
+        startButton.setOnAction( e -> lns.requestStartGame() );
+
+
 
         statusLabel = new Label("<no status>");
 
         this.getChildren().add(lobbyLabel);
         this.getChildren().add(playerListView);
+        this.getChildren().addAll(startButton);
         this.getChildren().add(statusLabel);
 
     }
@@ -97,16 +101,6 @@ public class LobbyView extends VBox implements ViewObserver {
         // TODO: Make this update view tick every once in a whilem and request new lobby info with REST
 
     }
-
-	public void updatePlayersInLobby() {
-        Platform.runLater(() -> {
-            List<ServerPlayer> pList = List.of(LobbyRest.requestPlayersByLobbyId(lobby.getId()));
-            // Edit local player name with appendix: (you)
-            for (ServerPlayer sp: pList)
-                if (sp.getId().equals(splayer.getId())) { sp.setName(sp.getName() + " (you)");}
-            playersFetched.setAll(pList);
-        });
-	}
 
 
 }

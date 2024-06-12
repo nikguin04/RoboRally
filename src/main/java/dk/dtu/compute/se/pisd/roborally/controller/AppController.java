@@ -21,40 +21,6 @@
  */
 package dk.dtu.compute.se.pisd.roborally.controller;
 
-import dk.dtu.compute.se.pisd.designpatterns.observer.Observer;
-import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
-
-import dk.dtu.compute.se.pisd.roborally.RoboRally;
-
-import dk.dtu.compute.se.pisd.roborally.model.Board;
-import dk.dtu.compute.se.pisd.roborally.model.Command;
-import dk.dtu.compute.se.pisd.roborally.model.Player;
-import dk.dtu.compute.se.pisd.roborally.model.Serializer;
-import dk.dtu.compute.se.pisd.roborally.model.Space;
-import dk.dtu.compute.se.pisd.roborally.net.LobbyRest;
-import dk.dtu.compute.se.pisd.roborally.net.MovePlayedRest;
-import dk.dtu.compute.se.pisd.roborally.net.PlayerRest;
-import dk.dtu.compute.se.pisd.roborally.view.LoadDialog;
-import dk.dtu.compute.se.pisd.roborally.view.SaveDialog;
-import dk.dtu.compute.se.pisd.roborallyserver.model.Lobby;
-import dk.dtu.compute.se.pisd.roborallyserver.model.MovesPlayed;
-import dk.dtu.compute.se.pisd.roborallyserver.model.ServerPlayer;
-import javafx.application.Platform;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.ChoiceDialog;
-import javafx.scene.control.TextInputDialog;
-
-import org.jetbrains.annotations.NotNull;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RestTemplate;
-
-import com.google.gson.GsonBuilder;
-import com.google.gson.Gson;
-
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -62,7 +28,32 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import static dk.dtu.compute.se.pisd.roborally.RoboRally.SERVER_HTTPURL;
+
+import org.jetbrains.annotations.NotNull;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import dk.dtu.compute.se.pisd.designpatterns.observer.Observer;
+import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
+import dk.dtu.compute.se.pisd.roborally.RoboRally;
+import dk.dtu.compute.se.pisd.roborally.model.Board;
+import dk.dtu.compute.se.pisd.roborally.model.Command;
+import dk.dtu.compute.se.pisd.roborally.model.Player;
+import dk.dtu.compute.se.pisd.roborally.model.Serializer;
+import dk.dtu.compute.se.pisd.roborally.model.Space;
+import dk.dtu.compute.se.pisd.roborally.net.LobbyRest;
+import dk.dtu.compute.se.pisd.roborally.net.PlayerRest;
+import dk.dtu.compute.se.pisd.roborally.view.LoadDialog;
+import dk.dtu.compute.se.pisd.roborally.view.SaveDialog;
+import dk.dtu.compute.se.pisd.roborallyserver.model.Lobby;
+import dk.dtu.compute.se.pisd.roborallyserver.model.ServerPlayer;
+import javafx.application.Platform;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ChoiceDialog;
+import javafx.scene.control.TextInputDialog;
 
 /**
  * ...
@@ -113,14 +104,6 @@ public class AppController implements Observer {
             }
 
             // XXX the board should eventually be created programmatically or loaded from a file
-            //     here we just create an empty board with the required number of players.
-            /*
-                Lobby lobby = LobbyRest.requestNewLobby(0);
-                PlayerRest.PushPlayerToLobby(lobby.getId(), "Player 1");
-                PlayerRest.PushPlayerToLobby(lobby.getId(), "Player 2");
-                MovePlayedRest.requestNewMove(Long.valueOf(0), 5, "Hello", "Fucka", "Loser", "Winner", "Letsgo", lobby.getId(),Long.valueOf(0)); //Get playerID
-            */
-            // The pushes return the lobby, make sure it is the same lobby as in the lobby variable (check id or something)
 
             Board board = new Board(8,8, null);
 
@@ -134,7 +117,7 @@ public class AppController implements Observer {
             board.setPrioAntenna(prioAntenna);
 
             // Set the startTile on the board
-            for(int i = 0; i < PLAYER_NUMBER_OPTIONS.get(0); i++){
+            for(int i = 0; i < PLAYER_NUMBER_OPTIONS.get(0); i++){ //TODO Make this so that the number of players is the number of players in the lobbey
                 StartTile startTile = new StartTile(i,0);
                 board.setStartTile(startTile);
             }
@@ -181,7 +164,7 @@ public class AppController implements Observer {
 
         ServerPlayer splayer = PlayerRest.PushPlayerToLobby(lobby.getId(), playerName);
 
-        roboRally.createLobbyView(lobby, splayer);
+        roboRally.createLobbyView(this, lobby, splayer);
 
     }
 
@@ -201,10 +184,60 @@ public class AppController implements Observer {
         Optional<Integer> result = dialog.showAndWait();
 
         if (result.isPresent()) {
-            Lobby lobby = new Lobby(Long.valueOf(result.get()), Long.valueOf(0), Long.valueOf(0)); // TODO: TEMP VARIABLE, add actual lobby fetching
+            Lobby lobby = new Lobby(Long.valueOf(result.get()), Long.valueOf(0), Long.valueOf(0), false); // TODO: TEMP VARIABLE, add actual lobby fetching
             ServerPlayer splayer = PlayerRest.PushPlayerToLobby(lobby.getId(), playerName);
-            roboRally.createLobbyView(lobby, splayer);
+            roboRally.createLobbyView(this, lobby, splayer);
         }
+    }
+
+    public void initGameFromLobbyStart(Lobby lobby, ServerPlayer[] players) {
+        // TODO: This is copy pasted code from newgame, eventually make following code work together with newgame so we dont repeat ourselves
+
+
+        Board board = new Board(8,8, lobby);
+
+        board.getSpace(2,2).setElement(new ConveyorBelt()); // WARN: TODO: This is for debugging json temporarily and might be helpful to debug other parts of our program, delete this before production release
+        // Add the priority antenna to the board
+        PrioAntenna prioAntenna = new PrioAntenna(5,5);
+        board.setPrioAntenna(prioAntenna);
+        int no = players.length;
+
+        // Set the startTile on the board
+        for(int i = 0; i < no; i++){
+            StartTile startTile = new StartTile(i,0);
+            board.setStartTile(startTile);
+        }
+
+
+        // Set Player on startTile
+        gameController = new GameController(board);
+        Player player;
+        int i = 0;
+        int x = 0;
+        for(int g = 0; g < board.width; g++){
+            for(int j = 0; j < board.height; j++){
+                if (i >= no) {
+                    x = 1;
+                    break;
+                }
+                if(board.getSpace(g, j).getElement() instanceof StartTile){
+                    player = new Player(board, PLAYER_COLORS.get(i), players[i].getName());
+                    board.addPlayer(player);
+                    board.addPrioPlayer(player);
+                    player.setSpace(board.getSpace(g, j));
+                    i += 1;
+                }
+            }
+            if(x == 1){
+                break;
+            }
+        }
+
+        // XXX: V2
+        // board.setCurrentPlayer(board.getPlayer(0));
+        gameController.StartProgrammingPhase(true);
+
+        roboRally.createBoardView(gameController);
     }
 
 	public void changeName() {

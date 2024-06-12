@@ -23,6 +23,7 @@ package dk.dtu.compute.se.pisd.roborally;
 
 import dk.dtu.compute.se.pisd.roborally.controller.AppController;
 import dk.dtu.compute.se.pisd.roborally.controller.GameController;
+import dk.dtu.compute.se.pisd.roborally.controller.LobbyNetworkScheduler;
 import dk.dtu.compute.se.pisd.roborally.view.BoardView;
 import dk.dtu.compute.se.pisd.roborally.view.LobbyView;
 import dk.dtu.compute.se.pisd.roborally.view.RoboRallyMenuBar;
@@ -93,9 +94,10 @@ public class RoboRally extends Application {
         stage.sizeToScene();
     }
 
-    public void createLobbyView(Lobby lobby, ServerPlayer splayer) {
+    public void createLobbyView(AppController appController, Lobby lobby, ServerPlayer splayer) {
         boardRoot.getChildren().clear();
-        LobbyView lobbyView = new LobbyView(lobby, splayer);
+        LobbyNetworkScheduler lns = new LobbyNetworkScheduler(appController, lobby, splayer);
+        LobbyView lobbyView = new LobbyView(lns);
         boardRoot.setCenter(lobbyView);
 
         // dont know if i need this

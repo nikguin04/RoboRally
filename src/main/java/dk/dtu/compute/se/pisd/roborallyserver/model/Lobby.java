@@ -27,6 +27,6 @@ public class Lobby {
     private Long rounds;
 
     private Long board_map_id;
-
+    private boolean game_started;
 
 }
