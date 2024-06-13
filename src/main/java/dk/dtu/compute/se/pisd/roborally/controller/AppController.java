@@ -41,22 +41,15 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
+import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.ChoiceDialog;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.DialogPane;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.VBox;
 
 import org.jetbrains.annotations.NotNull;
 
 import com.google.gson.GsonBuilder;
 import com.google.gson.Gson;
+import org.springframework.web.client.HttpServerErrorException;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -65,7 +58,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import static dk.dtu.compute.se.pisd.roborally.RoboRally.SERVER_HTTPURL;
 
 /**
  * ...
@@ -218,12 +210,29 @@ public class AppController implements Observer {
 			}
 		});
 
+		Button okButton = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
+		okButton.setDisable(true);
+		textField.textProperty().addListener((observable, oldValue, newValue) -> {
+			boolean isValid = false;
+			try {
+				Integer lobby = Integer.valueOf(newValue);
+				isValid = availableLobbies.contains(lobby);
+			} catch (NumberFormatException ignored) { }
+			okButton.setDisable(!isValid);
+		});
+
 		if (dialog.showAndWait().get() == ButtonType.OK) {
 			String result = textField.getText();
 			if (result == null || result.isEmpty()) return;
-			Lobby lobby = new Lobby(Long.valueOf(textField.getText()), 0L, 0L); // TODO: TEMP VARIABLE, add actual lobby fetching
-			ServerPlayer splayer = PlayerRest.PushPlayerToLobby(lobby.getId(), playerName);
-			roboRally.createLobbyView(lobby, splayer);
+			try {
+				Lobby lobby = new Lobby(Long.valueOf(textField.getText()), 0L, 0L); // TODO: TEMP VARIABLE, add actual lobby fetching
+				ServerPlayer splayer = PlayerRest.PushPlayerToLobby(lobby.getId(), playerName);
+				roboRally.createLobbyView(lobby, splayer);
+			} catch (HttpServerErrorException e) {
+				Alert alert = new Alert(AlertType.ERROR, "There was an error when trying to join the lobby.", ButtonType.OK);
+				alert.setHeaderText("Something went wrong on the server");
+				alert.showAndWait();
+			}
 		}
 	}
 
