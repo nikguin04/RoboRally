@@ -42,6 +42,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceDialog;
@@ -183,10 +184,11 @@ public class AppController implements Observer {
 
     public void joinLobby() {
         // This is the textform to join a lobby by a string or id
-
+        
         Dialog dialog = new Dialog<>();
         dialog.setTitle("Join Lobby");
         dialog.getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
         dialog.getDialogPane().autosize();
         
         
@@ -205,11 +207,46 @@ public class AppController implements Observer {
     
         ListView<String> listView = new ListView<String>(lobbynames);
         VBox layout = new VBox(10);
-        layout.setPadding(new Insets(5, 5, 5, 50));
-        layout.getChildren().addAll(listView);
-    
+        layout.setPadding(new Insets(10, 20, 5, 20));
+        
+        
+        
+
+        // This is the text field for the connection
+        VBox TextFieldAndCancel = new VBox();
+        
+        
+        
+        TextField textfield = new TextField();
+        textfield.setPromptText("Enter lobby id");
+        TextFieldAndCancel.getChildren().addAll(textfield);
+        
+
+        
+        
+        // TextFieldAndCancel.getChildren().add(textfield);
+        layout.getChildren().addAll(listView, TextFieldAndCancel);
+        
+        
         dialog.getDialogPane().setContent(layout);
-    
+        
+
+        if (!listView.getSelectionModel().isEmpty()){
+            textfield.setText(listView.getSelectionModel().getSelectedItem().substring(6));
+        } 
+
+        if (dialog.showAndWait().get() == ButtonType.OK){
+            Lobby lobby = null;
+            if(textfield != null && !textfield.getText().isEmpty()){
+                lobby = new Lobby(Long.valueOf(textfield.getText()), Long.valueOf(0), Long.valueOf(0)); // TODO: TEMP VARIABLE, add actual lobby fetching
+            } else {
+                return;
+            }
+            ServerPlayer splayer = PlayerRest.PushPlayerToLobby(lobby.getId(), playerName);
+            roboRally.createLobbyView(lobby, splayer);
+
+        }        
+
         // The Textinput for the connection.        
         // TextField textfield = new TextField();
         // String resultForStringInput = textfield.getText();
@@ -237,9 +274,6 @@ public class AppController implements Observer {
         // dialog.getDialogPane().setContent(choicedialog.getDialogPane().getContent());
         
         // dialog.getDialogPane().setContent(textfield);
-        // TODO Make it so that if two players join at the samme time and the lobby is full, the second player is not added
-        
-        dialog.show();
     }
 
     public void changeName() {
