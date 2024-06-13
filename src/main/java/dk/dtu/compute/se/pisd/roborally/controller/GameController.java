@@ -168,8 +168,8 @@ public class GameController {
 
 	private void executeNextStep() {
 		Player currentPlayer = board.getCurrentPlayer();
-		assert board.getPhase() == Phase.ACTIVATION && currentPlayer != null;
 		int step = board.getStep();
+		assert board.getPhase() == Phase.ACTIVATION && currentPlayer != null;
 		assert step >= 0 && step < Player.NO_REGISTERS;
 		CommandCard card = currentPlayer.getProgramField(step).getCard();
 		if (card != null) {
@@ -182,10 +182,29 @@ public class GameController {
 			currentPlayer.setLastCardPlayed(card);
 		}
 
+		handleAfterStep();
+	}
+
+	public void executeCommandOptionAndContinue(Command command){
+		board.setPhase(Phase.ACTIVATION);
+		executeCommand(board.getCurrentPlayer(), command);
+
+		handleAfterStep();
+	}
+
+	private void handleAfterStep() {
+		Player currentPlayer = board.getCurrentPlayer();
+		int step = board.getStep();
+
 		// After any player move, check space of all players, if checkpoint, activate checkpoint.
 		for (Player p : board.getPlayers()) {
-			if (p.getSpace().getElement() instanceof CheckPoint) {
-				p.getSpace().getElement().doAction(this, p.getSpace());
+			if (p.getSpace().getElement() instanceof CheckPoint cp) {
+				cp.doAction(this, p.getSpace());
+				int numCheckpoints = board.getNumCheckpoints();
+				if (numCheckpoints > 0 && p.getCheckPointCounter() == numCheckpoints) {
+					board.setWinner(p);
+					board.setPhase(Phase.GAME_OVER);
+				}
 			}
 		}
 
@@ -220,53 +239,32 @@ public class GameController {
 		// XXX This is a very simplistic way of dealing with some basic cards and
 		//     their execution. This should eventually be done in a more elegant way
 		//     (this concerns the way cards are modelled as well as the way they are executed).
-		//     player.setLastCardPlayed(currentCard); function calls the setLastCardPlayed and
-		//     copies the latest card for the Again card to use.
-		//
 
-		CommandCard currentCard = new CommandCard(command);
 		switch (command) {
-			case FWD1 -> {
-				this.moveForward(player);
-				player.setLastCardPlayed(currentCard);
-			}
-			case RIGHT -> {
-				this.turnRight(player);
-				player.setLastCardPlayed(currentCard);
-			}
-			case LEFT -> {
-				this.turnLeft(player);
-				player.setLastCardPlayed(currentCard);
-			}
-			case FWD2 -> {
-				this.fastForward(player);
-			}
-			case FWD3 -> {
-				this.fastfastForward(player);
-			}
+			case LEFT  -> this.turnLeft(player);
+			case RIGHT -> this.turnRight(player);
+			case FWD1  -> this.moveForward(player);
+			case FWD2  -> this.fastForward(player);
+			case FWD3  -> this.fastfastForward(player);
 			case Back -> {
 				this.turnLeft(player);
 				this.turnLeft(player);
 				this.moveForward(player);
 				this.turnLeft(player);
 				this.turnLeft(player);
-				player.setLastCardPlayed(currentCard);
 			}
 			case UTRN -> {
 				this.turnLeft(player);
 				this.turnLeft(player);
-				player.setLastCardPlayed(currentCard);
 			}
 			case OPTION_LEFT_RIGHT -> {
 				board.setPhase(Phase.PLAYER_INTERACTION);
-				player.setLastCardPlayed(currentCard);
 			}
 			case AGAN -> {
 				CommandCard lastCard = player.getLastCardPlayed();
 				if (lastCard != null && lastCard.command != Command.AGAN) {
 					executeCommand(player, lastCard.command);
 				}
-				player.setLastCardPlayed(currentCard);
 			}
 			default -> {
 				// DO NOTHING (for now)
@@ -314,39 +312,6 @@ public class GameController {
 		MoveNetworkScheduler mns = new MoveNetworkScheduler(board.lobby, splayer, this);
 		mns.setPeriod(Duration.seconds(1));
 		mns.start();
-    }
-
-
-    public void executeCommandOptionAndContinue(Command command){
-        Player currentPlayer = board.getCurrentPlayer();
-        board.setPhase(Phase.ACTIVATION);
-        executeCommand(board.getCurrentPlayer(), command);
-        int step = board.getStep();
-        int nextPlayerNumber = board.getPrioPlayerNumber(currentPlayer) + 1;
-        if (nextPlayerNumber < board.getPlayersNumber()) {
-            board.setCurrentPlayer(board.getPrioPlayer(nextPlayerNumber));
-        } else {
-            // For some reason, we can't just get a list of players???
-            for (int i = 0; i < board.getPlayersNumber(); i++) {
-                Space space = board.getPlayer(i).getSpace();
-                SpaceElement element = space.getElement();
-                if (element == null) continue;
-                // TODO We should probably handle activation order
-                element.doAction(this, space);
-            }
-            step++;
-            // Each time all players have made a move, recalculate priority
-            board.getPrioAntenna().updatePlayerPrio();
-            if (step < Player.NO_REGISTERS) {
-                makeProgramFieldsVisible(step);
-                board.setStep(step);
-                board.setCurrentPlayer(board.getPrioPlayer(0));
-            } else {
-                StartProgrammingPhase(true);
-            }
-        }
-
-        // executeNextStep();
     }
 
     private CommandCard generateRandomCommandCard() {
