@@ -179,106 +179,53 @@ public class AppController implements Observer {
         ServerPlayer splayer = PlayerRest.PushPlayerToLobby(lobby.getId(), playerName);
 
         roboRally.createLobbyView(lobby, splayer);
-
     }
 
-    public void joinLobby() {
-        // This is the textform to join a lobby by a string or id
-        
-        Dialog dialog = new Dialog<>();
-        dialog.setTitle("Join Lobby");
-        dialog.getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
-        dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
-        dialog.getDialogPane().autosize();
-        
-        
-        List<Integer> availableLobbies = new ArrayList<>();
+	public void joinLobby() {
+		Dialog dialog = new Dialog<>();
+		dialog.setTitle("Join Lobby");
+		dialog.getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
+		dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
+		dialog.getDialogPane().autosize();
 
-        Lobby[] joinableLobbies = LobbyRest.requestJoinableLobbies();
-        for (Lobby l: joinableLobbies) {
-            availableLobbies.add(l.getId().intValue());
-        }
-            
-        ObservableList<String> lobbynames = FXCollections.observableArrayList();
-    
-        for(int i = 0; i < availableLobbies.size(); i++){
-            lobbynames.add("Lobby " + availableLobbies.get(i));
-        }
-    
-        ListView<String> listView = new ListView<String>(lobbynames);
-        VBox layout = new VBox(10);
-        layout.setPadding(new Insets(10, 20, 5, 20));
-        
-        
-        
+		List<Integer> availableLobbies = new ArrayList<>();
 
-        // This is the text field for the connection
-        VBox TextFieldAndCancel = new VBox();
-        
-        
-        
-        TextField textfield = new TextField();
-        textfield.setPromptText("Enter lobby id");
-        TextFieldAndCancel.getChildren().addAll(textfield);
-        
+		Lobby[] joinableLobbies = LobbyRest.requestJoinableLobbies();
+		for (Lobby l : joinableLobbies) {
+			availableLobbies.add(l.getId().intValue());
+		}
 
-        
-        
-        // TextFieldAndCancel.getChildren().add(textfield);
-        layout.getChildren().addAll(listView, TextFieldAndCancel);
-        
-        
-        dialog.getDialogPane().setContent(layout);
-        
+		ObservableList<String> lobbyNames = FXCollections.observableArrayList();
 
-        if (!listView.getSelectionModel().isEmpty()){
-            textfield.setText(listView.getSelectionModel().getSelectedItem().substring(6));
-        } 
+		for (Integer lobby : availableLobbies) {
+			lobbyNames.add("Lobby " + lobby);
+		}
 
-        if (dialog.showAndWait().get() == ButtonType.OK){
-            Lobby lobby = null;
-            if(textfield != null && !textfield.getText().isEmpty()){
-                lobby = new Lobby(Long.valueOf(textfield.getText()), Long.valueOf(0), Long.valueOf(0)); // TODO: TEMP VARIABLE, add actual lobby fetching
-            } else {
-                return;
-            }
-            ServerPlayer splayer = PlayerRest.PushPlayerToLobby(lobby.getId(), playerName);
-            roboRally.createLobbyView(lobby, splayer);
+		ListView<String> listView = new ListView<String>(lobbyNames);
 
-        }        
+		VBox layout = new VBox(10);
+		layout.setPadding(new Insets(10, 20, 5, 20));
 
-        // The Textinput for the connection.        
-        // TextField textfield = new TextField();
-        // String resultForStringInput = textfield.getText();
-            
-        // if (resultForStringInput != null && !resultForStringInput.isEmpty()) {
-        //     Lobby lobby = new Lobby(Long.valueOf(resultForStringInput), Long.valueOf(0), Long.valueOf(0)); // TODO: TEMP VARIABLE, add actual lobby fetching
-        //     ServerPlayer splayer = PlayerRest.PushPlayerToLobby(lobby.getId(), playerName);
-        //     roboRally.createLobbyView(lobby, splayer);
-        
-        // The choicedialog for the connection. 
+		TextField textField = new TextField();
+		textField.setPromptText("Lobby ID");
 
-        // This is the list of available lobbies view when joining 
+		layout.getChildren().addAll(listView, textField);
+		dialog.getDialogPane().setContent(layout);
 
+		if (!listView.getSelectionModel().isEmpty()) {
+			textField.setText(listView.getSelectionModel().getSelectedItem().substring(6));
+		}
 
-        // ListView<Integer> choicedialog = new ListView<>(null, availableLobbies);
-        // choicedialog.setTitle("Select lobby");
-        // choicedialog.setHeaderText("Select lobby id to join");
-        // Optional<Integer> result = choicedialog.showAndWait();
-
-        // if (result.isPresent()) {
-        //     Lobby lobby = new Lobby(Long.valueOf(result.get()), Long.valueOf(0), Long.valueOf(0)); // TODO: TEMP VARIABLE, add actual lobby fetching
-        //     ServerPlayer splayer = PlayerRest.PushPlayerToLobby(lobby.getId(), playerName);
-        //     roboRally.createLobbyView(lobby, splayer);
-        // }
-        // dialog.getDialogPane().setContent(choicedialog.getDialogPane().getContent());
-        
-        // dialog.getDialogPane().setContent(textfield);
-    }
+		if (dialog.showAndWait().get() == ButtonType.OK) {
+			String result = textField.getText();
+			if (result == null || result.isEmpty()) return;
+			Lobby lobby = new Lobby(Long.valueOf(textField.getText()), 0L, 0L); // TODO: TEMP VARIABLE, add actual lobby fetching
+			ServerPlayer splayer = PlayerRest.PushPlayerToLobby(lobby.getId(), playerName);
+			roboRally.createLobbyView(lobby, splayer);
+		}
+	}
 
     public void changeName() {
-
-
         TextInputDialog tid = new TextInputDialog("Player");
         tid.setTitle("Choose new name");
         tid.setHeaderText("Please input your wanted name");
@@ -290,7 +237,7 @@ public class AppController implements Observer {
     }
 
 	/**
-	 *Start up a dialog with user and
+	 * Start up a dialog with user and
 	 * calls on the saveFile function, to save the file,
 	 * with the name the user has giving it
 	 */
