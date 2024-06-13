@@ -1,5 +1,6 @@
 package dk.dtu.compute.se.pisd.roborally.controller;
 
+import dk.dtu.compute.se.pisd.roborally.model.Board;
 import dk.dtu.compute.se.pisd.roborally.net.LobbyRest;
 import dk.dtu.compute.se.pisd.roborallyserver.controller.MovesPlayedController;
 import dk.dtu.compute.se.pisd.roborallyserver.model.Lobby;
@@ -14,7 +15,9 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static dk.dtu.compute.se.pisd.roborally.RoboRally.SERVER_HTTPURL;
 
@@ -23,33 +26,51 @@ public class MoveNetworkScheduler extends ScheduledService<Void> {
 private Lobby lobby;
 private ServerPlayer splayer;
 
-	public MoveNetworkScheduler(Lobby lobby, ServerPlayer splayer) {
+private Board board;
+
+	public MoveNetworkScheduler(Lobby lobby, ServerPlayer splayer, Board board) {
 		this.lobby = lobby;
 		this.splayer = splayer;
+		this.board = board;
 	}
 	protected Task<Void> createTask() {
 		return new Task<Void>() {
 			@Override
 			protected Void call() throws Exception {
-				UpdatePlayersCard();
+
+
+				CheckAllPLayerMoves();
 				return null;
 			}
 		};
 	}
 
-	public void UpdatePlayersCard() {
+	public void CheckAllPLayerMoves() {
 		Platform.runLater(() -> {
-			List<MovesPlayed> playerMovesList = List.of();
-
-			MovesPlayed move = isFinishedProgramming();
-			System.out.println(move);
+			ServerPlayer[] finishPlayers = isFinishedProgramming(lobby.getId());
+			if (finishPlayers.length == board.getPlayersNumber()) {
+				MovesPlayed[] playersMovesToClient = SendMovesToPlayers(lobby.getId());
+			}
+			
 		});
 	}
 
-	public static MovesPlayed isFinishedProgramming() {
+	public static ServerPlayer[] isFinishedProgramming(long lobbyid) {
 		final RestTemplate restTemplate = new RestTemplate();
-		ResponseEntity<MovesPlayed> response = restTemplate
-			.exchange(SERVER_HTTPURL + "movesplayed/finishedprogramming", HttpMethod.GET, null, MovesPlayed.class);
+		Map<String, String> uriVariables = new HashMap<>();
+		uriVariables.put("lobbyid", String.valueOf(lobbyid));
+
+		ResponseEntity<ServerPlayer[]> response = restTemplate
+			.getForEntity(SERVER_HTTPURL + "movesplayed/lobbyroundfinished?lobbyid={lobbyid}", ServerPlayer[].class, uriVariables);
+		return response.getBody();
+	}
+	public  static MovesPlayed[] SendMovesToPlayers(long lobbyid){
+		final RestTemplate restTemplate = new RestTemplate();
+		Map<String, String> uriVariables = new HashMap<>();
+		uriVariables.put("lobbyid", String.valueOf(lobbyid));
+
+		ResponseEntity<MovesPlayed[]> response = restTemplate
+			.getForEntity(SERVER_HTTPURL + "movesplayed/getPlayersMoves?lobbyid={lobbyid}", MovesPlayed[].class, uriVariables);
 		return response.getBody();
 	}
 }
