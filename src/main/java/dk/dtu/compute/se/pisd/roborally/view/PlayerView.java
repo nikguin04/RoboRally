@@ -25,6 +25,7 @@ import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.controller.GameController;
 import dk.dtu.compute.se.pisd.roborally.controller.NetworkController;
 import dk.dtu.compute.se.pisd.roborally.model.*;
+import dk.dtu.compute.se.pisd.roborally.model.Player.PlayerStatus;
 import dk.dtu.compute.se.pisd.roborally.net.MovePlayedRest;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;

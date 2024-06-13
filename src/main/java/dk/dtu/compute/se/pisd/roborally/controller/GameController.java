@@ -22,6 +22,7 @@
 package dk.dtu.compute.se.pisd.roborally.controller;
 
 import dk.dtu.compute.se.pisd.roborally.model.*;
+import dk.dtu.compute.se.pisd.roborallyserver.model.Lobby;
 import dk.dtu.compute.se.pisd.roborallyserver.model.ServerPlayer;
 
 import javafx.util.Duration;
@@ -37,10 +38,14 @@ public class GameController {
 
     final public Board board;
     final public ServerPlayer splayer;
+    final public Lobby lobby;
+    final public ServerPlayer[] players;
 
-    public GameController(Board board, ServerPlayer splayer) {
+    public GameController(Board board, ServerPlayer splayer, Lobby lobby, ServerPlayer[] players) {
         this.board = board;
         this.splayer = splayer;
+        this.lobby = lobby;
+        this.players = players;
     }
 
     public void moveForward(@NotNull Player player) {
