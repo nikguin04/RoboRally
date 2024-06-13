@@ -25,9 +25,7 @@ public class MovesPlayedController {
 		this.playerRepository = playerRepository;
     }
 
-    @GetMapping
-    //Specific endpoint for the method
-    @RequestMapping(value = "")
+    @GetMapping()
     public ResponseEntity<List<MovesPlayed>> getMovesPlayed(){
 
         List<MovesPlayed> lobbyList = movesPlayedRepository.findAll();

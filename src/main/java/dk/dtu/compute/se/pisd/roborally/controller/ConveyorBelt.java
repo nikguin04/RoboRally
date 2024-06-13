@@ -60,11 +60,16 @@ public class ConveyorBelt extends SpaceElement {
     }
 
 
-    @Override
-    public boolean doAction(@NotNull GameController gameController, @NotNull Space space) {
-        // TODO needs to be implemented
-        return false;
-    }
+	@Override
+	public boolean doAction(@NotNull GameController gameController, @NotNull Space space) {
+		// TODO: Should pushing other players be allowed?
+		try {
+			gameController.moveToSpace(space.getPlayer(), heading);
+			return true;
+		} catch (GameController.ImpossibleMoveException e) {
+			return false;
+		}
+	}
 
     @Override
 	public String getArgument() {

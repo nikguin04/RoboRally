@@ -123,10 +123,44 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.22.0</version>
             </plugin>
-            <plugin>
+            <!--<plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.2.0</version>
+
+                <executions>
+                    <execution>
+                        <id>jar-game</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <configuration>
+                            <classifier>game</classifier>
+                            <archive>
+                                <manifest>
+                                    <mainClass>dk.dtu.compute.se.pisd.roborally.StartRoboRally</mainClass>
+                                </manifest>
+                            </archive>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>jar-server</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <configuration>
+                            <classifier>server</classifier>
+                            <archive>
+                                <manifest>
+                                    <mainClass>dk.dtu.compute.se.pisd.roborallyserver.server</mainClass>
+                                </manifest>
+                            </archive>
+                        </configuration>
+                    </execution>
+                </executions>
+
                 <configuration>
                     <archive>
                         <manifest>
@@ -136,7 +170,9 @@
                         </manifest>
                     </archive>
                 </configuration>
-            </plugin>
+            </plugin>-->
+
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -195,18 +231,8 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<excludes>
-						<exclude>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-						</exclude>
-					</excludes>
-				</configuration>
-			</plugin>
+
+
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
@@ -215,7 +241,113 @@
                     <mainClass>dk.dtu.compute.se.pisd.roborallyserver.server</mainClass>
                 </configuration>
             </plugin>
+
+
+
+
+
+
+            <!--<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.3.0</version>
+                <executions>
+                    <execution>
+                        <id>shade-game</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>org.springframework.boot.loader.launch.JarLauncher</mainClass>
+                                    <startClass>dk.dtu.compute.se.pisd.roborally.StartRoboRally</startClass>
+                                </transformer>
+                            </transformers>
+                            <finalName>${project.artifactId}-game</finalName>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>shade-serv</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>org.springframework.boot.loader.launch.JarLauncher</mainClass>
+                                    <startClass>dk.dtu.compute.se.pisd.roborallyserver.server</startClass>
+                                </transformer>
+                            </transformers>
+                            <finalName>${project.artifactId}-serv</finalName>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>-->
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>game</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
+                        <version>3.3.0</version>
+                        <configuration>
+                            <mainClass>dk.dtu.compute.se.pisd.roborally.StartRoboRally</mainClass>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>repackage-game</id>
+                                <goals>
+                                    <goal>repackage</goal>
+                                </goals>
+                                <phase>package</phase>
+                                <configuration>
+                                    <classifier>game</classifier>
+                                    <finalName>roborally-game</finalName>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>server</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
+                        <version>3.3.0</version>
+                        <configuration>
+                            <mainClass>dk.dtu.compute.se.pisd.roborallyserver.server</mainClass>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>repackage-server</id>
+                                <goals>
+                                    <goal>repackage</goal>
+                                </goals>
+                                <phase>package</phase>
+                                <configuration>
+                                    <classifier>server</classifier>
+                                    <finalName>roborally-server</finalName>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
 
 </project>

@@ -31,9 +31,7 @@ public class PlayerController {
         this.lobbyRepository = lobbyRepository;
     }
 
-    @GetMapping
-    //Specific endpoint for the method
-    @RequestMapping(value = "")
+    @GetMapping()
     public ResponseEntity<List<ServerPlayer>> getPlayers(){
         List<ServerPlayer> lobbyList = playerRepository.findAll();
         return ResponseEntity.ok(lobbyList);

@@ -26,6 +26,8 @@ import dk.dtu.compute.se.pisd.roborally.controller.PrioAntenna;
 import dk.dtu.compute.se.pisd.roborally.controller.StartTile;
 import dk.dtu.compute.se.pisd.roborallyserver.model.Lobby;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -54,11 +56,17 @@ public class Board extends Subject {
 
     private StartTile startTile;
 
+	@Getter @Setter
+	private int numCheckpoints;
+
     private List<Player> players = new ArrayList<>();
 
 	private List<Player> priotizedPlayers = new ArrayList<>();
 
     private Player current;
+
+	@Getter @Setter
+	private Player winner;
 
     private Phase phase = INITIALISATION;
 
@@ -131,7 +139,6 @@ public class Board extends Subject {
 	public StartTile getStartTile() {
 		return this.startTile;
 	}
-
 
 	/**
 	 * Retrieve this board's list of prioritized players.
