@@ -11,8 +11,8 @@ public class NetworkController {
 	}
 
 	public void sendData(Player player){
-		MovePlayedRest.requestNewMove(gameController.board.lobby.getRounds(), player.getProgramField(0).getCardName(),
-			player.getProgramField(1).getCardName(), player.getProgramField(2).getCardName(), player.getProgramField(3).getCardName(),
-			player.getProgramField(4).getCardName(), gameController.board.lobby.getId(), player.getNetworkId());
+		MovePlayedRest.requestNewMove(gameController.board.lobby.getRounds(), player.getProgramField(0).getCardEnumName(),
+			player.getProgramField(1).getCardEnumName(), player.getProgramField(2).getCardEnumName(), player.getProgramField(3).getCardEnumName(),
+			player.getProgramField(4).getCardEnumName(), gameController.board.lobby.getId(), player.getNetworkId());
 	}
 }

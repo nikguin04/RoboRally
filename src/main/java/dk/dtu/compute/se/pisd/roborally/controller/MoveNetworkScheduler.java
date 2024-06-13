@@ -62,8 +62,8 @@ private GameController gameController;
 				for (MovesPlayed moves: playersMovesToClient) {
 					Player p = board.getPlayerByNetworkId(moves.getPlayerId());
 					p.parseServerMovesToProgram(moves);
-					gameController.finishProgrammingPhase();
 				}
+				gameController.finishProgrammingPhase();
 			}
 		});
 	}

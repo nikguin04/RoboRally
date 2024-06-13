@@ -245,6 +245,7 @@ public class Player extends Subject {
 
 		ccfArray[4] = new CommandCardField(this);
 		ccfArray[4].setCard(new CommandCard(Command.valueOf(moves.getMove5())));
+        program = ccfArray;
 	}
 
 

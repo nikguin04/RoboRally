@@ -44,11 +44,12 @@ public class MovesPlayed {
 
 	@ManyToOne
 	@JoinColumn(name = "players_id", nullable = false)
-	@JsonIgnore
+	//@JsonIgnore
 	@Id
 	private ServerPlayer player;
 	// Only return the lobby id and not the lobby object itself
 	@Transient
+	@JsonIgnore
 	public Long getPlayerId() {return player.getId();}
 
 	@Embeddable
