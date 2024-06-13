@@ -48,10 +48,13 @@ private Board board;
 	public void CheckAllPLayerMoves() {
 		Platform.runLater(() -> {
 			ServerPlayer[] finishPlayers = isFinishedProgramming(lobby.getId());
+			for (ServerPlayer sp: finishPlayers) {
+				board.getPlayerByNetworkId(sp.getId()).set
+			}
 			if (finishPlayers.length == board.getPlayersNumber()) {
 				MovesPlayed[] playersMovesToClient = SendMovesToPlayers(lobby.getId());
 			}
-			
+
 		});
 	}
 
