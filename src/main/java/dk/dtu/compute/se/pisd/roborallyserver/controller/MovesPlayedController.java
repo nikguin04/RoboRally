@@ -68,5 +68,18 @@ public class MovesPlayedController {
 		}
 	}
 
+	@GetMapping("/lobbyroundfinished")
+	public ResponseEntity<List<ServerPlayer>> getPlayersFinishedProgramming(
+			@RequestParam(required=true,value="lobbyid") Long lobbyid, @RequestParam(required=true,value="round") Long round) {
+		
+		List<ServerPlayer> playersDone = new ArrayList<ServerPlayer>();
+		MovesPlayed[] moves = movesPlayedRepository.getMovesPlayedInLobbyByRound(lobbyid, round);
+		for (MovesPlayed move: moves) {
+			playersDone.add(move.getPlayer());
+		}
+		return ResponseEntity.ok(playersDone);
+		
+	}
+
 	public static record NewMovesPlayBody (int rounds, String move1, String move2, String move3, String move4, String move5, Long lobby_id, long player_id) {};
 }
