@@ -212,9 +212,11 @@ public class AppController implements Observer {
 		layout.getChildren().addAll(listView, textField);
 		dialog.getDialogPane().setContent(layout);
 
-		if (!listView.getSelectionModel().isEmpty()) {
-			textField.setText(listView.getSelectionModel().getSelectedItem().substring(6));
-		}
+		listView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+			if (newValue != null) {
+				textField.setText(newValue.substring(6));
+			}
+		});
 
 		if (dialog.showAndWait().get() == ButtonType.OK) {
 			String result = textField.getText();
