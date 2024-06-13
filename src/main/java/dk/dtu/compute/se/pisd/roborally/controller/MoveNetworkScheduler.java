@@ -28,11 +28,13 @@ private Lobby lobby;
 private ServerPlayer splayer;
 
 private Board board;
+private GameController gameController;
 
-	public MoveNetworkScheduler(Lobby lobby, ServerPlayer splayer, Board board) {
+	public MoveNetworkScheduler(Lobby lobby, ServerPlayer splayer, GameController gameController) {
 		this.lobby = lobby;
 		this.splayer = splayer;
-		this.board = board;
+		this.board = gameController.board;
+		this.gameController = gameController;
 	}
 	protected Task<Void> createTask() {
 		return new Task<Void>() {
@@ -57,8 +59,12 @@ private Board board;
 				cancel(); // Cancel task timer
 				MovesPlayed[] playersMovesToClient = requestAllPlayerMoves(lobby.getId());
 
+				for (MovesPlayed moves: playersMovesToClient) {
+					Player p = board.getPlayerByNetworkId(moves.getPlayerId());
+					p.parseServerMovesToProgram(moves);
+					gameController.finishProgrammingPhase();
+				}
 			}
-
 		});
 	}
 

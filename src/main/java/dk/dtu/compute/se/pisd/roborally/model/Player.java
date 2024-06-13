@@ -27,6 +27,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import dk.dtu.compute.se.pisd.roborallyserver.model.MovesPlayed;
 import org.jetbrains.annotations.NotNull;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
@@ -227,6 +228,24 @@ public class Player extends Subject {
             this.displayName = displayName;
         }
     }
+
+	public void parseServerMovesToProgram(MovesPlayed moves) {
+		CommandCardField[] ccfArray = new CommandCardField[5];
+		ccfArray[0] = new CommandCardField(this);
+		ccfArray[0].setCard(new CommandCard(Command.valueOf(moves.getMove1())));
+
+		ccfArray[1] = new CommandCardField(this);
+		ccfArray[1].setCard(new CommandCard(Command.valueOf(moves.getMove2())));
+
+		ccfArray[2] = new CommandCardField(this);
+		ccfArray[2].setCard(new CommandCard(Command.valueOf(moves.getMove3())));
+
+		ccfArray[3] = new CommandCardField(this);
+		ccfArray[3].setCard(new CommandCard(Command.valueOf(moves.getMove4())));
+
+		ccfArray[4] = new CommandCardField(this);
+		ccfArray[4].setCard(new CommandCard(Command.valueOf(moves.getMove5())));
+	}
 
 
     @Override
