@@ -1,7 +1,10 @@
 package dk.dtu.compute.se.pisd.roborallyserver.controller;
 
 
-import java.util.List;
+import dk.dtu.compute.se.pisd.roborallyserver.model.Lobby;
+import dk.dtu.compute.se.pisd.roborallyserver.model.ServerPlayer;
+import dk.dtu.compute.se.pisd.roborallyserver.repository.LobbyRepository;
+import dk.dtu.compute.se.pisd.roborallyserver.repository.PlayerRepository;
 
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -12,10 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import dk.dtu.compute.se.pisd.roborallyserver.model.Lobby;
-import dk.dtu.compute.se.pisd.roborallyserver.model.ServerPlayer;
-import dk.dtu.compute.se.pisd.roborallyserver.repository.LobbyRepository;
-import dk.dtu.compute.se.pisd.roborallyserver.repository.PlayerRepository;
+import java.util.List;
 
 @RestController
 //Base endpoint
@@ -51,10 +51,8 @@ public class LobbyController {
 
 	@PostMapping("/newlobby")
 	public ResponseEntity<Lobby> newLobby(@RequestBody Lobby lobby) {
-
         lobbyRepository.saveAndFlush(lobby);
 		return ResponseEntity.ok(lobby); // lobbyRepository.save(lobby)
-
 	}
 
     @GetMapping("/startgame")
