@@ -22,7 +22,7 @@ public class LobbyRest {
 		Lobby lobby = new Lobby((Long)null, Long.valueOf(0), Long.valueOf(board_map_id), false);
 		HttpEntity<Lobby> request = new HttpEntity<>(lobby);
 		ResponseEntity<Lobby> response = restTemplate
-			.exchange(SERVER_HTTPURL + "lobbies/newlobby", HttpMethod.POST, request, Lobby.class);
+			.postForEntity(SERVER_HTTPURL + "lobbies/newlobby", request, Lobby.class);
 		return response.getBody();
 	}
 

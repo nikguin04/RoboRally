@@ -18,7 +18,7 @@ public class PlayerRest {
 	public static ServerPlayer PushPlayerToLobby(Long lobby_id, String player_name) {
 		HttpEntity<NewPlayerBody> request = new HttpEntity<>(new NewPlayerBody(player_name, lobby_id));
 		ResponseEntity<ServerPlayer> response = restTemplate
-			.exchange(SERVER_HTTPURL + "players/newplayer", HttpMethod.POST, request, ServerPlayer.class);
+			.postForEntity(SERVER_HTTPURL + "players/newplayer", request, ServerPlayer.class);
 		return response.getBody();
 	}
 
