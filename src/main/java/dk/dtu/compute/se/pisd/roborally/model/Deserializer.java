@@ -116,7 +116,7 @@ public class Deserializer {
 				commands[cmdindex++] = context.deserialize(card, Command.class);
 			}
 
-			Player p = new Player(board, color, name, commands);
+			Player p = new Player(board, color, name, commands, 0l); // hardcoded 0 for long currently
 			p.setSpace(board.getSpace(Integer.parseInt(space[0]), Integer.parseInt(space[1])));
 			p.setHeading(Heading.valueOf(obj.get("heading").getAsString()));
 

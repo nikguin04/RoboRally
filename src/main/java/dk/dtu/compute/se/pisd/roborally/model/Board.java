@@ -31,7 +31,9 @@ import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static dk.dtu.compute.se.pisd.roborally.model.Phase.INITIALISATION;
 
@@ -58,6 +60,7 @@ public class Board extends Subject {
 
 	@Getter @Setter
 	private int numCheckpoints;
+	private Map<Long, Player> playerNetworkIdIndex = new HashMap<>();
 
     private List<Player> players = new ArrayList<>();
 
@@ -189,6 +192,7 @@ public class Board extends Subject {
 
     public void addPlayer(@NotNull Player player) {
         if (player.board == this && !players.contains(player)) {
+            playerNetworkIdIndex.put(player.getNetworkId(), player);
             players.add(player);
             notifyChange();
         }
@@ -225,6 +229,10 @@ public class Board extends Subject {
         } else {
             return null;
         }
+    }
+
+    public Player getPlayerByNetworkId(Long id) {
+        return playerNetworkIdIndex.get(id);
     }
 
     public Player getCurrentPlayer() {

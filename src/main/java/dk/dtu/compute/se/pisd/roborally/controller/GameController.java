@@ -22,7 +22,10 @@
 package dk.dtu.compute.se.pisd.roborally.controller;
 
 import dk.dtu.compute.se.pisd.roborally.model.*;
+import dk.dtu.compute.se.pisd.roborallyserver.model.Lobby;
+import dk.dtu.compute.se.pisd.roborallyserver.model.ServerPlayer;
 
+import javafx.util.Duration;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -34,9 +37,15 @@ import org.jetbrains.annotations.NotNull;
 public class GameController {
 
     final public Board board;
+    final public ServerPlayer splayer;
+    final public Lobby lobby;
+    final public ServerPlayer[] players;
 
-    public GameController(Board board) {
+    public GameController(Board board, ServerPlayer splayer, Lobby lobby, ServerPlayer[] players) {
         this.board = board;
+        this.splayer = splayer;
+        this.lobby = lobby;
+        this.players = players;
     }
 
     public void moveForward(@NotNull Player player) {
@@ -300,6 +309,9 @@ public class GameController {
                 field.setVisible(true);
             }
         }
+		MoveNetworkScheduler mns = new MoveNetworkScheduler(board.lobby, splayer, this);
+		mns.setPeriod(Duration.seconds(1));
+		mns.start();
     }
 
     private CommandCard generateRandomCommandCard() {

@@ -29,6 +29,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import dk.dtu.compute.se.pisd.roborally.view.PlayerView;
 import org.jetbrains.annotations.NotNull;
 
 import com.google.gson.Gson;
@@ -49,11 +50,14 @@ import dk.dtu.compute.se.pisd.roborally.view.SaveDialog;
 import dk.dtu.compute.se.pisd.roborallyserver.model.Lobby;
 import dk.dtu.compute.se.pisd.roborallyserver.model.ServerPlayer;
 import javafx.application.Platform;
-import javafx.scene.control.Alert;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
+import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.ChoiceDialog;
-import javafx.scene.control.TextInputDialog;
+import javafx.scene.layout.VBox;
+
+import org.springframework.web.client.HttpServerErrorException;
 
 /**
  * ...
@@ -70,6 +74,8 @@ public class AppController implements Observer {
     private String playerName = null;
 
     private GameController gameController;
+	private NetworkController network;
+	private ServerPlayer sPlayer;
 
     public AppController(@NotNull RoboRally roboRally) {
         this.roboRally = roboRally;
@@ -124,7 +130,7 @@ public class AppController implements Observer {
 
 
             // Set Player on startTile
-            gameController = new GameController(board);
+            gameController = new GameController(board, new ServerPlayer(0l, "", null), null, null);
             int no = result.get();
             Player player;
             int i = 0;
@@ -136,7 +142,7 @@ public class AppController implements Observer {
                         break;
                     }
                     if(board.getSpace(g, j).getElement() instanceof StartTile){
-                        player = new Player(board, PLAYER_COLORS.get(i), "Player " + (i+1));
+                        player = new Player(board, PLAYER_COLORS.get(i), "Player " + (i+1), 0l); // hardcoded 0 for netowork id since this is offline game
                         board.addPlayer(player);
                         board.addPrioPlayer(player);
                         player.setSpace(board.getSpace(g, j));
@@ -148,12 +154,12 @@ public class AppController implements Observer {
                 }
 
             }
-
+			network = new NetworkController(gameController);
             // XXX: V2
             // board.setCurrentPlayer(board.getPlayer(0));
             gameController.StartProgrammingPhase(true);
 
-            roboRally.createBoardView(gameController);
+            roboRally.createBoardView(gameController, network);
         }
     }
 
@@ -167,32 +173,74 @@ public class AppController implements Observer {
         ServerPlayer splayer = PlayerRest.PushPlayerToLobby(lobby.getId(), playerName);
         
         roboRally.createLobbyView(this, lobby, splayer);
-
     }
 
-    public void joinLobby() {
+	public void joinLobby() {
 		if (playerName == null) changeName();
 
-        List<Integer> availableLobbies = new ArrayList<>();
+		Dialog dialog = new Dialog<>();
+		dialog.setTitle("Join Lobby");
+		dialog.getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
+		dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
+		dialog.getDialogPane().autosize();
 
-        Lobby[] joinableLobbies = LobbyRest.requestJoinableLobbies();
-        for (Lobby l: joinableLobbies) {
-            availableLobbies.add(l.getId().intValue());
-        }
+		List<Integer> availableLobbies = new ArrayList<>();
 
-        ChoiceDialog<Integer> dialog = new ChoiceDialog<>(null, availableLobbies);
-        dialog.setTitle("Select lobby");
-        dialog.setHeaderText("Select lobby id to join");
-        Optional<Integer> result = dialog.showAndWait();
+		Lobby[] joinableLobbies = LobbyRest.requestJoinableLobbies();
+		for (Lobby l : joinableLobbies) {
+			availableLobbies.add(l.getId().intValue());
+		}
 
-        if (result.isPresent()) {
-            Lobby lobby = new Lobby(Long.valueOf(result.get()), Long.valueOf(0), Long.valueOf(0), false); // TODO: TEMP VARIABLE, add actual lobby fetching
-            ServerPlayer splayer = PlayerRest.PushPlayerToLobby(lobby.getId(), playerName);
-            roboRally.createLobbyView(this, lobby, splayer);
-        }
-    }
+		ObservableList<String> lobbyNames = FXCollections.observableArrayList();
 
-    public void initGameFromLobbyStart(Lobby lobby, ServerPlayer[] players) {
+		for (Integer lobby : availableLobbies) {
+			lobbyNames.add("Lobby " + lobby);
+		}
+
+		ListView<String> listView = new ListView<String>(lobbyNames);
+
+		VBox layout = new VBox(10);
+		layout.setPadding(new Insets(10, 20, 5, 20));
+
+		TextField textField = new TextField();
+		textField.setPromptText("Lobby ID");
+
+		layout.getChildren().addAll(listView, textField);
+		dialog.getDialogPane().setContent(layout);
+
+		listView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+			if (newValue != null) {
+				textField.setText(newValue.substring(6));
+			}
+		});
+
+		Button okButton = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
+		okButton.setDisable(true);
+		textField.textProperty().addListener((observable, oldValue, newValue) -> {
+			boolean isValid = false;
+			try {
+				Integer lobby = Integer.valueOf(newValue);
+				isValid = availableLobbies.contains(lobby);
+			} catch (NumberFormatException ignored) { }
+			okButton.setDisable(!isValid);
+		});
+
+		if (dialog.showAndWait().get() == ButtonType.OK) {
+			String result = textField.getText();
+			if (result == null || result.isEmpty()) return;
+			try {
+				Lobby lobby = new Lobby(Long.valueOf(textField.getText()), 0L, 0L, false); // TODO: TEMP VARIABLE, add actual lobby fetching
+				ServerPlayer splayer = PlayerRest.PushPlayerToLobby(lobby.getId(), playerName);
+				roboRally.createLobbyView(this, lobby, splayer);
+			} catch (HttpServerErrorException e) {
+				Alert alert = new Alert(AlertType.ERROR, "There was an error when trying to join the lobby.", ButtonType.OK);
+				alert.setHeaderText("Something went wrong on the server");
+				alert.showAndWait();
+			}
+		}
+	}
+
+    public void initGameFromLobbyStart(Lobby lobby, ServerPlayer[] players, ServerPlayer splayer) {
         // TODO: This is copy pasted code from newgame, eventually make following code work together with newgame so we dont repeat ourselves
 
 
@@ -212,7 +260,7 @@ public class AppController implements Observer {
 
 
         // Set Player on startTile
-        gameController = new GameController(board);
+        gameController = new GameController(board, splayer, lobby, players);
         Player player;
         int i = 0;
         int x = 0;
@@ -223,7 +271,7 @@ public class AppController implements Observer {
                     break;
                 }
                 if(board.getSpace(g, j).getElement() instanceof StartTile){
-                    player = new Player(board, PLAYER_COLORS.get(i), players[i].getName());
+                    player = new Player(board, PLAYER_COLORS.get(i), players[i].getName(), players[i].getId());
                     board.addPlayer(player);
                     board.addPrioPlayer(player);
                     player.setSpace(board.getSpace(g, j));
@@ -234,12 +282,12 @@ public class AppController implements Observer {
                 break;
             }
         }
-
+		this.network = new NetworkController(gameController);
         // XXX: V2
         // board.setCurrentPlayer(board.getPlayer(0));
         gameController.StartProgrammingPhase(true);
 
-        roboRally.createBoardView(gameController);
+        roboRally.createBoardView(gameController, network);
     }
 
 	public void changeName() {
@@ -256,7 +304,7 @@ public class AppController implements Observer {
 	}
 
 	/**
-	 *Start up a dialog with user and
+	 * Start up a dialog with user and
 	 * calls on the saveFile function, to save the file,
 	 * with the name the user has giving it
 	 */
@@ -334,10 +382,10 @@ public class AppController implements Observer {
 
     private void loadBoardIntoGame(Board board) {
 
-        gameController = new GameController(board);
+        gameController = new GameController(board, new ServerPlayer(0l, "", null), null, null);
 
         gameController.StartProgrammingPhase(false); // TODO: Make sure to load the correct phase here
-        roboRally.createBoardView(gameController);
+        roboRally.createBoardView(gameController, network);
     }
 
     /**
@@ -356,7 +404,7 @@ public class AppController implements Observer {
             //saveGame();
 
             gameController = null;
-            roboRally.createBoardView(null);
+            roboRally.createBoardView(null, null);
             return true;
         }
         return false;
