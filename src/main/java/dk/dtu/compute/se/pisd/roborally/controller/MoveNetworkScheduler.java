@@ -11,6 +11,8 @@ import dk.dtu.compute.se.pisd.roborallyserver.repository.MovesPlayedRepository;
 import javafx.application.Platform;
 import javafx.concurrent.ScheduledService;
 import javafx.concurrent.Task;
+import javafx.util.Duration;
+
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -64,6 +66,10 @@ private GameController gameController;
 					p.parseServerMovesToProgram(moves);
 				}
 				gameController.finishProgrammingPhase();
+				// Start the autimatic step scheduler
+				ProgramPhaseScheduler pps = new ProgramPhaseScheduler(gameController);
+				pps.setPeriod(Duration.seconds(1));
+				pps.start();
 			}
 		});
 	}
