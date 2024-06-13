@@ -160,10 +160,12 @@ public class AppController implements Observer {
     public void newLobby() {
 		if (playerName == null) changeName();
 
+        
+
         Lobby lobby = LobbyRest.requestNewLobby(0);
 
         ServerPlayer splayer = PlayerRest.PushPlayerToLobby(lobby.getId(), playerName);
-
+        
         roboRally.createLobbyView(this, lobby, splayer);
 
     }
