@@ -21,14 +21,19 @@
  */
 package dk.dtu.compute.se.pisd.roborally.model;
 
+import static dk.dtu.compute.se.pisd.roborally.model.Heading.SOUTH;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import org.jetbrains.annotations.NotNull;
+
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.utils.CompareException;
 import dk.dtu.compute.se.pisd.roborally.utils.FieldsCompare;
-
-import org.jetbrains.annotations.NotNull;
-import java.util.List;
-
-import static dk.dtu.compute.se.pisd.roborally.model.Heading.SOUTH;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 
 /**
  * ...
@@ -55,6 +60,7 @@ public class Player extends Subject {
 	private CommandCard lastCardPlayed;
 
     private Long playerNetworkID;
+    public ObjectProperty<PlayerStatus> playerStatus;
 
     /**
      * {@inheritDoc}
@@ -90,6 +96,7 @@ public class Player extends Subject {
 
         this.space = null;
 		checkPointCounter = 0;
+        playerStatus = new SimpleObjectProperty<PlayerStatus>(PlayerStatus.WAITING);
 
         program = new CommandCardField[NO_REGISTERS];
         for (int i = 0; i < program.length; i++) {
@@ -201,6 +208,24 @@ public class Player extends Subject {
 
     public Long getNetworkId() {
         return this.playerNetworkID;
+    }
+
+    /*public PlayerStatus getStatus() {
+        return playerStatus.get();
+    }
+    public void setStatus(PlayerStatus status) {
+        playerStatus.set(status);;
+    }*/
+    public enum PlayerStatus {
+        READY("Ready"),
+        WAITING("Waiting"),
+        IDLE("Idle");
+
+        final public String displayName;
+
+        PlayerStatus(String displayName) {
+            this.displayName = displayName;
+        }
     }
 
 
