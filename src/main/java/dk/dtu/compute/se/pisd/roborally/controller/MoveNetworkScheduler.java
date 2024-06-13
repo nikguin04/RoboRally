@@ -1,6 +1,7 @@
 package dk.dtu.compute.se.pisd.roborally.controller;
 
 import dk.dtu.compute.se.pisd.roborally.model.Board;
+import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.net.LobbyRest;
 import dk.dtu.compute.se.pisd.roborallyserver.controller.MovesPlayedController;
 import dk.dtu.compute.se.pisd.roborallyserver.model.Lobby;
@@ -49,10 +50,13 @@ private Board board;
 		Platform.runLater(() -> {
 			ServerPlayer[] finishPlayers = isFinishedProgramming(lobby.getId());
 			for (ServerPlayer sp: finishPlayers) {
-				board.getPlayerByNetworkId(sp.getId()).set
+				board.getPlayerByNetworkId(sp.getId()).playerStatus.set(Player.PlayerStatus.READY);
 			}
+
 			if (finishPlayers.length == board.getPlayersNumber()) {
-				MovesPlayed[] playersMovesToClient = SendMovesToPlayers(lobby.getId());
+				cancel(); // Cancel task timer
+				MovesPlayed[] playersMovesToClient = requestAllPlayerMoves(lobby.getId());
+
 			}
 
 		});
@@ -67,7 +71,7 @@ private Board board;
 			.getForEntity(SERVER_HTTPURL + "movesplayed/lobbyroundfinished?lobbyid={lobbyid}", ServerPlayer[].class, uriVariables);
 		return response.getBody();
 	}
-	public  static MovesPlayed[] SendMovesToPlayers(long lobbyid){
+	public  static MovesPlayed[] requestAllPlayerMoves(long lobbyid){
 		final RestTemplate restTemplate = new RestTemplate();
 		Map<String, String> uriVariables = new HashMap<>();
 		uriVariables.put("lobbyid", String.valueOf(lobbyid));
