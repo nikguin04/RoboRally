@@ -23,6 +23,7 @@ package dk.dtu.compute.se.pisd.roborally.view;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.controller.GameController;
+import dk.dtu.compute.se.pisd.roborally.controller.NetworkController;
 import dk.dtu.compute.se.pisd.roborally.model.Board;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
 import javafx.scene.control.TabPane;
@@ -36,21 +37,26 @@ import javafx.scene.control.TabPane;
 public class PlayersView extends TabPane implements ViewObserver {
 
     private Board board;
+	private NetworkController network;
 
     private PlayerView[] playerViews;
 
-    public PlayersView(GameController gameController) {
+    public PlayersView(GameController gameController, NetworkController networkController) {
         board = gameController.board;
-
+		this.network = networkController;
         this.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
+        PlayerView focus = null;
 
         playerViews = new PlayerView[board.getPlayersNumber()];
         for (int i = 0; i < board.getPlayersNumber();  i++) {
-            playerViews[i] = new PlayerView(gameController, board.getPlayer(i));
+            playerViews[i] = new PlayerView(gameController, board.getPlayer(i), network);
             this.getTabs().add(playerViews[i]);
+            if (gameController.splayer.getId() != board.getPlayer(i).getNetworkId()) { playerViews[i].setDisable(true); }
+            else { focus = playerViews[i]; }
         }
         board.attach(this);
         update(board);
+        this.getSelectionModel().select(focus); // We can only focus after the board attach, therefore we store the PlayerView focus till after the attach is called
     }
 
     @Override

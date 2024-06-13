@@ -10,4 +10,7 @@ public interface LobbyRepository  extends JpaRepository<Lobby, Long> {
 
     // TODO: Make a function that only returns joinable lobbies
     // public Lobby[] findJoinableLobbies
+
+
+
 }

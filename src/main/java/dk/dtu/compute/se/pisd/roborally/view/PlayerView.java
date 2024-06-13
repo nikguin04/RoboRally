@@ -23,7 +23,9 @@ package dk.dtu.compute.se.pisd.roborally.view;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.controller.GameController;
+import dk.dtu.compute.se.pisd.roborally.controller.NetworkController;
 import dk.dtu.compute.se.pisd.roborally.model.*;
+import dk.dtu.compute.se.pisd.roborally.model.Player.PlayerStatus;
 import dk.dtu.compute.se.pisd.roborally.net.MovePlayedRest;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -69,8 +71,9 @@ public class PlayerView extends Tab implements ViewObserver {
     private VBox playerInteractionPanel;
 
     private GameController gameController;
+	private NetworkController networkController;
 
-    public PlayerView(@NotNull GameController gameController, @NotNull Player player) {
+    public PlayerView(@NotNull GameController gameController, @NotNull Player player, @NotNull NetworkController networkController) {
         super(player.getName());
         this.setStyle("-fx-text-base-color: " + player.getColor() + ";");
 
@@ -80,6 +83,7 @@ public class PlayerView extends Tab implements ViewObserver {
 
         this.gameController = gameController;
         this.player = player;
+		this.networkController = networkController;
 
         programLabel = new Label("Program");
 
@@ -101,9 +105,7 @@ public class PlayerView extends Tab implements ViewObserver {
 
         finishButton = new Button("Finish Programming");
 //        finishButton.setOnAction( e -> gameController.finishProgrammingPhase());
-		finishButton.setOnAction( e -> MovePlayedRest.requestNewMove(gameController.board.lobby.getRounds().intValue(), player.getProgramField(0).getCardName(),
-			player.getProgramField(1).getCardName(), player.getProgramField(2).getCardName(), player.getProgramField(3).getCardName(),
-			player.getProgramField(4).getCardName(), gameController.board.lobby.getId(), 1L));
+		finishButton.setOnAction( e -> networkController.sendData(player));
 
 
         executeButton = new Button("Execute Program");

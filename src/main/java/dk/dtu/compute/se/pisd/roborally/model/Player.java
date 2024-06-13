@@ -21,14 +21,20 @@
  */
 package dk.dtu.compute.se.pisd.roborally.model;
 
+import static dk.dtu.compute.se.pisd.roborally.model.Heading.SOUTH;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import dk.dtu.compute.se.pisd.roborallyserver.model.MovesPlayed;
+import org.jetbrains.annotations.NotNull;
+
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.utils.CompareException;
 import dk.dtu.compute.se.pisd.roborally.utils.FieldsCompare;
-
-import org.jetbrains.annotations.NotNull;
-import java.util.List;
-
-import static dk.dtu.compute.se.pisd.roborally.model.Heading.SOUTH;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 
 /**
  * ...
@@ -54,6 +60,9 @@ public class Player extends Subject {
 	private int checkPointCounter;
 	private CommandCard lastCardPlayed;
 
+    private Long playerNetworkID;
+    public ObjectProperty<PlayerStatus> playerStatus;
+
     /**
      * {@inheritDoc}
      * @param board         Board on which player is located and interacts with
@@ -62,13 +71,14 @@ public class Player extends Subject {
      *
      * @see Player#Player(Board, String, String, Command[])  Player() - For creating a player with predefined commands
      */
-    public Player(@NotNull Board board, String color, @NotNull String name) {
-        this(board, color, name, null);
+    public Player(@NotNull Board board, String color, @NotNull String name, @NotNull Long playerNetworkID) {
+        this(board, color, name, null, playerNetworkID);
         for (int i = 0; i < this.cards.length; i++) {
             this.cards[i] = new CommandCardField(this);
         }
 
     }
+
 
     /**
      * Creates player
@@ -79,13 +89,15 @@ public class Player extends Subject {
      *
      * @see Player#Player(Board, String, String)  Player() - For creating a player with blank commands
      */
-    public Player(@NotNull Board board, String color, @NotNull String name, Command[] Commands) {
+    public Player(@NotNull Board board, String color, @NotNull String name, Command[] Commands, @NotNull Long playerNetworkID) {
         this.board = board;
         this.name = name;
         this.color = color;
+        this.playerNetworkID = playerNetworkID;
 
         this.space = null;
 		checkPointCounter = 0;
+        playerStatus = new SimpleObjectProperty<PlayerStatus>(PlayerStatus.WAITING);
 
         program = new CommandCardField[NO_REGISTERS];
         for (int i = 0; i < program.length; i++) {
@@ -195,6 +207,47 @@ public class Player extends Subject {
         this.lastCardPlayed = card;
     }
 
+    public Long getNetworkId() {
+        return this.playerNetworkID;
+    }
+
+    /*public PlayerStatus getStatus() {
+        return playerStatus.get();
+    }
+    public void setStatus(PlayerStatus status) {
+        playerStatus.set(status);;
+    }*/
+    public enum PlayerStatus {
+        READY("Ready"),
+        WAITING("Waiting"),
+        IDLE("Idle");
+
+        final public String displayName;
+
+        PlayerStatus(String displayName) {
+            this.displayName = displayName;
+        }
+    }
+
+	public void parseServerMovesToProgram(MovesPlayed moves) {
+		CommandCardField[] ccfArray = new CommandCardField[5];
+		ccfArray[0] = new CommandCardField(this);
+		ccfArray[0].setCard(new CommandCard(Command.valueOf(moves.getMove1())));
+
+		ccfArray[1] = new CommandCardField(this);
+		ccfArray[1].setCard(new CommandCard(Command.valueOf(moves.getMove2())));
+
+		ccfArray[2] = new CommandCardField(this);
+		ccfArray[2].setCard(new CommandCard(Command.valueOf(moves.getMove3())));
+
+		ccfArray[3] = new CommandCardField(this);
+		ccfArray[3].setCard(new CommandCard(Command.valueOf(moves.getMove4())));
+
+		ccfArray[4] = new CommandCardField(this);
+		ccfArray[4].setCard(new CommandCard(Command.valueOf(moves.getMove5())));
+        program = ccfArray;
+	}
+
 
     @Override
     public boolean equals(Object obj) { // TODO: This should be made as the board, where all variables are checked
@@ -210,4 +263,5 @@ public class Player extends Subject {
         }
         return false;
     }
+
 }

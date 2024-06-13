@@ -17,4 +17,7 @@ public interface PlayerRepository extends JpaRepository<ServerPlayer, Long> {
 	@Query("select p from ServerPlayer p where p.lobby.id = ?1")
 	public List<ServerPlayer> findByLobbyID(Long id);
 
+
+	@Query("select count(id) from ServerPlayer where lobby.id = ?1")
+	public int countPlayersInLobby(Long lobbyid);
 }
