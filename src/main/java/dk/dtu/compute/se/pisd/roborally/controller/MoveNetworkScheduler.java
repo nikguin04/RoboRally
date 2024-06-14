@@ -58,7 +58,6 @@ private GameController gameController;
 				MovesPlayed[] playersMovesToClient = requestAllPlayerMoves(lobby.getId());
 				for (MovesPlayed moves: playersMovesToClient) {
 					Player p = board.getPlayerByNetworkId(moves.getPlayerId());
-//					gameController.AutoSelectCard(p);
 					p.parseServerMovesToProgram(moves);
 				}
 				gameController.finishProgrammingPhase();
