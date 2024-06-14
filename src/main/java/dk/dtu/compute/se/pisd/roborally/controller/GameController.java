@@ -309,6 +309,7 @@ public class GameController {
      * @see CommandCardField
      */
     public void StartProgrammingPhase(Boolean RandomizeCards) {
+
         board.setPhase(Phase.PROGRAMMING);
         board.setCurrentPlayer(board.getPlayer(0));
         board.setStep(0);
