@@ -69,8 +69,9 @@ private GameController gameController;
 					p.parseServerMovesToProgram(moves);
 				}
 				gameController.finishProgrammingPhase();
-				// Start the autimatic step scheduler
-				ProgramPhaseScheduler pps = new ProgramPhaseScheduler(gameController);
+				// Start the automatic step scheduler
+				Player p = board.getPlayerByNetworkId(splayer.getId());
+				ProgramPhaseScheduler pps = new ProgramPhaseScheduler(gameController, p);
 				pps.setPeriod(Duration.seconds(1));
 				pps.start();
 			}

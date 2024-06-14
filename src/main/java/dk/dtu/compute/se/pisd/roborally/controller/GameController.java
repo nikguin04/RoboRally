@@ -323,13 +323,19 @@ public class GameController {
             for (int j = 0; j < Player.NO_CARDS; j++) {
                 CommandCardField field = player.getCardField(j);
                 if (RandomizeCards) field.setCard(generateRandomCommandCard());
-                field.setVisible(true);
             }
         }
 		MoveNetworkScheduler mns = new MoveNetworkScheduler(board.lobby, splayer, this);
 		mns.setPeriod(Duration.seconds(1));
 		mns.start();
     }
+
+	public void ResetPlayerProgramCards(Player player){
+		for (int i = 0; i < Player.NO_REGISTERS; i++) {
+			System.out.println(player.getProgramField(i).getCardName());
+			player.getProgramField(i).setCard(null);
+		}
+	}
 
     private CommandCard generateRandomCommandCard() {
         Command[] commands = Command.values();
