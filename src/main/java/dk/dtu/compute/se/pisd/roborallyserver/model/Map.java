@@ -26,7 +26,8 @@ public class Map implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	private String mapstring;
+	@Lob
+	private String mapjson;
 
 	private Long numberofplayers;
 
