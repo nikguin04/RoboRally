@@ -28,6 +28,15 @@ public class MapController {
 		return ResponseEntity.ok(lobbyList);
 	}
 
+	@GetMapping("/get")
+	public ResponseEntity<Map> getMap(@RequestParam("id") Long id) {
+		Optional<Map> map = mapRepository.findById(id);
+		if (map.isEmpty()) {
+			return ResponseEntity.notFound().build();
+		}
+		return ResponseEntity.ok(map.get());
+	}
+
 	@PostMapping("/newmap")
 	public ResponseEntity<Map> newMap(@RequestBody Map map) {
 		mapRepository.saveAndFlush(map);
