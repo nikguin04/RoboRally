@@ -40,8 +40,6 @@ private GameController gameController;
 		return new Task<Void>() {
 			@Override
 			protected Void call() throws Exception {
-
-
 				CheckAllPLayerMoves();
 				return null;
 			}
@@ -58,9 +56,9 @@ private GameController gameController;
 			if (finishPlayers.length == board.getPlayersNumber()) {
 				cancel(); // Cancel task timer
 				MovesPlayed[] playersMovesToClient = requestAllPlayerMoves(lobby.getId());
-
 				for (MovesPlayed moves: playersMovesToClient) {
 					Player p = board.getPlayerByNetworkId(moves.getPlayerId());
+					gameController.AutoSelectCard(p);
 					p.parseServerMovesToProgram(moves);
 				}
 				gameController.finishProgrammingPhase();

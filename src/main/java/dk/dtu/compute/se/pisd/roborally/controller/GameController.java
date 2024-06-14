@@ -150,7 +150,24 @@ public class GameController {
         board.setStep(0);
     }
 
-    public void executePrograms() {
+
+	public void AutoSelectCard(Player player){
+		for (int i = 0; i < 5; i++){
+			if(player.getProgramField(i).getCard() == null) {
+				while (true) {
+					int randomCardIndex = (int)(Math.random() * 8);
+					CommandCard randomCard = player.getCardField(randomCardIndex).getCard();
+					if (randomCard != null) {
+						player.getProgramField(i).setCard(randomCard);
+						break;
+					}
+				}
+			}
+		}
+	}
+
+
+	public void executePrograms() {
         board.setStepMode(false);
         continuePrograms();
     }
@@ -267,7 +284,7 @@ public class GameController {
 				}
 			}
 			default -> {
-				// DO NOTHING (for now)
+
 			}
 		}
 	}
