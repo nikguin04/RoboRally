@@ -24,12 +24,17 @@ package dk.dtu.compute.se.pisd.roborally.controller;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Optional;
 
-import dk.dtu.compute.se.pisd.roborally.view.PlayerView;
+import dk.dtu.compute.se.pisd.roborally.net.MapRest;
+import dk.dtu.compute.se.pisd.roborallyserver.model.Map;
+import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.NotNull;
 
 import com.google.gson.Gson;
@@ -163,17 +168,46 @@ public class AppController implements Observer {
         }
     }
 
-    public void newLobby() {
+	public void newLobby() {
 		if (playerName == null) changeName();
 
-        
+		List<String> files = new ArrayList<>();
+		try {
+			Enumeration<URL> resources = Thread.currentThread().getContextClassLoader().getResources("boards"); // replace with your directory path
 
-        Lobby lobby = LobbyRest.requestNewLobby(null);
+			while (resources.hasMoreElements()) {
+				URL directoryURL = resources.nextElement();
+				List<String> filenames = IOUtils.readLines(directoryURL.openStream(), StandardCharsets.UTF_8);
+				for (String filename : filenames) {
+					if (filename.endsWith(".json")) {
+						files.add(filename.substring(0, filename.length() - ".json".length()));
+					}
+				}
+			}
+		} catch (IOException ignored) {}
 
-        ServerPlayer splayer = PlayerRest.PushPlayerToLobby(lobby.getId(), playerName);
-        
-        roboRally.createLobbyView(this, lobby, splayer);
-    }
+		ChoiceDialog<String> mapChoiceDialog = new ChoiceDialog<>();
+		mapChoiceDialog.setTitle("Choose board");
+		mapChoiceDialog.setHeaderText("Please choose the board to use");
+		mapChoiceDialog.getItems().addAll(files);
+		mapChoiceDialog.setSelectedItem(files.get(0));
+
+		Optional<String> result = mapChoiceDialog.showAndWait();
+		if (result.isEmpty()) return;
+		String mapName = result.get();
+
+		Map map;
+		try {
+			String mapJSON = IOUtils.resourceToString("boards/" + mapName + ".json", StandardCharsets.UTF_8, AppController.class.getClassLoader());
+			map = MapRest.newMap(mapName, mapJSON, 0L);
+		} catch (IOException e) { return; }
+
+		Lobby lobby = LobbyRest.requestNewLobby(map);
+
+		ServerPlayer splayer = PlayerRest.PushPlayerToLobby(lobby.getId(), playerName);
+
+		roboRally.createLobbyView(this, lobby, splayer);
+	}
 
 	public void joinLobby() {
 		if (playerName == null) changeName();
