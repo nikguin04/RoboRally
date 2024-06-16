@@ -18,14 +18,11 @@ import lombok.Setter;
 public class Map implements Serializable {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private String mapName;
 
 	@Lob
 	private String mapjson;
 
 	private Long numberofplayers;
-
-	private String mapname;
 
 }

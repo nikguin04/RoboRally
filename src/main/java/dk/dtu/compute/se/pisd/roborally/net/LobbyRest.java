@@ -18,8 +18,9 @@ import java.util.Map;
 public class LobbyRest {
 
 	public static final RestTemplate restTemplate = new RestTemplate();
-	public static Lobby requestNewLobby(int board_map_id) {
-		Lobby lobby = new Lobby((Long)null, Long.valueOf(0), Long.valueOf(board_map_id), false);
+
+	public static Lobby requestNewLobby(dk.dtu.compute.se.pisd.roborallyserver.model.Map map) {
+		Lobby lobby = new Lobby(null, 0L, map, false);
 		HttpEntity<Lobby> request = new HttpEntity<>(lobby);
 		ResponseEntity<Lobby> response = restTemplate
 			.postForEntity(SERVER_HTTPURL + "lobbies/newlobby", request, Lobby.class);

@@ -29,8 +29,8 @@ public class MapController {
 	}
 
 	@GetMapping("/get")
-	public ResponseEntity<Map> getMap(@RequestParam("id") Long id) {
-		Optional<Map> map = mapRepository.findById(id);
+	public ResponseEntity<Map> getMap(@RequestParam("name") String mapName) {
+		Optional<Map> map = mapRepository.findById(mapName);
 		if (map.isEmpty()) {
 			return ResponseEntity.notFound().build();
 		}

@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface MapRepository extends JpaRepository<Map, Long> {
+public interface MapRepository extends JpaRepository<Map, String> {
 }
