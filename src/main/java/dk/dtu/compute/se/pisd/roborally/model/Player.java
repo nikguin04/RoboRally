@@ -99,9 +99,9 @@ public class Player extends Subject {
 		checkPointCounter = 0;
         playerStatus = new SimpleObjectProperty<PlayerStatus>(PlayerStatus.WAITING);
 
-        program = new CommandCardField[NO_REGISTERS];
-        for (int i = 0; i < program.length; i++) {
-            program[i] = new CommandCardField(this);
+        this.program = new CommandCardField[NO_REGISTERS];
+        for (int i = 0; i < this.program.length; i++) {
+            this.program[i] = new CommandCardField(this);
         }
         this.cards = new CommandCardField[NO_CARDS];
         if (Commands != null) {
@@ -230,22 +230,11 @@ public class Player extends Subject {
     }
 
 	public void parseServerMovesToProgram(MovesPlayed moves) {
-		CommandCardField[] ccfArray = new CommandCardField[5];
-		ccfArray[0] = new CommandCardField(this);
-		ccfArray[0].setCard(new CommandCard(Command.valueOf(moves.getMove1())));
-
-		ccfArray[1] = new CommandCardField(this);
-		ccfArray[1].setCard(new CommandCard(Command.valueOf(moves.getMove2())));
-
-		ccfArray[2] = new CommandCardField(this);
-		ccfArray[2].setCard(new CommandCard(Command.valueOf(moves.getMove3())));
-
-		ccfArray[3] = new CommandCardField(this);
-		ccfArray[3].setCard(new CommandCard(Command.valueOf(moves.getMove4())));
-
-		ccfArray[4] = new CommandCardField(this);
-		ccfArray[4].setCard(new CommandCard(Command.valueOf(moves.getMove5())));
-        program = ccfArray;
+		program[0].setCard(new CommandCard(Command.valueOf(moves.getMove1())));
+		program[1].setCard(new CommandCard(Command.valueOf(moves.getMove2())));
+		program[2].setCard(new CommandCard(Command.valueOf(moves.getMove3())));
+		program[3].setCard(new CommandCard(Command.valueOf(moves.getMove4())));
+		program[4].setCard(new CommandCard(Command.valueOf(moves.getMove5())));
 	}
 
 

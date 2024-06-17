@@ -31,9 +31,15 @@ import dk.dtu.compute.se.pisd.roborally.view.RoboRallyMenuBar;
 import dk.dtu.compute.se.pisd.roborallyserver.model.Lobby;
 import dk.dtu.compute.se.pisd.roborallyserver.model.ServerPlayer;
 import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 /**
@@ -71,8 +77,11 @@ public class RoboRally extends Application {
         boardRoot = new BorderPane();
         VBox vbox = new VBox(menuBar, boardRoot);
         vbox.setMinWidth(MIN_APP_WIDTH);
-        Scene primaryScene = new Scene(vbox);
+        
 
+        boardRoot.setCenter(startMenuView(appController));
+
+        Scene primaryScene = new Scene(vbox);        
         stage.setScene(primaryScene);
         stage.setTitle("RoboRally");
         stage.setOnCloseRequest(
@@ -107,6 +116,32 @@ public class RoboRally extends Application {
         stage.sizeToScene();
     }
 
+    public Node startMenuView(AppController appController){
+        VBox vbox = new VBox();
+        Button newLobbyButoon = new Button("New lobby");
+        newLobbyButoon.setFont(new Font(20));
+        newLobbyButoon.setPrefWidth(MIN_APP_WIDTH/2);
+        newLobbyButoon.setOnAction( e -> appController.newLobby());
+
+        Button joinButoon = new Button("Join lobby");
+        joinButoon.setFont(new Font(20));
+        joinButoon.setPrefWidth(MIN_APP_WIDTH/2);
+        joinButoon.setOnAction( e -> appController.joinLobby());
+
+        Button exitButoon = new Button("Exit");
+        exitButoon.setFont(new Font(20));
+        exitButoon.setPrefWidth(MIN_APP_WIDTH/2);
+        exitButoon.setOnAction( e -> appController.exit());
+
+
+        vbox.setSpacing(30);
+        vbox.setPadding(new Insets(50));
+        vbox.setAlignment(Pos.CENTER);
+        vbox.getChildren().addAll(newLobbyButoon, joinButoon, exitButoon);
+        return vbox;
+    }
+
+    
     @Override
     public void stop() throws Exception {
         super.stop();

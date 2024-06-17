@@ -42,8 +42,6 @@ private GameController gameController;
 		return new Task<Void>() {
 			@Override
 			protected Void call() throws Exception {
-
-
 				CheckAllPLayerMoves();
 				return null;
 			}
