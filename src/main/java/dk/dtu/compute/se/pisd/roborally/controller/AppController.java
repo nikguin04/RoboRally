@@ -24,6 +24,7 @@ package dk.dtu.compute.se.pisd.roborally.controller;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.StringReader;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Optional;
 
+import dk.dtu.compute.se.pisd.roborally.fileaccess.LoadBoard;
 import dk.dtu.compute.se.pisd.roborally.net.MapRest;
 import dk.dtu.compute.se.pisd.roborallyserver.model.Map;
 import org.apache.commons.io.IOUtils;
@@ -274,55 +276,37 @@ public class AppController implements Observer {
 		}
 	}
 
-    public void initGameFromLobbyStart(Lobby lobby, ServerPlayer[] players, ServerPlayer splayer) {
-        // TODO: This is copy pasted code from newgame, eventually make following code work together with newgame so we dont repeat ourselves
+	public void initGameFromLobbyStart(Lobby lobby, ServerPlayer[] players, ServerPlayer splayer) {
+		Map map = lobby.getMapName();
+		Board board = LoadBoard.loadBoard(new StringReader(map.getMapjson()));
 
+		int playerCount = players.length;
 
-        Board board = new Board(8,8, lobby);
-
-        board.getSpace(2,2).setElement(new ConveyorBelt()); // WARN: TODO: This is for debugging json temporarily and might be helpful to debug other parts of our program, delete this before production release
-        // Add the priority antenna to the board
-        PrioAntenna prioAntenna = new PrioAntenna(5,5);
-        board.setPrioAntenna(prioAntenna);
-        int no = players.length;
-
-        // Set the startTile on the board
-        for(int i = 0; i < no; i++){
-            StartTile startTile = new StartTile(i,0);
-            board.setStartTile(startTile);
-        }
-
-
-        // Set Player on startTile
-        gameController = new GameController(board, splayer, lobby, players);
-        Player player;
-        int i = 0;
-        int x = 0;
-        for(int g = 0; g < board.width; g++){
-            for(int j = 0; j < board.height; j++){
-                if (i >= no) {
-                    x = 1;
-                    break;
-                }
-                if(board.getSpace(g, j).getElement() instanceof StartTile){
-                    player = new Player(board, PLAYER_COLORS.get(i), players[i].getName(), players[i].getId());
-                    board.addPlayer(player);
-                    board.addPrioPlayer(player);
-                    player.setSpace(board.getSpace(g, j));
-                    i += 1;
-                }
-            }
-            if(x == 1){
-                break;
-            }
-        }
+		// Set Player on startTile
+		gameController = new GameController(board, splayer, lobby, players);
+		Player player;
+		int i = 0;
+		outerLoop:
+		for (int x = 0; x < board.width; x++) {
+			for (int y = 0; y < board.height; y++) {
+				if (i >= playerCount) {
+					break outerLoop;
+				}
+				if (board.getSpace(x, y).getElement() instanceof StartTile) {
+					player = new Player(board, PLAYER_COLORS.get(i), players[i].getName(), players[i].getId());
+					board.addPlayer(player);
+					board.addPrioPlayer(player);
+					player.setSpace(board.getSpace(x, y));
+					i++;
+				}
+			}
+		}
+		assert i == playerCount : "There wasn't enough start tiles for all the players";
 		this.network = new NetworkController(gameController);
-        // XXX: V2
-        // board.setCurrentPlayer(board.getPlayer(0));
-        gameController.StartProgrammingPhase(true);
+		gameController.StartProgrammingPhase(true);
 
-        roboRally.createBoardView(gameController, network);
-    }
+		roboRally.createBoardView(gameController, network);
+	}
 
 	public void changeName() {
 		TextInputDialog dialog = new TextInputDialog(playerName != null ? playerName : "Player");
