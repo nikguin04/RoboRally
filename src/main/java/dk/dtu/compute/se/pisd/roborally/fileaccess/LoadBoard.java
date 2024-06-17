@@ -31,6 +31,7 @@ import dk.dtu.compute.se.pisd.roborally.fileaccess.model.SpaceTemplate;
 import dk.dtu.compute.se.pisd.roborally.controller.SpaceElement;
 import dk.dtu.compute.se.pisd.roborally.model.Board;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
+import dk.dtu.compute.se.pisd.roborallyserver.model.Lobby;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
@@ -48,12 +49,12 @@ public class LoadBoard {
 
 	/**
 	 * Loads a board with a given name from the included application resources.
-	 * If the board doesn't exist in the application resources, a new blank board is returned.
+	 * If the board doesn't exist in the application resources, null is returned.
 	 * Note that this doesn't load from external files, only from resources compiled into the game.
 	 * @param boardName The board name
-	 * @return A board either loaded from resources, or a blank one if an error occured
+	 * @return A board loaded from resources, or null if the specified board doesn't exist
 	 */
-	public static Board loadBoard(String boardName) {
+	public static Board loadBoard(String boardName, Lobby lobby) {
 		if (boardName == null) {
 			boardName = DEFAULTBOARD;
 		}
@@ -62,11 +63,10 @@ public class LoadBoard {
 		InputStream inputStream = classLoader.getResourceAsStream(BOARDSFOLDER + "/" + boardName + "." + JSON_EXT);
 
 		if (inputStream == null) {
-			// TODO these constants should be defined somewhere
-			return new Board(8, 8);
+			return null;
 		}
 
-		return loadBoard(new InputStreamReader(inputStream));
+		return loadBoard(new InputStreamReader(inputStream), lobby);
 	}
 
 	/**
@@ -75,7 +75,7 @@ public class LoadBoard {
 	 * @param reader The reader supplying JSON
 	 * @return A board loaded from the supplied JSON
 	 */
-	public static Board loadBoard(@NotNull Reader reader) {
+	public static Board loadBoard(@NotNull Reader reader, Lobby lobby) {
 		GsonBuilder simpleBuilder = new GsonBuilder().
 			registerTypeAdapter(SpaceElement.class, new Adapter<SpaceElement>());
 		Gson gson = simpleBuilder.create();
@@ -84,7 +84,7 @@ public class LoadBoard {
 		try (JsonReader jsonReader = gson.newJsonReader(reader)) {
 			BoardTemplate template = gson.fromJson(jsonReader, BoardTemplate.class);
 
-			result = new Board(template.width, template.height);
+			result = new Board(template.width, template.height, lobby);
 			int numCheckpoints = 0;
 			for (SpaceTemplate spaceTemplate : template.spaces) {
 				Space space = result.getSpace(spaceTemplate.x, spaceTemplate.y);
