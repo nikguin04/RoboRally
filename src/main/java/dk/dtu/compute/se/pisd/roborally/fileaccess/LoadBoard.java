@@ -31,6 +31,7 @@ import dk.dtu.compute.se.pisd.roborally.fileaccess.model.SpaceTemplate;
 import dk.dtu.compute.se.pisd.roborally.controller.SpaceElement;
 import dk.dtu.compute.se.pisd.roborally.model.Board;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
 
@@ -45,61 +46,60 @@ public class LoadBoard {
     private static final String DEFAULTBOARD = "defaultboard";
     private static final String JSON_EXT = "json";
 
-    public static Board loadBoard(String boardname) {
-        if (boardname == null) {
-            boardname = DEFAULTBOARD;
-        }
+	/**
+	 * Loads a board with a given name from the included application resources.
+	 * If the board doesn't exist in the application resources, a new blank board is returned.
+	 * Note that this doesn't load from external files, only from resources compiled into the game.
+	 * @param boardName The board name
+	 * @return A board either loaded from resources, or a blank one if an error occured
+	 */
+	public static Board loadBoard(String boardName) {
+		if (boardName == null) {
+			boardName = DEFAULTBOARD;
+		}
 
-        ClassLoader classLoader = LoadBoard.class.getClassLoader();
-        InputStream inputStream = classLoader.getResourceAsStream(BOARDSFOLDER + "/" + boardname + "." + JSON_EXT);
-        if (inputStream == null) {
-            // TODO these constants should be defined somewhere
-            return new Board(8,8);
-        }
+		ClassLoader classLoader = LoadBoard.class.getClassLoader();
+		InputStream inputStream = classLoader.getResourceAsStream(BOARDSFOLDER + "/" + boardName + "." + JSON_EXT);
 
-		// In simple cases, we can create a Gson object with new Gson():
-        GsonBuilder simpleBuilder = new GsonBuilder().
-                registerTypeAdapter(SpaceElement.class, new Adapter<SpaceElement>());
-        Gson gson = simpleBuilder.create();
+		if (inputStream == null) {
+			// TODO these constants should be defined somewhere
+			return new Board(8, 8);
+		}
+
+		return loadBoard(new InputStreamReader(inputStream));
+	}
+
+	/**
+	 * Load a board from a {@link Reader} supplying a JSON stream.
+	 * The {@link Reader} is automatically closed when done, even if an error occurs.
+	 * @param reader The reader supplying JSON
+	 * @return A board loaded from the supplied JSON
+	 */
+	public static Board loadBoard(@NotNull Reader reader) {
+		GsonBuilder simpleBuilder = new GsonBuilder().
+			registerTypeAdapter(SpaceElement.class, new Adapter<SpaceElement>());
+		Gson gson = simpleBuilder.create();
 
 		Board result;
-		// FileReader fileReader = null;
-        JsonReader reader = null;
-		try {
-			// fileReader = new FileReader(filename);
-			reader = gson.newJsonReader(new InputStreamReader(inputStream));
-			BoardTemplate template = gson.fromJson(reader, BoardTemplate.class);
-			reader.close();
+		try (JsonReader jsonReader = gson.newJsonReader(reader)) {
+			BoardTemplate template = gson.fromJson(jsonReader, BoardTemplate.class);
 
 			result = new Board(template.width, template.height);
 			int numCheckpoints = 0;
-			for (SpaceTemplate spaceTemplate: template.spaces) {
-			    Space space = result.getSpace(spaceTemplate.x, spaceTemplate.y);
-			    if (space != null) {
-                    space.setElement(spaceTemplate.element);
-                    space.getWalls().addAll(spaceTemplate.walls);
-					if (spaceTemplate.element instanceof CheckPoint) {
-						numCheckpoints++;
-					}
-                }
-            }
+			for (SpaceTemplate spaceTemplate : template.spaces) {
+				Space space = result.getSpace(spaceTemplate.x, spaceTemplate.y);
+				if (space == null) continue;
+				space.setElement(spaceTemplate.element);
+				space.getWalls().addAll(spaceTemplate.walls);
+				if (spaceTemplate.element instanceof CheckPoint) {
+					numCheckpoints++;
+				}
+			}
 			result.setNumCheckpoints(numCheckpoints);
 			return result;
-		} catch (IOException e1) {
-            if (reader != null) {
-                try {
-                    reader.close();
-                    inputStream = null;
-                } catch (IOException e2) {}
-            }
-            if (inputStream != null) {
-				try {
-					inputStream.close();
-				} catch (IOException e2) {}
-			}
-		}
+		} catch (IOException ignored) {}
 		return null;
-    }
+	}
 
     public static void saveBoard(Board board, String name) {
         BoardTemplate template = new BoardTemplate();
