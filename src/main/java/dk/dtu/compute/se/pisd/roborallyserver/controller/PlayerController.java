@@ -40,6 +40,9 @@ public class PlayerController {
 	@PostMapping("/newplayer")
 	public ResponseEntity<ServerPlayer> newPlayer(@RequestBody NewPlayerBody npb) {
         Lobby lobby = lobbyRepository.findLobbyById(npb.lobby_id);
+        if (lobby.isGame_started()) {
+            return ResponseEntity.badRequest().body(null);
+        }
         ServerPlayer player = new ServerPlayer((Long)null, npb.name, lobby);
         playerRepository.saveAndFlush(player);
 		return ResponseEntity.ok(player);
