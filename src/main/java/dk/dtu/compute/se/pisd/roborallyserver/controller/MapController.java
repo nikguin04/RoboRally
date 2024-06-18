@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/maps")
@@ -21,10 +22,19 @@ public class MapController {
 		this.lobbyRepository = lobbyRepository;
 	}
 
-	@GetMapping(value = "")
+	@GetMapping()
 	public ResponseEntity<List<Map>> findAllMaps() {
 		List<Map> lobbyList = mapRepository.findAll();
 		return ResponseEntity.ok(lobbyList);
+	}
+
+	@GetMapping("/get")
+	public ResponseEntity<Map> getMap(@RequestParam("name") String mapName) {
+		Optional<Map> map = mapRepository.findById(mapName);
+		if (map.isEmpty()) {
+			return ResponseEntity.notFound().build();
+		}
+		return ResponseEntity.ok(map.get());
 	}
 
 	@PostMapping("/newmap")
