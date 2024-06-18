@@ -62,15 +62,15 @@ public class MovesPlayedController {
 	}
 	@GetMapping("/getPlayersMoves")
 	public ResponseEntity<MovesPlayed[]> isFinishedProgramming(@RequestParam(required = true, value="lobbyid") long lobbyid, @RequestParam(required = true, value="round") long round ){
-
-		Lobby lobby = lobbyRepository.findLobbyById(lobbyid);
 		int playerCount = playerRepository.countPlayersInLobby(lobbyid);
-		// TO DO: Validate that all players have finished programming
 
 		MovesPlayed[] movesplayed = movesPlayedRepository.getMovesPlayedInLobbyByRound(lobbyid, round);
 
-//
+		if (playerCount == movesplayed.length) {
 			return ResponseEntity.ok(movesplayed);
+		} else {
+			return ResponseEntity.badRequest().build();
+		}
 
 	}
 
