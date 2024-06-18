@@ -38,7 +38,7 @@ public class LobbyController {
 
     @GetMapping("/players")
     public ResponseEntity<List<ServerPlayer>> getPlayersInLobby(@RequestParam(required=true,value="id") Long id){
-        List<ServerPlayer> playerList = lobbyRepository.findLobbyById(id).getPlayers();
+        List<ServerPlayer> playerList = playerRepository.getPlayersByLobby_Id(id);
         return ResponseEntity.ok(playerList);
     }
 
@@ -57,7 +57,7 @@ public class LobbyController {
 
     @GetMapping("/startgame")
     public ResponseEntity<String> startGameForLobby(@RequestParam(required=true,value="id") Long id) {
-        Lobby lobby = lobbyRepository.findLobbyById(id);
+        Lobby lobby = lobbyRepository.getLobbyById(id);
         if (!lobby.isGameStarted()) {
             lobby.setGameStarted(true);
             lobbyRepository.saveAndFlush(lobby);
@@ -69,7 +69,7 @@ public class LobbyController {
 
     @GetMapping("/getlobby")
     public ResponseEntity<Lobby> getMethodName(@RequestParam(required=true,value="id") Long id) {
-       Lobby lobby = lobbyRepository.findLobbyById(id);
+       Lobby lobby = lobbyRepository.getLobbyById(id);
        return ResponseEntity.ok(lobby);
     }
 
