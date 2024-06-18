@@ -12,14 +12,14 @@ public class CheckPointTest {
 	@Test
 	public void testDoAction() {
 		Board board = new Board(8, 8);
-		GameController gameController = new GameController(board);
+		GameController gameController = new GameController(board, null, null, null);
 		board.getSpace(3, 3).setElement(new CheckPoint(1));
 		board.getSpace(5,5).setElement(new CheckPoint(2));
 		board.getSpace(4,4).setElement(new CheckPoint(3));
 
 
 
-		Player player1 = new Player(board, "red", "Test player1");
+		Player player1 = new Player(board, "red", "Test player1", 0l);
 		board.addPlayer(player1);
 		player1.setSpace(board.getSpace(2,2));
 		assertEquals(0, player1.getCheckPointCounter());

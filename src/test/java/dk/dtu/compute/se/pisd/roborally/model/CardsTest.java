@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.Test;
+
 import dk.dtu.compute.se.pisd.roborally.controller.GameController;
 
 public class CardsTest {
@@ -11,8 +12,8 @@ public class CardsTest {
     public void testTurnRight() {
 
         Board board = new Board(8, 8);
-		GameController gameController = new GameController(board);
-        Player player = new Player(board, "red", "Test player1");
+		GameController gameController = new GameController(board, null, null, null);
+  		Player player = new Player(board, "red", "Test Player", 0l);
 
         Space initialSpace = new Space(board, 0, 0);
         player.setSpace(initialSpace);
@@ -32,8 +33,8 @@ public class CardsTest {
     public void testMoveForward2() {
 
         Board board = new Board(8, 8);
-		GameController gameController = new GameController(board);
-        Player player = new Player(board, "red", "Test player1");
+		GameController gameController = new GameController(board, null, null, null);
+		Player player = new Player(board, "red", "Test Player", 0l);
 
         Space initialSpace = new Space(board, 0, 0);
         player.setSpace(initialSpace);
@@ -54,8 +55,8 @@ public class CardsTest {
     public void testMoveForward3() {
 
         Board board = new Board(8, 8);
-		GameController gameController = new GameController(board);
-        Player player = new Player(board, "red", "Test player1");
+		GameController gameController = new GameController(board, null, null, null);
+		Player player = new Player(board, "red", "Test Player", 0l);
 
         Space initialSpace = new Space(board, 0, 0);
         player.setSpace(initialSpace);
@@ -76,8 +77,8 @@ public class CardsTest {
     public void testMoveForward1() {
 
         Board board = new Board(8, 8);
-        GameController gameController = new GameController(board);
-        Player player = new Player(board, "red", "Test player1");
+        GameController gameController = new GameController(board, null, null, null);
+		Player player = new Player(board, "red", "Test Player", 0l);
 
         Space initialSpace = new Space(board, 0, 0);
 
@@ -98,8 +99,8 @@ public class CardsTest {
     public void testTurnLeft() {
 
         Board board = new Board(8, 8);
-        GameController gameController = new GameController(board);
-        Player player = new Player(board, "red", "Test player1");
+        GameController gameController = new GameController(board, null, null, null);
+		Player player = new Player(board, "red", "Test Player", 0l);
 
         Space initialSpace = new Space(board, 0, 0);
         player.setSpace(initialSpace);
@@ -119,8 +120,8 @@ public class CardsTest {
     public void testUTurn() {
 
         Board board = new Board(8, 8);
-        GameController gameController = new GameController(board);
-        Player player = new Player(board, "red", "Test player1");
+        GameController gameController = new GameController(board, null, null, null);
+		Player player = new Player(board, "red", "Test Player", 0l);
 
         Space initialSpace = new Space(board, 0, 0);
         player.setSpace(initialSpace);
@@ -141,8 +142,8 @@ public class CardsTest {
     public void testBackUp() {
 
         Board board = new Board(8, 8);
-        GameController gameController = new GameController(board);
-        Player player = new Player(board, "red", "Test player1");
+        GameController gameController = new GameController(board, null, null, null);
+		Player player = new Player(board, "red", "Test Player", 0l);
 
         Space initialSpace = new Space(board, 0, 0);
         player.setSpace(initialSpace);

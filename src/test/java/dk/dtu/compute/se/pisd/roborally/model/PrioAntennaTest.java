@@ -1,10 +1,10 @@
 package dk.dtu.compute.se.pisd.roborally.model;
-import dk.dtu.compute.se.pisd.roborally.controller.GameController;
-import dk.dtu.compute.se.pisd.roborally.controller.PrioAntenna;
-import dk.dtu.compute.se.pisd.roborally.model.Board;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+
+import dk.dtu.compute.se.pisd.roborally.controller.GameController;
+import dk.dtu.compute.se.pisd.roborally.controller.PrioAntenna;
 
 public class PrioAntennaTest {
 
@@ -12,7 +12,7 @@ public class PrioAntennaTest {
 	@Test
 	public void testManhattanDistance() {
 		Board board = new Board(8, 8);
-		GameController gameController = new GameController(board);
+		GameController gameController = new GameController(board, null, null, null);
 		PrioAntenna prioAntenna = new PrioAntenna(5, 5);
 		board.setPrioAntenna(prioAntenna);
         assertEquals(2, prioAntenna.getManhattanDistance(1, 1, 2, 2));
@@ -24,13 +24,13 @@ public class PrioAntennaTest {
 	@Test
 	public void testPrioTieBreak() {
 		Board board = new Board(8, 8);
-		GameController gameController = new GameController(board);
+		GameController gameController = new GameController(board, null, null, null);
 		PrioAntenna prioAntenna = new PrioAntenna(5, 5);
 		board.setPrioAntenna(prioAntenna);
-		Player player1 = new Player(board, "red", "Test Player1");
-		Player player2 = new Player(board, "blue", "Test Player2");
-		Player player3 = new Player(board, "yellow", "Test Player3");
-		Player player4 = new Player(board, "green", "Test Player4");
+		Player player1 = new Player(board, "red", "Test Player1", 0l);
+		Player player2 = new Player(board, "blue", "Test Player2", 0l);
+		Player player3 = new Player(board, "yellow", "Test Player3", 0l);
+		Player player4 = new Player(board, "green", "Test Player4", 0l);
 		board.addPlayer(player1);
 		board.addPlayer(player2);
 		board.addPlayer(player3);
@@ -52,13 +52,13 @@ public class PrioAntennaTest {
 	@Test
 	public void testGetPrioPlayer() {
 		Board board = new Board(8, 8);
-		GameController gameController = new GameController(board);
+		GameController gameController = new GameController(board, null, null, null);
 		PrioAntenna prioAntenna = new PrioAntenna(5, 5);
 		board.setPrioAntenna(prioAntenna);
-		Player player1 = new Player(board, "red", "Test Player1");
-		Player player2 = new Player(board, "blue", "Test Player2");
-		Player player3 = new Player(board, "yellow", "Test Player3");
-		Player player4 = new Player(board, "green", "Test Player4");
+		Player player1 = new Player(board, "red", "Test Player1", 0l);
+		Player player2 = new Player(board, "blue", "Test Player2", 0l);
+		Player player3 = new Player(board, "yellow", "Test Player3", 0l);
+		Player player4 = new Player(board, "green", "Test Player4", 0l);
 		board.addPlayer(player1);
 		board.addPlayer(player2);
 		board.addPlayer(player3);
@@ -78,11 +78,11 @@ public class PrioAntennaTest {
 	@Test
 	public void testGetPrioPlayerList() {
 		Board board = new Board(8, 8);
-		GameController gameController = new GameController(board);
+		GameController gameController = new GameController(board, null, null, null);
 		PrioAntenna prioAntenna = new PrioAntenna(5, 5);
 		board.setPrioAntenna(prioAntenna);
-		Player player1 = new Player(board, "red", "Test Player1");
-		Player player2 = new Player(board, "blue", "Test Player2");
+		Player player1 = new Player(board, "red", "Test Player1", 0l);
+		Player player2 = new Player(board, "blue", "Test Player2", 0l);
 		board.addPlayer(player1);
 		board.addPlayer(player2);
 		player1.setSpace(board.getSpace(3, 5));
@@ -91,8 +91,8 @@ public class PrioAntennaTest {
 		assertEquals(player2,prioAntenna.getPrioPlayerList(board.getPlayers()).get(0));
 		assertEquals(player1,prioAntenna.getPrioPlayerList(board.getPlayers()).get(1));
 
-		Player player3 = new Player(board, "yellow", "Test Player3");
-		Player player4 = new Player(board, "green", "Test Player4");
+		Player player3 = new Player(board, "yellow", "Test Player3", 0l);
+		Player player4 = new Player(board, "green", "Test Player4", 0l);
 		board.addPlayer(player3);
 		board.addPlayer(player4);
 		player3.setSpace(board.getSpace(7, 5));
@@ -108,13 +108,13 @@ public class PrioAntennaTest {
 	@Test
 	public void testUpdatePlayerPrio() {
 		Board board = new Board(8, 8);
-		GameController gameController = new GameController(board);
+		GameController gameController = new GameController(board, null, null, null);
 		PrioAntenna prioAntenna = new PrioAntenna(5, 5);
 		board.setPrioAntenna(prioAntenna);
-		Player player1 = new Player(board, "red", "Test Player1");
-		Player player2 = new Player(board, "blue", "Test Player2");
-		Player player3 = new Player(board, "yellow", "Test Player3");
-		Player player4 = new Player(board, "green", "Test Player4");
+		Player player1 = new Player(board, "red", "Test Player1", 0l);
+		Player player2 = new Player(board, "blue", "Test Player2", 0l);
+		Player player3 = new Player(board, "yellow", "Test Player3", 0l);
+		Player player4 = new Player(board, "green", "Test Player4", 0l);
 		board.addPlayer(player1);
 		board.addPlayer(player2);
 		board.addPlayer(player3);
