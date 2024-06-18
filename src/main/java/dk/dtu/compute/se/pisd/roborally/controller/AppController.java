@@ -56,6 +56,7 @@ import dk.dtu.compute.se.pisd.roborally.view.LoadDialog;
 import dk.dtu.compute.se.pisd.roborally.view.SaveDialog;
 import dk.dtu.compute.se.pisd.roborallyserver.model.Lobby;
 import dk.dtu.compute.se.pisd.roborallyserver.model.ServerPlayer;
+import dk.dtu.compute.se.pisd.roborallyserver.repository.PlayerRepository;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -116,8 +117,6 @@ public class AppController implements Observer {
                 }
             }
 
-            // XXX the board should eventually be created programmatically or loaded from a file
-
             Board board = new Board(8,8, null);
 
 			// TODO: This is very temporary for debugging, delete this when proper boards are loaded
@@ -173,6 +172,8 @@ public class AppController implements Observer {
 	public void newLobby() {
 		if (playerName == null) changeName();
 
+        
+
 		List<String> files = new ArrayList<>();
 		try {
 			Enumeration<URL> resources = Thread.currentThread().getContextClassLoader().getResources("boards"); // replace with your directory path
@@ -206,7 +207,11 @@ public class AppController implements Observer {
 
 		Lobby lobby = LobbyRest.requestNewLobby(map);
 
-		ServerPlayer splayer = PlayerRest.PushPlayerToLobby(lobby.getId(), playerName);
+        if (sPlayer.getLobby() != null) {
+            PlayerRest.removePlayerFromLobby(sPlayer.getId(), sPlayer.getLobbyId());
+        }
+        
+        ServerPlayer splayer = PlayerRest.PushPlayerToLobby(lobby.getId(), playerName);
 
 		roboRally.createLobbyView(this, lobby, splayer);
 	}
