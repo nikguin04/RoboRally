@@ -68,6 +68,10 @@ public class RoboRally extends Application {
     public void start(Stage primaryStage) {
         stage = primaryStage;
 
+        // Set icon for game
+        ClassLoader loader = RoboRally.class.getClassLoader();
+        primaryStage.getIcons().add(new Image(loader.getResourceAsStream("assets/logo.jpg")));
+
         AppController appController = new AppController(this);
 
         // Create the primary scene with a menu bar and a pane for
@@ -77,11 +81,11 @@ public class RoboRally extends Application {
         boardRoot = new BorderPane();
         VBox vbox = new VBox(menuBar, boardRoot);
         vbox.setMinWidth(MIN_APP_WIDTH);
-        
+
 
         boardRoot.setCenter(startMenuView(appController));
 
-        Scene primaryScene = new Scene(vbox);        
+        Scene primaryScene = new Scene(vbox);
         stage.setScene(primaryScene);
         stage.setTitle("RoboRally");
         stage.setOnCloseRequest(
@@ -141,7 +145,7 @@ public class RoboRally extends Application {
         return vbox;
     }
 
-    
+
     @Override
     public void stop() throws Exception {
         super.stop();
