@@ -20,7 +20,7 @@ public class LobbyRest {
 	public static final RestTemplate restTemplate = new RestTemplate();
 
 	public static Lobby requestNewLobby(dk.dtu.compute.se.pisd.roborallyserver.model.Map map) {
-		Lobby lobby = new Lobby(null, 0L, map, false);
+		Lobby lobby = new Lobby(null, 0L, map, false, null);
 		HttpEntity<Lobby> request = new HttpEntity<>(lobby);
 		ResponseEntity<Lobby> response = restTemplate
 			.postForEntity(SERVER_HTTPURL + "lobbies/newlobby", request, Lobby.class);

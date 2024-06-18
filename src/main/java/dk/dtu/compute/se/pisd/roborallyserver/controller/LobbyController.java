@@ -38,8 +38,8 @@ public class LobbyController {
 
     @GetMapping("/players")
     public ResponseEntity<List<ServerPlayer>> getPlayersInLobby(@RequestParam(required=true,value="id") Long id){
-        List<ServerPlayer> playerList = playerRepository.findByLobbyID(id);
-        return ResponseEntity.ok(playerList );
+        List<ServerPlayer> playerList = lobbyRepository.findLobbyById(id).getPlayers();
+        return ResponseEntity.ok(playerList);
     }
 
     // TODO: Make function to return only joinable lobbies for client

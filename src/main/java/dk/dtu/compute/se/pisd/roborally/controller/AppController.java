@@ -265,7 +265,7 @@ public class AppController implements Observer {
 			String result = textField.getText();
 			if (result == null || result.isEmpty()) return;
 			try {
-				Lobby lobby = new Lobby(Long.valueOf(textField.getText()), 0L, null, false); // TODO: TEMP VARIABLE, add actual lobby fetching
+				Lobby lobby = new Lobby(Long.valueOf(textField.getText()), 0L, null, false, null); // TODO: TEMP VARIABLE, add actual lobby fetching
 				ServerPlayer splayer = PlayerRest.PushPlayerToLobby(lobby.getId(), playerName);
 				roboRally.createLobbyView(this, lobby, splayer);
 			} catch (HttpServerErrorException e) {

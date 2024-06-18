@@ -58,8 +58,8 @@ public class MovesPlayedController {
 		}
 
 		return ResponseEntity.ok(lobby); // lobbyRepository.save(lobby)
-
 	}
+
 	@GetMapping("/getPlayersMoves")
 	public ResponseEntity<MovesPlayed[]> isFinishedProgramming(@RequestParam(required = true, value="lobbyid") long lobbyid, @RequestParam(required = true, value="round") long round ){
 
@@ -69,9 +69,7 @@ public class MovesPlayedController {
 
 		MovesPlayed[] movesplayed = movesPlayedRepository.getMovesPlayedInLobbyByRound(lobbyid, round);
 
-//
-			return ResponseEntity.ok(movesplayed);
-
+		return ResponseEntity.ok(movesplayed);
 	}
 
 	@GetMapping("/lobbyroundfinished")
@@ -86,7 +84,6 @@ public class MovesPlayedController {
 			playersDone.add(move.getPlayer());
 		}
 		return ResponseEntity.ok(playersDone);
-
 	}
 
 	public static record NewMovesPlayBody (Long rounds, String move1, String move2, String move3, String move4, String move5, Long lobby_id, long player_id) {};

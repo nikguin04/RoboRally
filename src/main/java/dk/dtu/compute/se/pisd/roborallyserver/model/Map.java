@@ -9,12 +9,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "maps")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Embeddable
 public class Map implements Serializable {
 
 	@Id
