@@ -26,6 +26,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import dk.dtu.compute.se.pisd.roborally.controller.CheckPoint;
+import dk.dtu.compute.se.pisd.roborally.controller.PrioAntenna;
 import dk.dtu.compute.se.pisd.roborally.fileaccess.model.BoardTemplate;
 import dk.dtu.compute.se.pisd.roborally.fileaccess.model.SpaceTemplate;
 import dk.dtu.compute.se.pisd.roborally.controller.SpaceElement;
@@ -93,6 +94,8 @@ public class LoadBoard {
 				space.getWalls().addAll(spaceTemplate.walls);
 				if (spaceTemplate.element instanceof CheckPoint) {
 					numCheckpoints++;
+				} else if (spaceTemplate.element instanceof PrioAntenna antenna) {
+					result.setPrioAntenna(antenna, space);
 				}
 			}
 			result.setNumCheckpoints(numCheckpoints);
