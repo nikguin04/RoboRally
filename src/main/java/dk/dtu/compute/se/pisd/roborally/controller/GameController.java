@@ -195,6 +195,8 @@ public class GameController {
 			Command command = card.command;
 			if (command == Command.OPTION_LEFT_RIGHT) {
 				board.setPhase(Phase.PLAYER_INTERACTION);
+                // Start awaiting result
+
 				return;
 			}
 			executeCommand(currentPlayer, command);

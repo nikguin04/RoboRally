@@ -173,7 +173,7 @@ public class PlayerView extends Tab implements ViewObserver {
 			cardsPane.setBackground(background);
 		}
 
-		if (player.board.getPhase() != Phase.PLAYER_INTERACTION) {
+		if (player.board.getPhase() != Phase.PLAYER_INTERACTION) { // Check that we are the serverplayer who needs to move
 			if (!programPane.getChildren().contains(buttonPanel)) {
 				programPane.getChildren().remove(playerInteractionPanel);
 				programPane.add(buttonPanel, Player.NO_REGISTERS, 0);
