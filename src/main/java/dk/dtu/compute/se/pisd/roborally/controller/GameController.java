@@ -147,8 +147,8 @@ public class GameController {
         makeProgramFieldsVisible(0);
         board.setPhase(Phase.ACTIVATION);
 		// When entering activation phase, calculate priority of players.
-		board.getPrioAntenna().updatePlayerPrio();
-        board.setCurrentPlayer(board.getPrioPlayer(0));
+		board.getPriorityAntenna().updatePlayerPriority();
+        board.setCurrentPlayer(board.getPriorityPlayer(0));
         board.setStep(0);
     }
 
@@ -227,9 +227,9 @@ public class GameController {
 			}
 		}
 
-		int nextPlayerNumber = board.getPrioPlayerNumber(currentPlayer) + 1;
+		int nextPlayerNumber = board.getPriorityPlayerNumber(currentPlayer) + 1;
 		if (nextPlayerNumber < board.getPlayersNumber()) {
-			board.setCurrentPlayer(board.getPrioPlayer(nextPlayerNumber));
+			board.setCurrentPlayer(board.getPriorityPlayer(nextPlayerNumber));
 		} else { // else = we have reached the final step
 			// For some reason, we can't just get a list of players???
 			for (int i = 0; i < board.getPlayersNumber(); i++) {
@@ -245,11 +245,11 @@ public class GameController {
 			}
 			step++;
 			// Each time all players have made a move, recalculate priority
-			board.getPrioAntenna().updatePlayerPrio();
+			board.getPriorityAntenna().updatePlayerPriority();
 			if (step < Player.NO_REGISTERS) {
 				makeProgramFieldsVisible(step);
 				board.setStep(step);
-				board.setCurrentPlayer(board.getPrioPlayer(0));
+				board.setCurrentPlayer(board.getPriorityPlayer(0));
 			} else {
 				StartProgrammingPhase(true);
 			}

@@ -14,7 +14,7 @@ public class StartTile extends SpaceElement {
 	/**
 	 * Attaches the StartTile to a board
 	 * The {@link Board#StartTile} element is not set automatically and needs to be set in the {@link Board} class
-	 * @param board The board to attach this prio antenna to
+	 * @param board The board to attach this priority antenna to
 	 */
 	public void attachBoard(Board board) {
 		board.getSpace(x, y).setElement(this);
@@ -31,7 +31,7 @@ public class StartTile extends SpaceElement {
 		this.y = y;
 	}
 	/**
-	 * Create a new prio antenna, with a set coordinate x,y given as a string
+	 * Create a new priority antenna, with a set coordinate x,y given as a string
 	 * @param coord Stringified coordinates: "x,y"
 	 */
 	public StartTile(String coord) {
