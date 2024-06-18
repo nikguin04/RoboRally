@@ -2,6 +2,7 @@ package dk.dtu.compute.se.pisd.roborally.controller;
 
 import dk.dtu.compute.se.pisd.roborally.model.Board;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
+import dk.dtu.compute.se.pisd.roborally.model.Player.PlayerStatus;
 import dk.dtu.compute.se.pisd.roborally.net.LobbyRest;
 import dk.dtu.compute.se.pisd.roborallyserver.controller.MovesPlayedController;
 import dk.dtu.compute.se.pisd.roborallyserver.model.Lobby;
@@ -65,6 +66,7 @@ private GameController gameController;
 				for (MovesPlayed moves: playersMovesToClient) {
 					Player p = board.getPlayerByNetworkId(moves.getPlayerId());
 					p.parseServerMovesToProgram(moves);
+					p.playerStatus.set(PlayerStatus.IDLE);
 				}
 				gameController.finishProgrammingPhase();
 				// Start the autimatic step scheduler

@@ -22,6 +22,7 @@
 package dk.dtu.compute.se.pisd.roborally.controller;
 
 import dk.dtu.compute.se.pisd.roborally.model.*;
+import dk.dtu.compute.se.pisd.roborally.model.Player.PlayerStatus;
 import dk.dtu.compute.se.pisd.roborallyserver.model.Lobby;
 import dk.dtu.compute.se.pisd.roborallyserver.model.ServerPlayer;
 
@@ -228,10 +229,12 @@ public class GameController {
 		int nextPlayerNumber = board.getPrioPlayerNumber(currentPlayer) + 1;
 		if (nextPlayerNumber < board.getPlayersNumber()) {
 			board.setCurrentPlayer(board.getPrioPlayer(nextPlayerNumber));
-		} else {
+		} else { // else = we have reached the final step
 			// For some reason, we can't just get a list of players???
 			for (int i = 0; i < board.getPlayersNumber(); i++) {
-				Space space = board.getPlayer(i).getSpace();
+				Player p = board.getPlayer(i);
+                Space space = p.getSpace();
+                p.playerStatus.set(PlayerStatus.WAITING);
 				SpaceElement element = space.getElement();
 				if (element == null) continue;
 				// TODO We should probably handle activation order
@@ -310,10 +313,11 @@ public class GameController {
      */
     public void StartProgrammingPhase(Boolean RandomizeCards) {
         board.setPhase(Phase.PROGRAMMING);
-        board.setCurrentPlayer(board.getPlayer(0));
+        board.setCurrentPlayer(board.getPlayerByNetworkId(splayer.getId()));
         board.setStep(0);
         for (int i = 0; i < board.getPlayersNumber(); i++) {
             Player player = board.getPlayer(i);
+            player.playerStatus.set(PlayerStatus.WAITING);
             if (player == null) continue;
             for (int j = 0; j < Player.NO_REGISTERS; j++) {
                 CommandCardField field = player.getProgramField(j);
