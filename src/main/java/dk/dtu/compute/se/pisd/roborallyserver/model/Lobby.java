@@ -30,8 +30,8 @@ public class Lobby {
 
 	@ManyToOne
 	@JoinColumn(nullable = false)
-    private Map mapName;
+	private Map map;
 
-    private boolean game_started;
+	private boolean gameStarted;
 
 }

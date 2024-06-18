@@ -58,8 +58,8 @@ public class LobbyController {
     @GetMapping("/startgame")
     public ResponseEntity<String> startGameForLobby(@RequestParam(required=true,value="id") Long id) {
         Lobby lobby = lobbyRepository.findLobbyById(id);
-        if (!lobby.isGame_started()) {
-            lobby.setGame_started(true);
+        if (!lobby.isGameStarted()) {
+            lobby.setGameStarted(true);
             lobbyRepository.saveAndFlush(lobby);
             return ResponseEntity.ok("");
         } else {

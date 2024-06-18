@@ -84,7 +84,7 @@ public class BoardView extends VBox implements ViewObserver {
         statusLabel = new Label("<no status>");
 
         infoLabel = new Label("Hello from right side");
-        mapLabel = new Label("Current map: " + gameController.lobby.getMapName());
+        mapLabel = new Label("Current map: " + gameController.lobby.getMap().getMapName());
         playerStatusLabels = new ArrayList<Label>();
         for (int i = 0; i < gameController.players.length; i++) {
             ServerPlayer p = gameController.players[i];

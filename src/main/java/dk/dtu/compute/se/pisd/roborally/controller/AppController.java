@@ -277,8 +277,8 @@ public class AppController implements Observer {
 	}
 
 	public void initGameFromLobbyStart(Lobby lobby, ServerPlayer[] players, ServerPlayer splayer) {
-		Map map = lobby.getMapName();
-		Board board = LoadBoard.loadBoard(new StringReader(map.getMapjson()), lobby);
+		Map map = lobby.getMap();
+		Board board = LoadBoard.loadBoard(new StringReader(map.getJson()), lobby);
 
 		int playerCount = players.length;
 

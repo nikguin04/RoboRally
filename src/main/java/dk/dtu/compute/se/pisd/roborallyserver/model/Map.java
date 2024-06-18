@@ -21,8 +21,8 @@ public class Map implements Serializable {
 	private String mapName;
 
 	@Lob
-	private String mapjson;
+	private String json;
 
-	private Long numberofplayers;
+	private Long playerCount;
 
 }
