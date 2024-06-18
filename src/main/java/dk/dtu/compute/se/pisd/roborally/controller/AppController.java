@@ -265,7 +265,7 @@ public class AppController implements Observer {
 			String result = textField.getText();
 			if (result == null || result.isEmpty()) return;
 			try {
-				Lobby lobby = new Lobby(Long.valueOf(textField.getText()), 0L, null, false); // TODO: TEMP VARIABLE, add actual lobby fetching
+				Lobby lobby = new Lobby(Long.valueOf(textField.getText()), 0L, null, false, null); // TODO: TEMP VARIABLE, add actual lobby fetching
 				ServerPlayer splayer = PlayerRest.PushPlayerToLobby(lobby.getId(), playerName);
 				roboRally.createLobbyView(this, lobby, splayer);
 			} catch (HttpServerErrorException e) {
@@ -277,8 +277,8 @@ public class AppController implements Observer {
 	}
 
 	public void initGameFromLobbyStart(Lobby lobby, ServerPlayer[] players, ServerPlayer splayer) {
-		Map map = lobby.getMapName();
-		Board board = LoadBoard.loadBoard(new StringReader(map.getMapjson()), lobby);
+		Map map = lobby.getMap();
+		Board board = LoadBoard.loadBoard(new StringReader(map.getJson()), lobby);
 
 		int playerCount = players.length;
 

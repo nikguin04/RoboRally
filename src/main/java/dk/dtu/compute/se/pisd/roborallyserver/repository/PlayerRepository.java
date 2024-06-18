@@ -1,23 +1,17 @@
 package dk.dtu.compute.se.pisd.roborallyserver.repository;
 
-import java.util.List;
-
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 
-
-import dk.dtu.compute.se.pisd.roborallyserver.model.Lobby;
 import dk.dtu.compute.se.pisd.roborallyserver.model.ServerPlayer;
 
+import java.util.List;
+
 public interface PlayerRepository extends JpaRepository<ServerPlayer, Long> {
-	public ServerPlayer findPlayerById(long id);
 
+	ServerPlayer getPlayerById(Long id);
 
-	//https://docs.spring.io/spring-data/jpa/reference/jpa/query-methods.html
-	@Query("select p from ServerPlayer p where p.lobby.id = ?1")
-	public List<ServerPlayer> findByLobbyID(Long id);
+	List<ServerPlayer> getPlayersByLobby_Id(Long id);
 
+	int countPlayersByLobby_Id(Long lobbyId);
 
-	@Query("select count(id) from ServerPlayer where lobby.id = ?1")
-	public int countPlayersInLobby(Long lobbyid);
 }

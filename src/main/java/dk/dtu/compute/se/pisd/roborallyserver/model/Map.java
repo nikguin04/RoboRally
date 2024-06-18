@@ -9,20 +9,18 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "maps")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Embeddable
 public class Map implements Serializable {
 
 	@Id
 	private String mapName;
 
 	@Lob
-	private String mapjson;
+	private String json;
 
-	private Long numberofplayers;
+	private Long playerCount;
 
 }
