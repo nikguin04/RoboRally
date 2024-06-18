@@ -117,8 +117,8 @@ public class Board extends Subject {
 	 * @author Anders Greve Sørensen, s235093@dtu.dk.
 	 * @param prioAntenna the priority antenna to be attached to this board.
 	 */
-	public void setPrioAntenna(PrioAntenna prioAntenna) {
-        prioAntenna.attachBoard(this);
+	public void setPrioAntenna(PrioAntenna prioAntenna, Space space) {
+		prioAntenna.attachBoard(this, space);
 		this.prioAntenna = prioAntenna;
 	}
 

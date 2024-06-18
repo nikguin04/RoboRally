@@ -6,16 +6,17 @@ import java.util.List;
 import dk.dtu.compute.se.pisd.roborally.model.Board;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
-import static dk.dtu.compute.se.pisd.roborally.utils.StringUtils.intarrFromCommaStr;
+import lombok.NoArgsConstructor;
 
 /**
  * @author Anders Greve Sørensen, s235093@dtu.dk
  */
+@NoArgsConstructor
 public class PrioAntenna extends SpaceElement {
 
 	// All these variables are only initialised when a board uses a priority antenna.
-	public final int x;
-	public final int y;
+	private int x;
+	private int y;
 
 	private Board board;
 
@@ -24,43 +25,11 @@ public class PrioAntenna extends SpaceElement {
 	 * The {@link Board#prioAntenna} element is not set automatically and needs to be set in the {@link Board} class
 	 * @param board The board to attach this prio antenna to
 	 */
-	public void attachBoard(Board board) {
-		board.getSpace(x, y).setElement(this);
+	public void attachBoard(Board board, Space space) {
+		this.x = space.x;
+		this.y = space.y;
 		this.board = board;
 	}
-
-	/**
-	 * Create a new prio antenna, with set coordinates x,y
-	 * @param x Coordinate x
-	 * @param y Coordinate y
-	 */
-	public PrioAntenna(int x, int y) {
-		this.x = x;
-		this.y = y;
-	}
-
-	/**
-	 * Create a new prio antenna, with a set coordinate x,y given as a string
-	 * @param coord Stringified coordinates: "x,y"
-	 */
-	public PrioAntenna(String coord) {
-		int[] coordi = intarrFromCommaStr(coord);
-		this.x = coordi[0];
-		this.y = coordi[1];
-	}
-
-	/**
-	 * Creates an instance of the priority antenna at a given position, on a given board.
-	 * @author Anders Greve Sørensen, s235093@dtu.dk.
-	 * @param x The x coordinate of the priority antenna.
-	 * @param y The y coordinate of the priority antenna.
-	 * @param board The board that the priority antenna is associated with.
-	 */
-	/*public PrioAntenna(int x, int y, Board board) {
-		this.x = x;
-		this.y = y;
-		this.board = board;
-	}*/
 
 	/**
 	 * Updates the associated boards player priority list.

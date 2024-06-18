@@ -13,8 +13,8 @@ public class PrioAntennaTest {
 	public void testManhattanDistance() {
 		Board board = new Board(8, 8);
 		GameController gameController = new GameController(board, null, null, null);
-		PrioAntenna prioAntenna = new PrioAntenna(5, 5);
-		board.setPrioAntenna(prioAntenna);
+		PrioAntenna prioAntenna = new PrioAntenna();
+		board.setPrioAntenna(prioAntenna, board.getSpace(5, 5));
         assertEquals(2, prioAntenna.getManhattanDistance(1, 1, 2, 2));
 		assertEquals(2, prioAntenna.getManhattanDistance(-1, -1, -2, -2));
 		assertEquals(6, prioAntenna.getManhattanDistance(-1, -1, 2, 2));

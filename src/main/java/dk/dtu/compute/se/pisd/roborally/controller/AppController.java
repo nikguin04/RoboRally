@@ -126,8 +126,8 @@ public class AppController implements Observer {
 			board.getSpace(4,5).setElement(new CheckPoint(2));
 			board.setNumCheckpoints(2);
 			// Add the priority antenna to the board
-			PrioAntenna prioAntenna = new PrioAntenna(5,5);
-            board.setPrioAntenna(prioAntenna);
+			PrioAntenna prioAntenna = new PrioAntenna();
+            board.setPrioAntenna(prioAntenna, board.getSpace(5, 5));
 
             // Set the startTile on the board
             for(int i = 0; i < PLAYER_NUMBER_OPTIONS.get(0); i++){ //TODO Make this so that the number of players is the number of players in the lobbey
