@@ -26,6 +26,7 @@ import dk.dtu.compute.se.pisd.roborally.model.Player.PlayerStatus;
 import dk.dtu.compute.se.pisd.roborallyserver.model.Lobby;
 import dk.dtu.compute.se.pisd.roborallyserver.model.ServerPlayer;
 
+import javafx.application.Platform;
 import javafx.util.Duration;
 import org.jetbrains.annotations.NotNull;
 
@@ -234,7 +235,9 @@ public class GameController {
 			for (int i = 0; i < board.getPlayersNumber(); i++) {
 				Player p = board.getPlayer(i);
                 Space space = p.getSpace();
-                p.playerStatus.set(PlayerStatus.WAITING);
+				Platform.runLater( () -> {
+                	p.playerStatus.set(PlayerStatus.WAITING);
+				});
 				SpaceElement element = space.getElement();
 				if (element == null) continue;
 				// TODO We should probably handle activation order
