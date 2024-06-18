@@ -70,7 +70,7 @@ public class RoboRally extends Application {
 
         // Set icon for game
         ClassLoader loader = RoboRally.class.getClassLoader();
-        primaryStage.getIcons().add(new Image(loader.getResourceAsStream("assets/logo.jpg")));
+        // primaryStage.getIcons().add(new Image(loader.getResourceAsStream("assets/logo.jpg")));
 
         AppController appController = new AppController(this);
 
