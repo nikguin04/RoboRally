@@ -65,11 +65,13 @@ public class MovesPlayedController {
 
 		Lobby lobby = lobbyRepository.getLobbyById(lobbyid);
 		int playerCount = playerRepository.countPlayersByLobby_Id(lobbyid);
-		// TO DO: Validate that all players have finished programming
 
 		List<MovesPlayed> movesplayed = movesPlayedRepository.getMovesPlayedByLobby_IdAndRounds(lobbyid, round);
-
-		return ResponseEntity.ok(movesplayed);
+		if (playerCount == movesplayed.size()) {
+			return ResponseEntity.ok(movesplayed);
+		} else {
+			return ResponseEntity.badRequest().build();
+		}
 	}
 
 	@GetMapping("/lobbyroundfinished")
