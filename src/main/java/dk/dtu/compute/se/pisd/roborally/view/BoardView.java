@@ -51,6 +51,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
+
 /**
  * ...
  *
@@ -184,8 +185,8 @@ public class BoardView extends VBox implements ViewObserver {
 	}
 
 	private void setTimer(){
-		totalSec = 10;
-
+		totalSec = 5;
+		Player p = board.getCurrentPlayer();
 		Timer timer = new Timer();
 
 		TimerTask timerTask = new TimerTask() {
@@ -195,15 +196,18 @@ public class BoardView extends VBox implements ViewObserver {
 					convertTime();
 					if (totalSec <= 0) {
 
-						cancel();
 
 						gameController.AutoSelectCard(board.getCurrentPlayer());// TODO make this run the say done with programming cae
 
+
 					}
+
+
 				});
 			}
 		};
 
 		timer.schedule(timerTask, 0, 1000);
 	}
+
 }
