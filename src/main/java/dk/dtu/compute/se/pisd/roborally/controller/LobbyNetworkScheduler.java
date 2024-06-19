@@ -54,7 +54,7 @@ public class LobbyNetworkScheduler extends ScheduledService<Void> {
 	public void updateLobbyState() {
 		Platform.runLater(() -> {
 			lobby = LobbyRest.requestLobbyById(lobby.getId());
-			if (lobby.isGame_started()) {
+			if (lobby.isGameStarted()) {
 				this.cancel();
 				appController.initGameFromLobbyStart(lobby, playersFetched.toArray(ServerPlayer[]::new), splayer);
 			}

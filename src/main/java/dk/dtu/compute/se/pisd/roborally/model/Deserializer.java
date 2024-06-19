@@ -10,6 +10,7 @@ import com.google.gson.JsonParseException;
 import dk.dtu.compute.se.pisd.roborally.controller.PrioAntenna;
 import dk.dtu.compute.se.pisd.roborally.controller.SpaceElement;
 import dk.dtu.compute.se.pisd.roborally.controller.StartTile;
+import dk.dtu.compute.se.pisd.roborallyserver.model.Lobby;
 
 import java.lang.reflect.Type;
 
@@ -34,7 +35,8 @@ public class Deserializer {
 			JsonArray spaces = obj.get("spaces").getAsJsonArray();
 
 			int x = spaces.size(), y = spaces.get(0).getAsJsonArray().size();
-            Board b = new Board(x, y);
+            // TODO: Not a real lobby, but this code might not be useful anymore anyway?
+            Board b = new Board(x, y, new Lobby());
 
 			for (int ix = 0; ix < spaces.size(); ix++) {
 				JsonArray xarr = spaces.get(ix).getAsJsonArray();
@@ -44,7 +46,7 @@ public class Deserializer {
 
 					// Special case for prio antenna
 					if (new_s.getElement() != null && new_s.getElement().getClass().equals(PrioAntenna.class)) {
-						b.setPrioAntenna((PrioAntenna) new_s.getElement());
+						b.setPrioAntenna((PrioAntenna) new_s.getElement(), new_s);
 					} else if (new_s.getElement() != null && new_s.getElement().getClass().equals(StartTile.class)) {
 						b.setStartTile((StartTile) new_s.getElement());
 					}

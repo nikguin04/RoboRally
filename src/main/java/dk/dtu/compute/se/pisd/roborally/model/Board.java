@@ -48,6 +48,7 @@ public class Board extends Subject {
     public final int width;
 
     public final int height;
+
     public final Lobby lobby;
 
     private Integer gameId;
@@ -79,9 +80,6 @@ public class Board extends Subject {
 
     private int move_count = 0;
 
-    public Board(int width, int height) { // TODO: DELETE THIS AND MAKE SURE EVERYTHING HAS A PROPER LOBBY!!!
-        this(width, height, new Lobby());
-    }
     public Board(int width, int height, Lobby lobby) {
 		this.width = width;
         this.height = height;
@@ -94,6 +92,11 @@ public class Board extends Subject {
             }
         }
         this.stepMode = false;
+    }
+
+    // Board for patching tests (DO NOT USE FOR NEW DEVELOPING!)
+    public Board(int w, int h) {
+        this(w,h,null);
     }
 
 	/**
@@ -119,8 +122,8 @@ public class Board extends Subject {
 	 * @author Anders Greve Sørensen, s235093@dtu.dk.
 	 * @param prioAntenna the priority antenna to be attached to this board.
 	 */
-	public void setPrioAntenna(PrioAntenna prioAntenna) {
-        prioAntenna.attachBoard(this);
+	public void setPrioAntenna(PrioAntenna prioAntenna, Space space) {
+		prioAntenna.attachBoard(this, space);
 		this.prioAntenna = prioAntenna;
 	}
 

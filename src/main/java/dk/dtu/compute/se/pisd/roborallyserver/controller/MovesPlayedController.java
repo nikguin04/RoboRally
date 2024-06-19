@@ -44,49 +44,48 @@ public class MovesPlayedController {
 	@PostMapping("/newmovesplayed")
 	public ResponseEntity<Lobby> newMovesPlayed(@RequestBody NewMovesPlayBody nmp) {
 		counter++;
-		Lobby lobby = lobbyRepository.findLobbyById(nmp.lobby_id);
-		ServerPlayer player = playerRepository.findPlayerById(nmp.player_id);
+		Lobby lobby = lobbyRepository.getLobbyById(nmp.lobby_id);
+		ServerPlayer player = playerRepository.getPlayerById(nmp.player_id);
 		MovesPlayed played = new MovesPlayed(lobby.getRounds(), nmp.move1, nmp.move2, nmp.move3, nmp.move4, nmp.move5, lobby, player);
 
 		movesPlayedRepository.saveAndFlush(played);
 		// Check if all moves are submitted now, then increment round id
-		int countPlayers = playerRepository.countPlayersInLobby(lobby.getId());
-		int movesPlayed = movesPlayedRepository.getMovesPlayedInLobbyByRound(lobby.getId(), lobby.getRounds()).length;
+		int countPlayers = playerRepository.countPlayersByLobby_Id(lobby.getId());
+		int movesPlayed = movesPlayedRepository.countMovesPlayedByLobby_IdAndRounds(lobby.getId(), lobby.getRounds());
 		if (countPlayers == movesPlayed) {
 			lobby.setRounds(lobby.getRounds() + 1);
 			lobbyRepository.saveAndFlush(lobby);
 		}
 
 		return ResponseEntity.ok(lobby); // lobbyRepository.save(lobby)
-
 	}
+
 	@GetMapping("/getPlayersMoves")
-	public ResponseEntity<MovesPlayed[]> isFinishedProgramming(@RequestParam(required = true, value="lobbyid") long lobbyid, @RequestParam(required = true, value="round") long round ){
+	public ResponseEntity<List<MovesPlayed>> isFinishedProgramming(@RequestParam(required = true, value="lobbyid") long lobbyid, @RequestParam(required = true, value="round") long round ){
 
-		Lobby lobby = lobbyRepository.findLobbyById(lobbyid);
-		int playerCount = playerRepository.countPlayersInLobby(lobbyid);
-		// TO DO: Validate that all players have finished programming
+		Lobby lobby = lobbyRepository.getLobbyById(lobbyid);
+		int playerCount = playerRepository.countPlayersByLobby_Id(lobbyid);
 
-		MovesPlayed[] movesplayed = movesPlayedRepository.getMovesPlayedInLobbyByRound(lobbyid, round);
-
-//
+		List<MovesPlayed> movesplayed = movesPlayedRepository.getMovesPlayedByLobby_IdAndRounds(lobbyid, round);
+		if (playerCount == movesplayed.size()) {
 			return ResponseEntity.ok(movesplayed);
-
+		} else {
+			return ResponseEntity.badRequest().build();
+		}
 	}
 
 	@GetMapping("/lobbyroundfinished")
 	public ResponseEntity<List<ServerPlayer>> getPlayersFinishedProgramming(
 			@RequestParam(required=true,value="lobbyid") Long lobbyid, @RequestParam(required = true, value="round") long round) {
 
-		Lobby lobby = lobbyRepository.findLobbyById(lobbyid);
+		Lobby lobby = lobbyRepository.getLobbyById(lobbyid);
 
 		List<ServerPlayer> playersDone = new ArrayList<ServerPlayer>();
-		MovesPlayed[] moves = movesPlayedRepository.getMovesPlayedInLobbyByRound(lobbyid, round);
-		for (MovesPlayed move: moves) {
+		List<MovesPlayed> moves = movesPlayedRepository.getMovesPlayedByLobby_IdAndRounds(lobbyid, round);
+		for (MovesPlayed move : moves) {
 			playersDone.add(move.getPlayer());
 		}
 		return ResponseEntity.ok(playersDone);
-
 	}
 
 	public static record NewMovesPlayBody (Long rounds, String move1, String move2, String move3, String move4, String move5, Long lobby_id, long player_id) {};
