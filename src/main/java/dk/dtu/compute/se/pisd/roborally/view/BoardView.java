@@ -176,12 +176,11 @@ public class BoardView extends VBox implements ViewObserver {
 	}
 
 	public void convertTime(){
+		totalSec--;
 		min = TimeUnit.SECONDS.toMinutes(totalSec);
 		sec = totalSec - (min * 60);
-
 		timeLabel.setText(format(min) + ":"+ format(sec));
 
-		totalSec--;
 	}
 
 	private void setTimer(){
@@ -195,11 +194,8 @@ public class BoardView extends VBox implements ViewObserver {
 				Platform.runLater(() -> {
 					convertTime();
 					if (totalSec <= 0) {
-
-
-						gameController.AutoSelectCard(board.getCurrentPlayer());// TODO make this run the say done with programming cae
-
-
+						network.sendData(p);
+                        timer.cancel();
 					}
 
 
