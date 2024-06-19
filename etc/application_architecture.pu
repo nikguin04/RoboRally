@@ -1,0 +1,39 @@
+@startuml
+
+
+node Server {
+
+database "Server Database" {
+	component "Spring Boot\n(JPARepository)"
+	component "H2 Database\nEngine"
+	"H2 Database\nEngine" <-left-> "Spring Boot\n(JPARepository)": Provides storage
+}
+component "Spring Boot\nREST Server"
+
+
+}
+"Server Database" <-left-> "Spring Boot\nREST Server": Provides data
+
+node Client {
+	component "REST Client"
+	component "Game Controller"
+	component "Presentation Layer (JavaFX UI)"
+
+	"REST Client" --> "Game Controller"
+	"Game Controller" --> "Presentation Layer (JavaFX UI)"
+}
+
+Server <==> Client: REST Communication
+
+cloud "Java compatible\nComputer"
+Client <-left- "Java compatible\nComputer"
+
+actor User
+User -up- "Java compatible\nComputer"
+
+
+cloud "Java compatible\nServer"
+"Java compatible\nServer" --> Server
+
+
+@enduml
