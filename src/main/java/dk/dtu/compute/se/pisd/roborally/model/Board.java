@@ -94,6 +94,11 @@ public class Board extends Subject {
         this.stepMode = false;
     }
 
+    // Board for patching tests (DO NOT USE FOR NEW DEVELOPING!)
+    public Board(int w, int h) {
+        this(w,h,null);
+    }
+
 	/**
 	 * Gives the priority antenna of the board.
 	 * @author Anders Greve Sørensen, s235093@dtu.dk.

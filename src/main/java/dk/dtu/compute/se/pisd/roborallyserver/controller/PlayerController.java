@@ -40,7 +40,7 @@ public class PlayerController {
 	@PostMapping("/newplayer")
 	public ResponseEntity<ServerPlayer> newPlayer(@RequestBody NewPlayerBody npb) {
         Lobby lobby = lobbyRepository.getLobbyById(npb.lobby_id);
-        if (lobby.isGame_started()) {
+        if (lobby.isGameStarted()) {
             return ResponseEntity.badRequest().body(null);
         }
         ServerPlayer player = new ServerPlayer((Long)null, npb.name, lobby);

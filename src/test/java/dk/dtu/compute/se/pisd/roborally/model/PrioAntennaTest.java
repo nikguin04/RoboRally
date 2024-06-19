@@ -25,8 +25,8 @@ public class PrioAntennaTest {
 	public void testPrioTieBreak() {
 		Board board = new Board(8, 8);
 		GameController gameController = new GameController(board, null, null, null);
-		PrioAntenna prioAntenna = new PrioAntenna(5, 5);
-		board.setPrioAntenna(prioAntenna);
+		PrioAntenna prioAntenna = new PrioAntenna();
+		board.setPrioAntenna(prioAntenna, board.getSpace(5, 5));
 		Player player1 = new Player(board, "red", "Test Player1", 0l);
 		Player player2 = new Player(board, "blue", "Test Player2", 0l);
 		Player player3 = new Player(board, "yellow", "Test Player3", 0l);
@@ -53,8 +53,8 @@ public class PrioAntennaTest {
 	public void testGetPrioPlayer() {
 		Board board = new Board(8, 8);
 		GameController gameController = new GameController(board, null, null, null);
-		PrioAntenna prioAntenna = new PrioAntenna(5, 5);
-		board.setPrioAntenna(prioAntenna);
+		PrioAntenna prioAntenna = new PrioAntenna();
+		board.setPrioAntenna(prioAntenna, board.getSpace(5, 5));
 		Player player1 = new Player(board, "red", "Test Player1", 0l);
 		Player player2 = new Player(board, "blue", "Test Player2", 0l);
 		Player player3 = new Player(board, "yellow", "Test Player3", 0l);
@@ -79,8 +79,8 @@ public class PrioAntennaTest {
 	public void testGetPrioPlayerList() {
 		Board board = new Board(8, 8);
 		GameController gameController = new GameController(board, null, null, null);
-		PrioAntenna prioAntenna = new PrioAntenna(5, 5);
-		board.setPrioAntenna(prioAntenna);
+		PrioAntenna prioAntenna = new PrioAntenna();
+		board.setPrioAntenna(prioAntenna, board.getSpace(5, 5));
 		Player player1 = new Player(board, "red", "Test Player1", 0l);
 		Player player2 = new Player(board, "blue", "Test Player2", 0l);
 		board.addPlayer(player1);
@@ -109,8 +109,8 @@ public class PrioAntennaTest {
 	public void testUpdatePlayerPrio() {
 		Board board = new Board(8, 8);
 		GameController gameController = new GameController(board, null, null, null);
-		PrioAntenna prioAntenna = new PrioAntenna(5, 5);
-		board.setPrioAntenna(prioAntenna);
+		PrioAntenna prioAntenna = new PrioAntenna();
+		board.setPrioAntenna(prioAntenna, board.getSpace(5, 5));
 		Player player1 = new Player(board, "red", "Test Player1", 0l);
 		Player player2 = new Player(board, "blue", "Test Player2", 0l);
 		Player player3 = new Player(board, "yellow", "Test Player3", 0l);

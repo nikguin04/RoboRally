@@ -15,8 +15,10 @@ import org.springframework.http.ResponseEntity;
 import dk.dtu.compute.se.pisd.roborallyserver.controller.MovesPlayedController.NewMovesPlayBody;
 import dk.dtu.compute.se.pisd.roborallyserver.controller.PlayerController.NewPlayerBody;
 import dk.dtu.compute.se.pisd.roborallyserver.model.Lobby;
+import dk.dtu.compute.se.pisd.roborallyserver.model.Map;
 import dk.dtu.compute.se.pisd.roborallyserver.model.ServerPlayer;
 import dk.dtu.compute.se.pisd.roborallyserver.repository.LobbyRepository;
+import dk.dtu.compute.se.pisd.roborallyserver.repository.MapRepository;
 import dk.dtu.compute.se.pisd.roborallyserver.repository.MovesPlayedRepository;
 import dk.dtu.compute.se.pisd.roborallyserver.repository.PlayerRepository;
 
@@ -29,6 +31,9 @@ public class lobbytest {
 	PlayerRepository playerRepository;
 	@Autowired
 	MovesPlayedRepository movesPlayedRepository;
+	@Autowired
+	MapRepository mapRepository;
+	Map m;
 
 	PlayerController playerController;
 	LobbyController lobbyController;
@@ -39,40 +44,45 @@ public class lobbytest {
 		lobbyController = new LobbyController(lobbyRepository, playerRepository);
 		playerController = new PlayerController(playerRepository, lobbyRepository);
 		movesPlayedController = new MovesPlayedController(movesPlayedRepository, lobbyRepository, playerRepository);
+
+		m = new Map("", "", 0l);
+		mapRepository.save(m);
 	}
 
 
 	@Test
 	public void testPushToLobby() {
-		Lobby newLobby = new Lobby((Long)null, 0l, 0l, false);
+		Lobby newLobby = new Lobby((Long)null, 0l, m, false, null);
 		Lobby insertedLobby = lobbyRepository.save(newLobby);
-		assertEquals(lobbyRepository.findLobbyById(insertedLobby.getId()), newLobby);
+		assertEquals(lobbyRepository.findById(insertedLobby.getId()).get(), newLobby);
 	}
 
 
 	@Test
 	public void PushPlayerAfterLobbyStart() {
-		Lobby newlobby = lobbyRepository.save(new Lobby((Long)null, 0l, 0l, false));
-		playerController.newPlayer(new NewPlayerBody("p1", newlobby.getId()));
-		playerController.newPlayer(new NewPlayerBody("p2", newlobby.getId()));
+		Lobby newLobby = new Lobby(null, 0l, m, false, null);
+		newLobby = lobbyController.newLobby(newLobby).getBody();
+		playerController.newPlayer(new NewPlayerBody("p1", newLobby.getId()));
+		playerController.newPlayer(new NewPlayerBody("p2", newLobby.getId()));
 
-		lobbyController.startGameForLobby(newlobby.getId());
-		assertNotEquals(HttpStatus.OK, playerController.newPlayer(new NewPlayerBody("p3", newlobby.getId())).getStatusCode());
+		lobbyController.startGameForLobby(newLobby.getId());
+		assertNotEquals(HttpStatus.OK, playerController.newPlayer(new NewPlayerBody("p3", newLobby.getId())).getStatusCode());
 	}
 
 	@Test
 	public void TestMoveGetRestrictions() {
-		Lobby newlobby = lobbyRepository.save(new Lobby((Long)null, 0l, 0l, false));
-		ServerPlayer p1 = playerController.newPlayer(new NewPlayerBody("p1", newlobby.getId())).getBody();
-		ServerPlayer p2 = playerController.newPlayer(new NewPlayerBody("p2", newlobby.getId())).getBody();
+		Lobby newLobby = new Lobby(null, 0l, m, false, null);
+		newLobby = lobbyController.newLobby(newLobby).getBody();
+		ServerPlayer p1 = playerController.newPlayer(new NewPlayerBody("p1", newLobby.getId())).getBody();
+		ServerPlayer p2 = playerController.newPlayer(new NewPlayerBody("p2", newLobby.getId())).getBody();
 
-		movesPlayedController.newMovesPlayed(new NewMovesPlayBody(0l, "FWD1", "FWD2", "FWD3", "LEFT", "Back", newlobby.getId(), p1.getId()));
+		movesPlayedController.newMovesPlayed(new NewMovesPlayBody(0l, "FWD1", "FWD2", "FWD3", "LEFT", "Back", newLobby.getId(), p1.getId()));
 
-		assertEquals(HttpStatus.BAD_REQUEST, movesPlayedController.isFinishedProgramming(newlobby.getId(), 0l).getStatusCode());
+		assertEquals(HttpStatus.BAD_REQUEST, movesPlayedController.isFinishedProgramming(newLobby.getId(), 0l).getStatusCode());
 
-		movesPlayedController.newMovesPlayed(new NewMovesPlayBody(0l, "FWD1", "FWD2", "FWD3", "LEFT", "Back", newlobby.getId(), p2.getId()));
+		movesPlayedController.newMovesPlayed(new NewMovesPlayBody(0l, "FWD1", "FWD2", "FWD3", "LEFT", "Back", newLobby.getId(), p2.getId()));
 
-		assertEquals(HttpStatus.OK, movesPlayedController.isFinishedProgramming(newlobby.getId(), 0l).getStatusCode());
+		assertEquals(HttpStatus.OK, movesPlayedController.isFinishedProgramming(newLobby.getId(), 0l).getStatusCode());
 	}
 
 

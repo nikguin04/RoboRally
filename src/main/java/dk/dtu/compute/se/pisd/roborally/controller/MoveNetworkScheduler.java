@@ -70,12 +70,11 @@ private GameController gameController;
 				}
 				gameController.finishProgrammingPhase();
 				// Start the autimatic step scheduler
-				ProgramPhaseScheduler pps = new ProgramPhaseScheduler(gameController);
-				pps.setPeriod(Duration.seconds(1));
-				pps.start();
+				gameController.startAutoActivationExecution();
 			}
 		});
 	}
+
 
 	public static ServerPlayer[] isFinishedProgramming(long lobbyid, int round) {
 		final RestTemplate restTemplate = new RestTemplate();
