@@ -44,15 +44,22 @@ public class TimerController {
 	}
 
 	public void convertTime() {
+
 		totalSec--;
 		min = TimeUnit.SECONDS.toMinutes(totalSec);
 		sec = totalSec - (min * 60);
+		if(timeLabel == null){
+			return;
+		}
+		Platform.runLater(()->{
+
 		timeLabel.setText(format(min) + ":" + format(sec));
+		});
 
 	}
 
 	void setTimer(){
-		totalSec = 5;
+		totalSec = 180;
 		Player p = board.getCurrentPlayer();
 		Timer timer = new Timer();
 
@@ -73,6 +80,10 @@ public class TimerController {
 		};
 
 		timer.schedule(timerTask, 0, 1000);
+
+	}
+	public void settTimer(Label label){
+		timeLabel = label;
 
 	}
 }

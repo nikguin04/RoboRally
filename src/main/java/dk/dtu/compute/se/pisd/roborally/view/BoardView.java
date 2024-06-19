@@ -93,8 +93,11 @@ public class BoardView extends VBox implements ViewObserver {
         mainBoardPane = new GridPane();
         playersView = new PlayersView(gameController, network);
         statusLabel = new Label("<no status>");
+
 		timeLabel = new Label();
-		setTimer();
+		gameController.getTimer().settTimer(timeLabel);
+
+
         infoLabel = new Label("Hello from right side");
         mapLabel = new Label("Current map: " + gameController.lobby.getMap().getMapName());
         playerStatusLabels = new ArrayList<Label>();

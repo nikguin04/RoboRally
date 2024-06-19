@@ -29,6 +29,7 @@ import dk.dtu.compute.se.pisd.roborallyserver.model.ServerPlayer;
 
 import javafx.application.Platform;
 import javafx.util.Duration;
+import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import dk.dtu.compute.se.pisd.roborally.controller.TimerController;
 
@@ -52,12 +53,15 @@ public class GameController {
         this.splayer = splayer;
         this.lobby = lobby;
         this.players = players;
+		timer = new TimerController(board, new NetworkController(this));
     }
 
     public void moveForward(@NotNull Player player) {
         moveAmt(player, 1);
     }
 
+	@Getter
+	private TimerController timer;
     // TODO Assignment A3
     public void fastForward(@NotNull Player player) {
         moveAmt(player, 2);
@@ -336,8 +340,8 @@ public class GameController {
      */
     public void StartProgrammingPhase(Boolean RandomizeCards) {
 
-		TimerController timer = new TimerController(board, new NetworkController(this));
-		timer.setTimer();
+
+
         board.setPhase(Phase.PROGRAMMING);
         board.setCurrentPlayer(board.getPlayerByNetworkId(splayer.getId()));
         board.setStep(0);
@@ -358,9 +362,12 @@ public class GameController {
         }
 		MoveNetworkScheduler mns = new MoveNetworkScheduler(board.lobby, splayer, this);
 		mns.setPeriod(Duration.seconds(1));
-
+		timer.setTimer();
 		mns.start();
     }
+
+
+
 
     private CommandCard generateRandomCommandCard() {
         Command[] commands = Command.values();
