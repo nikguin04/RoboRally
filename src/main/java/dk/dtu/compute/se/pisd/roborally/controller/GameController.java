@@ -161,6 +161,7 @@ public class GameController {
 					CommandCard randomCard = player.getCardField(randomCardIndex).getCard();
 					if (randomCard != null) {
 						player.getProgramField(i).setCard(randomCard);
+						player.getCardField(randomCardIndex).setCard(null);
 						break;
 					}
 				}
