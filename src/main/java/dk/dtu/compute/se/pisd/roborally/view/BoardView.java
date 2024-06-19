@@ -23,7 +23,12 @@ package dk.dtu.compute.se.pisd.roborally.view;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
+import dk.dtu.compute.se.pisd.roborally.RoboRally;
+import javafx.application.Platform;
 import org.jetbrains.annotations.NotNull;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
@@ -45,6 +50,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+
 
 /**
  * ...
@@ -70,18 +76,27 @@ public class BoardView extends VBox implements ViewObserver {
     private PlayersView playersView;
 
     private Label statusLabel;
-
+	private Label timeLabel;
 	private NetworkController network;
 
     private SpaceEventHandler spaceEventHandler;
 
+	private GameController gameController;
+
     public BoardView(@NotNull GameController gameController, NetworkController networkController) {
         board = gameController.board;
+		this.gameController = gameController;
+
+
 		this.network = networkController;
 
         mainBoardPane = new GridPane();
         playersView = new PlayersView(gameController, network);
         statusLabel = new Label("<no status>");
+
+		timeLabel = new Label();
+		gameController.getTimer().settTimer(timeLabel);
+
 
         infoLabel = new Label("Hello from right side");
         mapLabel = new Label("Current map: " + gameController.lobby.getMap().getMapName());
@@ -93,7 +108,7 @@ public class BoardView extends VBox implements ViewObserver {
             l.setTextFill(Color.valueOf(gameController.board.getPlayer(i).getColor()));
             playerStatusLabels.add(l);
         }
-        infoPane = new VBox(infoLabel, mapLabel);
+        infoPane = new VBox(infoLabel, mapLabel, timeLabel);
         infoPane.getChildren().addAll(playerStatusLabels);
 
         gameCenteredBox = new HBox(mainBoardPane, infoPane);
@@ -153,5 +168,45 @@ public class BoardView extends VBox implements ViewObserver {
         }
 
     }
+	private long min, sec, totalSec = 0;
+
+	private String format(long value){
+		if(value < 10){
+			return 0 + "" + value;
+		}
+		return value + "";
+
+	}
+
+	public void convertTime(){
+		totalSec--;
+		min = TimeUnit.SECONDS.toMinutes(totalSec);
+		sec = totalSec - (min * 60);
+		timeLabel.setText(format(min) + ":"+ format(sec));
+
+	}
+
+	private void setTimer(){
+		totalSec = 5;
+		Player p = board.getCurrentPlayer();
+		Timer timer = new Timer();
+
+		TimerTask timerTask = new TimerTask() {
+			@Override
+			public void run() {
+				Platform.runLater(() -> {
+					convertTime();
+					if (totalSec <= 0) {
+						network.sendData(p);
+                        timer.cancel();
+					}
+
+
+				});
+			}
+		};
+
+		timer.schedule(timerTask, 0, 1000);
+	}
 
 }
