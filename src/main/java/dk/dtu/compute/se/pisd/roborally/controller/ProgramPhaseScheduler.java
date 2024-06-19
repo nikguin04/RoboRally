@@ -1,6 +1,7 @@
 package dk.dtu.compute.se.pisd.roborally.controller;
 
 import dk.dtu.compute.se.pisd.roborally.model.Phase;
+import javafx.application.Platform;
 import javafx.concurrent.ScheduledService;
 import javafx.concurrent.Task;
 
@@ -18,7 +19,9 @@ public class ProgramPhaseScheduler extends ScheduledService<Void> {
             @Override
             protected Void call() throws Exception {
 				if (gameController.board.getPhase().equals(Phase.ACTIVATION)) {
-					gameController.executeStep();
+					Platform.runLater(() -> {
+						gameController.executeStep();
+					});
 				} else {
 					cancel(); // Cancel the step task
 				}

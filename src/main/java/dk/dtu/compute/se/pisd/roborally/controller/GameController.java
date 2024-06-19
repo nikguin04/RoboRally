@@ -196,11 +196,16 @@ public class GameController {
 			if (command == Command.OPTION_LEFT_RIGHT) {
 				board.setPhase(Phase.PLAYER_INTERACTION);
                 // Start awaiting result
+                Platform.runLater(() -> {
+                    for (int i = 0; i < board.getPlayersNumber(); i++) {
+                        Player p = board.getPlayer(i);
+                        p.playerStatus.set( currentPlayer.equals(p) ? PlayerStatus.WAITING : PlayerStatus.IDLE );
+                    }
+                });
                 if (currentPlayer.getNetworkId() != splayer.getId()) {
-                // TODO: Set players to waiting status
-                InteractionDecisionScheduler ids = new InteractionDecisionScheduler(this, lobby, currentPlayer.getNetworkId());
-                ids.setPeriod(Duration.seconds(1));
-                ids.start();
+                    InteractionDecisionScheduler ids = new InteractionDecisionScheduler(this, lobby, currentPlayer.getNetworkId());
+                    ids.setPeriod(Duration.seconds(1));
+                    ids.start();
                 }
 				return;
 			}
@@ -251,9 +256,6 @@ public class GameController {
 			for (int i = 0; i < board.getPlayersNumber(); i++) {
 				Player p = board.getPlayer(i);
                 Space space = p.getSpace();
-				Platform.runLater( () -> {
-                	p.playerStatus.set(PlayerStatus.WAITING);
-				});
 				SpaceElement element = space.getElement();
 				if (element == null) continue;
 				// TODO We should probably handle activation order
