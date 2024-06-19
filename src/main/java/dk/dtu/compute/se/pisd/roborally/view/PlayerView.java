@@ -21,12 +21,19 @@
  */
 package dk.dtu.compute.se.pisd.roborally.view;
 
+import java.util.List;
+
+import org.jetbrains.annotations.NotNull;
+
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.controller.GameController;
 import dk.dtu.compute.se.pisd.roborally.controller.NetworkController;
-import dk.dtu.compute.se.pisd.roborally.model.*;
-import dk.dtu.compute.se.pisd.roborally.model.Player.PlayerStatus;
-import dk.dtu.compute.se.pisd.roborally.net.MovePlayedRest;
+import dk.dtu.compute.se.pisd.roborally.model.Command;
+import dk.dtu.compute.se.pisd.roborally.model.CommandCardField;
+import dk.dtu.compute.se.pisd.roborally.model.Phase;
+import dk.dtu.compute.se.pisd.roborally.model.Player;
+import dk.dtu.compute.se.pisd.roborally.net.InteractionDecisionRest;
+import dk.dtu.compute.se.pisd.roborallyserver.controller.InteractionDecisionsController.NewInteractionDecisionBody;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -39,7 +46,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * ...
@@ -231,15 +237,19 @@ public class PlayerView extends Tab implements ViewObserver {
 				//      the player's choices of the interactive command card. The
 				//      following is just a mockup showing two options
 				// TODO EMIL
-				Button optionButton = new Button(player.getProgramField(player.board.getStep()).getCard().command.getOptions().get(0).displayName);
-				optionButton.setOnAction(e -> gameController.executeCommandOptionAndContinue(player.getProgramField(player.board.getStep()).getCard().command.getOptions().get(0)));
-				optionButton.setDisable(false);
-				playerInteractionPanel.getChildren().add(optionButton);
-
-				optionButton = new Button(player.getProgramField(player.board.getStep()).getCard().command.getOptions().get(1).displayName);
-				optionButton.setOnAction(e -> gameController.executeCommandOptionAndContinue(player.getProgramField(player.board.getStep()).getCard().command.getOptions().get(1)));
-				optionButton.setDisable(false);
-				playerInteractionPanel.getChildren().add(optionButton);
+				List<Command> options = player.getProgramField(player.board.getStep()).getCard().command.getOptions();
+				for (int i = 0; i < options.size(); i++) {
+					Button optionButton = new Button(player.getProgramField(player.board.getStep()).getCard().command.getOptions().get(i).displayName);
+					final Integer hardI = i;
+					optionButton.setOnAction(e -> {
+						NewInteractionDecisionBody intdec = new NewInteractionDecisionBody(
+							gameController.lobby.getRounds(), player.board.getStep(), gameController.lobby.getId(), player.getNetworkId(), options.get(hardI).name());
+						InteractionDecisionRest.postInteractionDecision(intdec);
+						gameController.executeCommandOptionAndContinue(player.getProgramField(player.board.getStep()).getCard().command.getOptions().get(hardI));
+					});
+					optionButton.setDisable(false);
+					playerInteractionPanel.getChildren().add(optionButton);
+				}
 			}
 		}
 	}

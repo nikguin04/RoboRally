@@ -196,7 +196,12 @@ public class GameController {
 			if (command == Command.OPTION_LEFT_RIGHT) {
 				board.setPhase(Phase.PLAYER_INTERACTION);
                 // Start awaiting result
-
+                if (currentPlayer.getNetworkId() != splayer.getId()) {
+                // TODO: Set players to waiting status
+                InteractionDecisionScheduler ids = new InteractionDecisionScheduler(this, lobby, currentPlayer.getNetworkId());
+                ids.setPeriod(Duration.seconds(1));
+                ids.start();
+                }
 				return;
 			}
 			executeCommand(currentPlayer, command);
@@ -211,6 +216,15 @@ public class GameController {
 		executeCommand(board.getCurrentPlayer(), command);
 
 		handleAfterStep();
+        // Start the execution of activation/programming cards again
+        startAutoActivationExecution();
+	}
+
+    public void startAutoActivationExecution() {
+		// WARNING: this needs to be canceled again by setting phase to something other than activation
+		ProgramPhaseScheduler pps = new ProgramPhaseScheduler(this);
+		pps.setPeriod(Duration.seconds(1));
+		pps.start();
 	}
 
 	private void handleAfterStep() {
