@@ -28,10 +28,12 @@ import org.jetbrains.annotations.NotNull;
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.controller.GameController;
 import dk.dtu.compute.se.pisd.roborally.controller.NetworkController;
+import dk.dtu.compute.se.pisd.roborally.model.Board;
 import dk.dtu.compute.se.pisd.roborally.model.Command;
 import dk.dtu.compute.se.pisd.roborally.model.CommandCardField;
 import dk.dtu.compute.se.pisd.roborally.model.Phase;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
+import dk.dtu.compute.se.pisd.roborally.model.Player.PlayerStatus;
 import dk.dtu.compute.se.pisd.roborally.net.InteractionDecisionRest;
 import dk.dtu.compute.se.pisd.roborallyserver.controller.InteractionDecisionsController.NewInteractionDecisionBody;
 import javafx.geometry.Pos;
@@ -245,6 +247,11 @@ public class PlayerView extends Tab implements ViewObserver {
 						NewInteractionDecisionBody intdec = new NewInteractionDecisionBody(
 							gameController.lobby.getRounds(), player.board.getStep(), gameController.lobby.getId(), player.getNetworkId(), options.get(hardI).name());
 						InteractionDecisionRest.postInteractionDecision(intdec);
+						Board board = gameController.board;
+						for (int a = 0; a < board.getPlayersNumber(); a++) {
+							Player player = board.getPlayer(a);
+							player.playerStatus.set(PlayerStatus.IDLE);
+						}
 						gameController.executeCommandOptionAndContinue(player.getProgramField(player.board.getStep()).getCard().command.getOptions().get(hardI));
 					});
 					optionButton.setDisable(false);
