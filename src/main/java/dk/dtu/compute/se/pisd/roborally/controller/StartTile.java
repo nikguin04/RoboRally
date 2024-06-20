@@ -2,10 +2,12 @@ package dk.dtu.compute.se.pisd.roborally.controller;
 
 import dk.dtu.compute.se.pisd.roborally.model.Board;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
+
 import static dk.dtu.compute.se.pisd.roborally.utils.StringUtils.intarrFromCommaStr;
 
 public class StartTile extends SpaceElement {
-    // All these variables are only initialised when a board uses a StartTile.
+
+	// All these variables are only initialised when a board uses a StartTile.
 	public final int x;
 	public final int y;
 
@@ -21,7 +23,7 @@ public class StartTile extends SpaceElement {
 		this.board = board;
 	}
 
-    /**
+	/**
 	 * Create a new StartTile, with set coordinates x,y
 	 * @param x Coordinate x
 	 * @param y Coordinate y
@@ -30,24 +32,12 @@ public class StartTile extends SpaceElement {
 		this.x = x;
 		this.y = y;
 	}
-	/**
-	 * Create a new priority antenna, with a set coordinate x,y given as a string
-	 * @param coord Stringified coordinates: "x,y"
-	 */
-	public StartTile(String coord) {
-		int[] coordi = intarrFromCommaStr(coord);
-		this.x = coordi[0];
-		this.y = coordi[1];
-	}
-    @Override
-    public boolean doAction(GameController gameController, Space space) {
-		// TODO Auto-generated method stub
-        // throw new UnsupportedOperationException("Unimplemented method 'doAction'");
-        return false;
-    }
 
 	@Override
-	public String getArgument() {
-        return x + "," + y;
-    }
+	public boolean doAction(GameController gameController, Space space) {
+		// TODO Auto-generated method stub
+		// throw new UnsupportedOperationException("Unimplemented method 'doAction'");
+		return false;
+	}
+
 }

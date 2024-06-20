@@ -32,7 +32,7 @@ import org.jetbrains.annotations.NotNull;
  *
  */
 public class ConveyorBelt extends SpaceElement {
-    // TODO: NIKLAS SAVE AND LOAD HEADING
+
     private final Heading heading;
     /**
      * Initialize ConveyorBelt with a default heading of north
@@ -40,13 +40,7 @@ public class ConveyorBelt extends SpaceElement {
     public ConveyorBelt() {
         this.heading = Heading.NORTH;
     }
-    /**
-     * Initialize ConveyorBelt with a specific heading
-     * @param heading enum Heading given as string
-     */
-    public ConveyorBelt(String heading) {
-        this.heading = Heading.valueOf(heading);
-    }
+
     /**
      * Initialize ConveyorBelt with a specific heading
      * @param heading enum Heading
@@ -70,11 +64,5 @@ public class ConveyorBelt extends SpaceElement {
 			return false;
 		}
 	}
-
-    @Override
-	public String getArgument() {
-        return String.valueOf(heading.toString());
-    }
-
 
 }

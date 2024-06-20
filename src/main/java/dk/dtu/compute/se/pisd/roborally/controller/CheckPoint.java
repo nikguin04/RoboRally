@@ -7,6 +7,7 @@ import dk.dtu.compute.se.pisd.roborally.model.Space;
  * @author Anders Greve Sørensen, s235093@dtu.dk
  */
 public class CheckPoint extends SpaceElement {
+
 	public final int checkPointNr;
 
 	/**
@@ -18,27 +19,6 @@ public class CheckPoint extends SpaceElement {
 	public CheckPoint(int checkPointNr) {
 		this.checkPointNr = checkPointNr;
 	}
-
-	/**
-	 * Instantiate checkpoint with given checkpoint number.
-	 * This works with strings, so we can load from json easier
-	 * @author Niklas Jensen, s235101@dtu.dk
-	 * @param checkPointNr the checkpoint number to be assigned to checkpoint. Players must visit checkpoints
-	 *                     with their numbers in ascending order. So 1 first, then 2, etc.
-	 */
-	public CheckPoint(String checkPointNr) {
-		this.checkPointNr = (sToInt(checkPointNr));
-	}
-
-	private int sToInt(String s) {
-		try {
-			return Integer.parseInt(s);
-		} catch (NumberFormatException e) {
-			System.out.println("Parsed number was not int, defaulting to 0");
-			return 0;
-		}
-	}
-
 
 	/**
 	 * Updates checkpoint counter for player on checkpoint if player has visited all previous checkpoints.
@@ -60,15 +40,11 @@ public class CheckPoint extends SpaceElement {
 	}
 
 	@Override
-	public String getArgument() {
-        return String.valueOf(checkPointNr);
-    }
-
-	@Override
-    public boolean equals(Object obj) {
-        if (obj instanceof CheckPoint comp) {
-            return this.checkPointNr == comp.checkPointNr;
+	public boolean equals(Object obj) {
+		if (obj instanceof CheckPoint comp) {
+			return this.checkPointNr == comp.checkPointNr;
 		}
 		return false;
-    }
+	}
+
 }

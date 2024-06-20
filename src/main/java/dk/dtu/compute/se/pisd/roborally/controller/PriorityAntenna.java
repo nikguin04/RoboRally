@@ -145,8 +145,4 @@ public class PriorityAntenna extends SpaceElement {
 		throw new UnsupportedOperationException("Unimplemented method 'doAction' for priority antenna. This point should never be reached as the priority antenna is solid. If you get this message, there is a flaw in the game move logic");
 	}
 
-	@Override
-	public String getArgument() {
-        return x + "," + y;
-    }
 }
