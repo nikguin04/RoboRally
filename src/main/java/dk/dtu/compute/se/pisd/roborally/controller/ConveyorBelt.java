@@ -22,6 +22,7 @@
 package dk.dtu.compute.se.pisd.roborally.controller;
 
 import dk.dtu.compute.se.pisd.roborally.model.Heading;
+import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
 import org.jetbrains.annotations.NotNull;
 
@@ -33,32 +34,42 @@ import org.jetbrains.annotations.NotNull;
  */
 public class ConveyorBelt extends SpaceElement {
 
-    private final Heading heading;
+    public final Heading heading;
+    public final boolean fast;
+
     /**
-     * Initialize ConveyorBelt with a default heading of north
+     * Instantiate a slow ConveyorBelt with a default heading of north
      */
     public ConveyorBelt() {
         this.heading = Heading.NORTH;
+        this.fast = false;
     }
 
     /**
-     * Initialize ConveyorBelt with a specific heading
+     * Instantiate a slow ConveyorBelt with a specific heading
      * @param heading enum Heading
      */
     public ConveyorBelt(Heading heading) {
         this.heading = heading;
+        this.fast = false;
     }
 
-    public Heading getHeading() {
-        return heading;
+    /**
+     * Instantiate a ConveyorBelt with a specific heading and whether it should be fast
+     * @param heading enum Heading
+     */
+    public ConveyorBelt(Heading heading, boolean fast) {
+        this.heading = heading;
+        this.fast = fast;
     }
-
 
 	@Override
 	public boolean doAction(@NotNull GameController gameController, @NotNull Space space) {
 		// TODO: Should pushing other players be allowed?
 		try {
-			gameController.moveToSpace(space.getPlayer(), heading);
+			Player player = space.getPlayer();
+			gameController.moveToSpace(player, heading);
+			if (fast) gameController.moveToSpace(player, heading);
 			return true;
 		} catch (GameController.ImpossibleMoveException e) {
 			return false;

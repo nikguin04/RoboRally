@@ -38,6 +38,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.InputStream;
+
 /**
  * ...
  *
@@ -116,20 +118,22 @@ public class SpaceView extends StackPane implements ViewObserver {
 			int index = 0;
 			Space neighbour;
 			// Check if there's another conveyor pointing to this one on each of the neighbour spaces
-			neighbour = space.board.getNeighbour(space, belt.getHeading().prev());
+			neighbour = space.board.getNeighbour(space, belt.heading.prev());
 			if (neighbour != null && neighbour.getElement() instanceof ConveyorBelt neighbourBelt
-				&& neighbourBelt.getHeading() == belt.getHeading().next())
+				&& neighbourBelt.heading == belt.heading.next())
 				index |= 1;
-			neighbour = space.board.getNeighbour(space, belt.getHeading().next());
+			neighbour = space.board.getNeighbour(space, belt.heading.next());
 			if (neighbour != null && neighbour.getElement() instanceof ConveyorBelt neighbourBelt
-				&& neighbourBelt.getHeading() == belt.getHeading().prev())
+				&& neighbourBelt.heading == belt.heading.prev())
 				index |= 2;
-			neighbour = space.board.getNeighbour(space, belt.getHeading().opposite());
+			neighbour = space.board.getNeighbour(space, belt.heading.opposite());
 			if (neighbour != null && neighbour.getElement() instanceof ConveyorBelt neighbourBelt
-				&& neighbourBelt.getHeading() == belt.getHeading())
+				&& neighbourBelt.heading == belt.heading)
 				index |= 4;
+			if (belt.fast)
+				index |= 8;
 			tile.setImage(conveyorTextures[index]);
-			tile.setRotate(90 * (belt.getHeading().ordinal() + 2));
+			tile.setRotate(90 * (belt.heading.ordinal() + 2));
 		}
 	}
 
@@ -158,27 +162,37 @@ public class SpaceView extends StackPane implements ViewObserver {
         }
     }
 
+	private static Image loadImage(String path) {
+		InputStream stream = SpaceView.class.getClassLoader().getResourceAsStream(path);
+		assert stream != null;
+		return new Image(stream);
+	}
+
 	static {
-		ClassLoader loader = SpaceView.class.getClassLoader();
-		blankSquare = new Image(loader.getResourceAsStream("assets/empty.png"));
-		wallTexture = new Image(loader.getResourceAsStream("assets/wall.png"));
-		antennaTexture = new Image(loader.getResourceAsStream("assets/antenna.png"));
-		startTileTexture = new Image(loader.getResourceAsStream("assets/startTile.png"));
-		gearAnticlockwiseTexture = new Image(loader.getResourceAsStream("assets/gearLeft.png"));
-		gearClockwiseTexture = new Image(loader.getResourceAsStream("assets/gearRight.png"));
+		blankSquare = loadImage("assets/empty.png");
+		wallTexture = loadImage("assets/wall.png");
+		antennaTexture = loadImage("assets/antenna.png");
+		startTileTexture = loadImage("assets/startTile.png");
+		gearAnticlockwiseTexture = loadImage("assets/gearLeft.png");
+		gearClockwiseTexture = loadImage("assets/gearRight.png");
 		checkpointTextures = new Image[8];
 		for (int i = 1; i <= 8; i++) {
-			checkpointTextures[i - 1] = new Image(loader.getResourceAsStream("assets/" + i + ".png"));
+			checkpointTextures[i - 1] = loadImage("assets/" + i + ".png");
 		}
-		conveyorTextures = new Image[8];
-		conveyorTextures[0] = new Image(loader.getResourceAsStream("assets/green.png"));
-		conveyorTextures[1] = new Image(loader.getResourceAsStream("assets/greenTurnLeft.png"));
-		conveyorTextures[2] = new Image(loader.getResourceAsStream("assets/greenTurnRight.png"));
-		conveyorTextures[3] = new Image(loader.getResourceAsStream("assets/greenMergeSide.png"));
-		conveyorTextures[4] = conveyorTextures[0];
-		conveyorTextures[5] = new Image(loader.getResourceAsStream("assets/greenMergeLeft.png"));
-		conveyorTextures[6] = new Image(loader.getResourceAsStream("assets/greenMergeRight.png"));
-		conveyorTextures[7] = conveyorTextures[0];
+		conveyorTextures = new Image[16];
+		String prefix = "assets/green";
+		for (int i = 0; i < 16; ) {
+			int straight = i;
+			conveyorTextures[i++] = loadImage(prefix + ".png");
+			conveyorTextures[i++] = loadImage(prefix + "TurnLeft.png");
+			conveyorTextures[i++] = loadImage(prefix + "TurnRight.png");
+			conveyorTextures[i++] = loadImage(prefix + "MergeSide.png");
+			conveyorTextures[i++] = conveyorTextures[straight];
+			conveyorTextures[i++] = loadImage(prefix + "MergeLeft.png");
+			conveyorTextures[i++] = loadImage(prefix + "MergeRight.png");
+			conveyorTextures[i++] = conveyorTextures[straight];
+			prefix = "assets/blue";
+		}
 	}
 
 }
