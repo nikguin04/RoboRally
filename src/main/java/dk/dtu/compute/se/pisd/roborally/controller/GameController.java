@@ -43,6 +43,8 @@ import java.util.Timer;
  */
 public class GameController {
 
+    final public static double POLLING_RATE = 0.25;
+
     final public Board board;
     final public ServerPlayer splayer;
     final public Lobby lobby;
@@ -213,7 +215,7 @@ public class GameController {
                 });
                 if (currentPlayer.getNetworkId() != splayer.getId()) {
                     InteractionDecisionScheduler ids = new InteractionDecisionScheduler(this, lobby, currentPlayer.getNetworkId());
-                    ids.setPeriod(Duration.seconds(1));
+                    ids.setPeriod(Duration.seconds(POLLING_RATE));
                     ids.start();
                 }
 				return;
@@ -237,7 +239,7 @@ public class GameController {
     public void startAutoActivationExecution() {
 		// WARNING: this needs to be canceled again by setting phase to something other than activation
 		ProgramPhaseScheduler pps = new ProgramPhaseScheduler(this);
-		pps.setPeriod(Duration.seconds(1));
+		pps.setPeriod(Duration.seconds(POLLING_RATE));
 		pps.start();
 	}
 
@@ -364,7 +366,7 @@ public class GameController {
             }
         }
 		MoveNetworkScheduler mns = new MoveNetworkScheduler(board.lobby, splayer, this);
-		mns.setPeriod(Duration.seconds(1));
+		mns.setPeriod(Duration.seconds(POLLING_RATE));
 		timer.setTimer();
 		mns.start();
     }

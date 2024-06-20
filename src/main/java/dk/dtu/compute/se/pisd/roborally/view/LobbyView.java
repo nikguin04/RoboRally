@@ -27,6 +27,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
+import dk.dtu.compute.se.pisd.roborally.controller.GameController;
 import dk.dtu.compute.se.pisd.roborally.controller.LobbyNetworkScheduler;
 import dk.dtu.compute.se.pisd.roborally.net.LobbyRest;
 import dk.dtu.compute.se.pisd.roborallyserver.model.Lobby;
@@ -77,7 +78,7 @@ public class LobbyView extends VBox implements ViewObserver {
 
         lns.updatePlayersInLobby();
 
-        lns.setPeriod(Duration.seconds(1));
+        lns.setPeriod(Duration.seconds(GameController.POLLING_RATE));
         lns.start();
 
 
