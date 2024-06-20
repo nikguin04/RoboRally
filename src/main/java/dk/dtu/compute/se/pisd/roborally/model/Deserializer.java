@@ -7,7 +7,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
-import dk.dtu.compute.se.pisd.roborally.controller.PrioAntenna;
+import dk.dtu.compute.se.pisd.roborally.controller.PriorityAntenna;
 import dk.dtu.compute.se.pisd.roborally.controller.SpaceElement;
 import dk.dtu.compute.se.pisd.roborally.controller.StartTile;
 import dk.dtu.compute.se.pisd.roborallyserver.model.Lobby;
@@ -44,9 +44,9 @@ public class Deserializer {
 					Space new_s = context.deserialize(xarr.get(iy), Space.class);
 					b.getSpace(ix, iy).copyAttributesFrom(new_s);
 
-					// Special case for prio antenna
-					if (new_s.getElement() != null && new_s.getElement().getClass().equals(PrioAntenna.class)) {
-						b.setPrioAntenna((PrioAntenna) new_s.getElement(), new_s);
+					// Special case for priority antenna
+					if (new_s.getElement() != null && new_s.getElement().getClass().equals(PriorityAntenna.class)) {
+						b.setPriorityAntenna((PriorityAntenna) new_s.getElement(), new_s);
 					} else if (new_s.getElement() != null && new_s.getElement().getClass().equals(StartTile.class)) {
 						b.setStartTile((StartTile) new_s.getElement());
 					}
@@ -65,7 +65,7 @@ public class Deserializer {
 				PlayerDeserializer.player_index = i;
 				Player p = context.deserialize(players.get(i), Player.class);
 				b.addPlayer(p);
-				b.addPrioPlayer(p);
+				b.addPriorityPlayer(p);
 			}
 			b.setCurrentPlayer(b.getPlayer(obj.get("current_playerindex").getAsInt()));
 

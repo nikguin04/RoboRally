@@ -22,7 +22,7 @@
 package dk.dtu.compute.se.pisd.roborally.model;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
-import dk.dtu.compute.se.pisd.roborally.controller.PrioAntenna;
+import dk.dtu.compute.se.pisd.roborally.controller.PriorityAntenna;
 import dk.dtu.compute.se.pisd.roborally.controller.StartTile;
 import dk.dtu.compute.se.pisd.roborallyserver.model.Lobby;
 
@@ -55,7 +55,7 @@ public class Board extends Subject {
 
     private final Space[][] spaces;
 
-	private PrioAntenna prioAntenna;
+	private PriorityAntenna priorityAntenna;
 
     private StartTile startTile;
 
@@ -65,7 +65,7 @@ public class Board extends Subject {
 
     private List<Player> players = new ArrayList<>();
 
-	private List<Player> priotizedPlayers = new ArrayList<>();
+	private List<Player> prioritisedPlayers = new ArrayList<>();
 
     private Player current;
 
@@ -104,8 +104,8 @@ public class Board extends Subject {
 	 * @author Anders Greve Sørensen, s235093@dtu.dk.
 	 * @return the priority antenna of this board.
 	 */
-	public PrioAntenna getPrioAntenna() {
-		return this.prioAntenna;
+	public PriorityAntenna getPriorityAntenna() {
+		return this.priorityAntenna;
 	}
 
 	/**
@@ -120,11 +120,11 @@ public class Board extends Subject {
 	/**
 	 * Attaches a given priority antenna to this board.
 	 * @author Anders Greve Sørensen, s235093@dtu.dk.
-	 * @param prioAntenna the priority antenna to be attached to this board.
+	 * @param priorityAntenna the priority antenna to be attached to this board.
 	 */
-	public void setPrioAntenna(PrioAntenna prioAntenna, Space space) {
-		prioAntenna.attachBoard(this, space);
-		this.prioAntenna = prioAntenna;
+	public void setPriorityAntenna(PriorityAntenna priorityAntenna, Space space) {
+		priorityAntenna.attachBoard(this, space);
+		this.priorityAntenna = priorityAntenna;
 	}
 
     /**
@@ -147,21 +147,21 @@ public class Board extends Subject {
 	}
 
 	/**
-	 * Retrieve this board's list of prioritized players.
+	 * Retrieve this board's list of prioritised players.
 	 * @author Anders Greve Sørensen, s235093@dtu.dk.
-	 * @return the board's list of prioritized players.
+	 * @return the board's list of prioritised players.
 	 */
-	public List<Player> getPrioritizedPlayers() {
-		return priotizedPlayers;
+	public List<Player> getPrioritisedPlayers() {
+		return prioritisedPlayers;
 	}
 
 	/**
-	 * Set this boards prioritized players list to the given list of players.
+	 * Set this boards prioritised players list to the given list of players.
 	 * @author Anders Greve Sørensen, s235093@dtu.dk.
-	 * @param prioPlayerList The player list to set this boards prioritized players list to.
+	 * @param prioritisedPlayerList The player list to set this boards prioritised players list to.
 	 */
-	public void setPrioritizedPlayers(List<Player> prioPlayerList) {
-		this.priotizedPlayers = prioPlayerList;
+	public void setPrioritisedPlayers(List<Player> prioritisedPlayerList) {
+		this.prioritisedPlayers = prioritisedPlayerList;
 	}
 
 
@@ -202,26 +202,26 @@ public class Board extends Subject {
     }
 
 	/**
-	 * Add a player to this board's prioritized players list.
+	 * Add a player to this board's prioritised players list.
 	 * @author Anders Greve Sørensen, s235093@dtu.dk.
-	 * @param player the player to be added to the prioritized players list.
+	 * @param player the player to be added to the prioritised players list.
 	 */
-	public void addPrioPlayer(@NotNull Player player) {
-		if (player.board == this && !priotizedPlayers.contains(player)) {
-			priotizedPlayers.add(player);
+	public void addPriorityPlayer(@NotNull Player player) {
+		if (player.board == this && !prioritisedPlayers.contains(player)) {
+			prioritisedPlayers.add(player);
 			notifyChange();
 		}
 	}
 
 	/**
-	 * Get a player from the prioritized player list, given its index.
+	 * Get a player from the prioritised player list, given its index.
 	 * @author Anders Greve Sørensen, s235093@dtu.dk.
-	 * @param i the index of the player in the prioritized player list.
-	 * @return the player with index i in this board's prioritized player list, null if index is out of range.
+	 * @param i the index of the player in the prioritised player list.
+	 * @return the player with index i in this board's prioritised player list, null if index is out of range.
 	 */
-	public Player getPrioPlayer(int i) {
-		if (i >= 0 && i < priotizedPlayers.size()) {
-			return priotizedPlayers.get(i);
+	public Player getPriorityPlayer(int i) {
+		if (i >= 0 && i < prioritisedPlayers.size()) {
+			return prioritisedPlayers.get(i);
 		}
 		else {return null;}
 	}
@@ -291,14 +291,14 @@ public class Board extends Subject {
     }
 
 	/**
-	 * Gets the index of the given player in the prioritized player list of this board.
+	 * Gets the index of the given player in the prioritised player list of this board.
 	 * @author Anders Greve Sørensen, s235093@dtu.dk.
 	 * @param player The player the find the index of.
-	 * @return the index of the given player in the boards prioritized players list.
+	 * @return the index of the given player in the boards prioritised players list.
 	 */
-	public int getPrioPlayerNumber(@NotNull Player player) {
+	public int getPriorityPlayerNumber(@NotNull Player player) {
 		if (player.board == this) {
-			return priotizedPlayers.indexOf(player);
+			return prioritisedPlayers.indexOf(player);
 		} else {
 			return -1;
 		}
@@ -365,7 +365,7 @@ public class Board extends Subject {
 		if (nextSpace == null)
 			return false;
 		return nextSpace.getWalls().contains(heading.opposite())
-			|| nextSpace.getElement() instanceof PrioAntenna;
+			|| nextSpace.getElement() instanceof PriorityAntenna;
 	}
 
     public String getStatusMessage() {

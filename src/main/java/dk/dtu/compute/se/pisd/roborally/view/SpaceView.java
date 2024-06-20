@@ -25,7 +25,7 @@ import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.controller.CheckPoint;
 import dk.dtu.compute.se.pisd.roborally.controller.ConveyorBelt;
 import dk.dtu.compute.se.pisd.roborally.controller.Gears;
-import dk.dtu.compute.se.pisd.roborally.controller.PrioAntenna;
+import dk.dtu.compute.se.pisd.roborally.controller.PriorityAntenna;
 import dk.dtu.compute.se.pisd.roborally.controller.StartTile;
 import dk.dtu.compute.se.pisd.roborally.model.Heading;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
@@ -103,7 +103,7 @@ public class SpaceView extends StackPane implements ViewObserver {
 
 		if (space.getElement() == null) {
 			tile.setImage(blankSquare);
-		} else if (space.getElement() instanceof PrioAntenna) {
+		} else if (space.getElement() instanceof PriorityAntenna) {
 			tile.setImage(antennaTexture);
 		} else if (space.getElement() instanceof StartTile) {
 			tile.setImage(startTileTexture);

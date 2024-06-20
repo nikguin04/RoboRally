@@ -12,7 +12,7 @@ import java.util.concurrent.ExecutionException;
 import org.junit.jupiter.api.Test;
 
 import dk.dtu.compute.se.pisd.roborally.controller.ConveyorBelt;
-import dk.dtu.compute.se.pisd.roborally.controller.PrioAntenna;
+import dk.dtu.compute.se.pisd.roborally.controller.PriorityAntenna;
 import dk.dtu.compute.se.pisd.roborally.controller.StartTile;
 import dk.dtu.compute.se.pisd.roborally.model.Board;
 import dk.dtu.compute.se.pisd.roborally.model.Command;
@@ -123,8 +123,8 @@ public class LoadTest {
 		b.setStartTile(new StartTile(0, 4));
 
 
-		b.setPrioAntenna(new PrioAntenna(5, 5));
-		b.addPrioPlayer(p);
+		b.setPriorityAntenna(new PriorityAntenna(5, 5));
+		b.addPriorityPlayer(p);
 
 		return b;
 	}
