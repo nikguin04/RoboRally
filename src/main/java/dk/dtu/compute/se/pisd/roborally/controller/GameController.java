@@ -240,33 +240,25 @@ public class GameController {
 		Player currentPlayer = board.getCurrentPlayer();
 		int step = board.getStep();
 
-		// After any player move, check space of all players, if checkpoint, activate checkpoint.
-		for (Player p : board.getPlayers()) {
-			if (p.getSpace().getElement() instanceof CheckPoint cp) {
-				cp.doAction(this, p.getSpace());
-				int numCheckpoints = board.getNumCheckpoints();
-				if (numCheckpoints > 0 && p.getCheckPointCounter() == numCheckpoints) {
-					board.setWinner(p);
-					board.setPhase(Phase.GAME_OVER);
-				}
-			}
-		}
-
 		int nextPlayerNumber = board.getPriorityPlayerNumber(currentPlayer) + 1;
 		if (nextPlayerNumber < board.getPlayersNumber()) {
 			board.setCurrentPlayer(board.getPriorityPlayer(nextPlayerNumber));
 		} else { // else = we have reached the final step
-			// For some reason, we can't just get a list of players???
-			for (int i = 0; i < board.getPlayersNumber(); i++) {
-				Player p = board.getPlayer(i);
-                Space space = p.getSpace();
-				Platform.runLater( () -> {
-                	p.playerStatus.set(PlayerStatus.WAITING);
+			int numCheckpoints = board.getNumCheckpoints();
+			for (Player player : board.getPlayers()) {
+				Space space = player.getSpace();
+				Platform.runLater(() -> {
+					player.playerStatus.set(PlayerStatus.WAITING);
 				});
 				SpaceElement element = space.getElement();
 				if (element == null) continue;
 				// TODO We should probably handle activation order
 				element.doAction(this, space);
+				// Check if the player has won
+				if (numCheckpoints > 0 && player.getCheckPointCounter() == numCheckpoints) {
+					board.setWinner(player);
+					board.setPhase(Phase.GAME_OVER);
+				}
 			}
 			step++;
 			// Each time all players have made a move, recalculate priority
