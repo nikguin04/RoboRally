@@ -63,17 +63,30 @@ public class ConveyorBelt extends SpaceElement {
         this.fast = fast;
     }
 
-	@Override
-	public boolean doAction(@NotNull GameController gameController, @NotNull Space space) {
+	private static boolean movePlayer(@NotNull GameController gameController, @NotNull Player player, @NotNull ConveyorBelt belt) {
 		// TODO: Should pushing other players be allowed?
 		try {
-			Player player = space.getPlayer();
-			gameController.moveToSpace(player, heading);
-			if (fast) gameController.moveToSpace(player, heading);
+			gameController.moveToSpace(player, belt.heading);
+			if (player.getSpace().getElement() instanceof ConveyorBelt second) {
+				if (belt.heading.next() == second.heading) {
+					gameController.turnRight(player);
+				} else if (belt.heading.prev() == second.heading) {
+					gameController.turnLeft(player);
+				}
+			}
 			return true;
 		} catch (GameController.ImpossibleMoveException e) {
 			return false;
 		}
+	}
+
+	@Override
+	public boolean doAction(@NotNull GameController gameController, @NotNull Space space) {
+		Player player = space.getPlayer();
+		boolean success = movePlayer(gameController, player, this);
+		if (fast && player.getSpace().getElement() instanceof ConveyorBelt second)
+			success |= movePlayer(gameController, player, second);
+		return success;
 	}
 
 }
