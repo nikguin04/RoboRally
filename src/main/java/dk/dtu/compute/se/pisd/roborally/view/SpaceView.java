@@ -24,6 +24,7 @@ package dk.dtu.compute.se.pisd.roborally.view;
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.controller.CheckPoint;
 import dk.dtu.compute.se.pisd.roborally.controller.ConveyorBelt;
+import dk.dtu.compute.se.pisd.roborally.controller.Gears;
 import dk.dtu.compute.se.pisd.roborally.controller.PrioAntenna;
 import dk.dtu.compute.se.pisd.roborally.controller.StartTile;
 import dk.dtu.compute.se.pisd.roborally.model.Heading;
@@ -49,6 +50,8 @@ public class SpaceView extends StackPane implements ViewObserver {
 	final public static Image wallTexture;
 	final public static Image antennaTexture;
 	final public static Image startTileTexture;
+	final public static Image gearAnticlockwiseTexture;
+	final public static Image gearClockwiseTexture;
 	final public static Image[] checkpointTextures;
 	final public static Image[] conveyorTextures;
 
@@ -107,6 +110,8 @@ public class SpaceView extends StackPane implements ViewObserver {
 		} else if (space.getElement() instanceof CheckPoint cp) {
 			assert cp.checkPointNr <= 8;
 			tile.setImage(checkpointTextures[cp.checkPointNr - 1]);
+		} else if (space.getElement() instanceof Gears gears) {
+			tile.setImage(gears.anticlockwise ? gearAnticlockwiseTexture : gearClockwiseTexture);
 		} else if (space.getElement() instanceof ConveyorBelt belt) {
 			int index = 0;
 			Space neighbour;
@@ -159,6 +164,8 @@ public class SpaceView extends StackPane implements ViewObserver {
 		wallTexture = new Image(loader.getResourceAsStream("assets/wall.png"));
 		antennaTexture = new Image(loader.getResourceAsStream("assets/antenna.png"));
 		startTileTexture = new Image(loader.getResourceAsStream("assets/startTile.png"));
+		gearAnticlockwiseTexture = new Image(loader.getResourceAsStream("assets/gearLeft.png"));
+		gearClockwiseTexture = new Image(loader.getResourceAsStream("assets/gearRight.png"));
 		checkpointTextures = new Image[8];
 		for (int i = 1; i <= 8; i++) {
 			checkpointTextures[i - 1] = new Image(loader.getResourceAsStream("assets/" + i + ".png"));
