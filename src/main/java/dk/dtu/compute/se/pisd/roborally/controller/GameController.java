@@ -43,6 +43,8 @@ import java.util.Timer;
  */
 public class GameController {
 
+    final public static double POLLING_RATE = 0.25;
+
     final public Board board;
     final public ServerPlayer splayer;
     final public Lobby lobby;
@@ -205,11 +207,16 @@ public class GameController {
 			if (command == Command.OPTION_LEFT_RIGHT) {
 				board.setPhase(Phase.PLAYER_INTERACTION);
                 // Start awaiting result
+                Platform.runLater(() -> {
+                    for (int i = 0; i < board.getPlayersNumber(); i++) {
+                        Player p = board.getPlayer(i);
+                        p.playerStatus.set( currentPlayer.equals(p) ? PlayerStatus.WAITING : PlayerStatus.IDLE );
+                    }
+                });
                 if (currentPlayer.getNetworkId() != splayer.getId()) {
-                // TODO: Set players to waiting status
-                InteractionDecisionScheduler ids = new InteractionDecisionScheduler(this, lobby, currentPlayer.getNetworkId());
-                ids.setPeriod(Duration.seconds(1));
-                ids.start();
+                    InteractionDecisionScheduler ids = new InteractionDecisionScheduler(this, lobby, currentPlayer.getNetworkId());
+                    ids.setPeriod(Duration.seconds(POLLING_RATE));
+                    ids.start();
                 }
 				return;
 			}
@@ -247,9 +254,6 @@ public class GameController {
 			int numCheckpoints = board.getNumCheckpoints();
 			for (Player player : board.getPlayers()) {
 				Space space = player.getSpace();
-				Platform.runLater(() -> {
-					player.playerStatus.set(PlayerStatus.WAITING);
-				});
 				SpaceElement element = space.getElement();
 				if (element == null) continue;
 				// TODO We should probably handle activation order
@@ -354,7 +358,7 @@ public class GameController {
             }
         }
 		MoveNetworkScheduler mns = new MoveNetworkScheduler(board.lobby, splayer, this);
-		mns.setPeriod(Duration.seconds(1));
+		mns.setPeriod(Duration.seconds(POLLING_RATE));
 		timer.setTimer();
 		mns.start();
     }
