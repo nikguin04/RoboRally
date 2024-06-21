@@ -45,7 +45,7 @@ public class LobbyController {
     // TODO: Make function to return only joinable lobbies for client
     @GetMapping("/joinable")
     public ResponseEntity<List<Lobby>> getJoinableLobbies(){
-        return ResponseEntity.ok(lobbyRepository.findAll());
+        return ResponseEntity.ok(lobbyRepository.getAllByGameStartedFalse());
     }
 
 

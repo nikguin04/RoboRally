@@ -64,7 +64,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.VBox;
 
-import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.HttpStatusCodeException;
 
 /**
  * ...
@@ -268,9 +268,9 @@ public class AppController implements Observer {
 				Lobby lobby = new Lobby(Long.valueOf(textField.getText()), 0L, null, false, null); // TODO: TEMP VARIABLE, add actual lobby fetching
 				ServerPlayer splayer = PlayerRest.PushPlayerToLobby(lobby.getId(), playerName);
 				roboRally.createLobbyView(this, lobby, splayer);
-			} catch (HttpServerErrorException e) {
-				Alert alert = new Alert(AlertType.ERROR, "There was an error when trying to join the lobby.", ButtonType.OK);
-				alert.setHeaderText("Something went wrong on the server");
+			} catch (HttpStatusCodeException e) {
+				Alert alert = new Alert(AlertType.ERROR, "The lobby might already have been started, or some other error occured.", ButtonType.OK);
+				alert.setHeaderText("Something went wrong when trying to join the lobby");
 				alert.showAndWait();
 			}
 		}
