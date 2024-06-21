@@ -239,7 +239,7 @@ public class GameController {
     public void startAutoActivationExecution() {
 		// WARNING: this needs to be canceled again by setting phase to something other than activation
 		ProgramPhaseScheduler pps = new ProgramPhaseScheduler(this);
-		pps.setPeriod(Duration.seconds(POLLING_RATE));
+		pps.setPeriod(Duration.seconds(1));
 		pps.start();
 	}
 

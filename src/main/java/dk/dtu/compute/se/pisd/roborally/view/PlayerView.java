@@ -116,13 +116,14 @@ public class PlayerView extends Tab implements ViewObserver {
 		finishButton.setOnAction( e -> networkController.sendData(player));
 
 
-        executeButton = new Button("Execute Program");
-        executeButton.setOnAction( e-> gameController.executePrograms());
+        //executeButton = new Button("Execute Program");
+        //executeButton.setOnAction( e-> gameController.executePrograms());
 
-        stepButton = new Button("Execute Current Register");
-        stepButton.setOnAction( e-> gameController.executeStep());
+        //stepButton = new Button("Execute Current Register");
+        //stepButton.setOnAction( e-> gameController.executeStep());
 
-        buttonPanel = new VBox(finishButton, executeButton, stepButton);
+        //buttonPanel = new VBox(finishButton, executeButton, stepButton);
+        buttonPanel = new VBox(finishButton);
         buttonPanel.setAlignment(Pos.CENTER_LEFT);
         buttonPanel.setSpacing(3.0);
         // programPane.add(buttonPanel, Player.NO_REGISTERS, 0); done in update now
@@ -191,23 +192,23 @@ public class PlayerView extends Tab implements ViewObserver {
 					finishButton.setDisable(true);
 					// XXX just to make sure that there is a way for the player to get
 					//     from the initialization phase to the programming phase somehow!
-					executeButton.setDisable(false);
-					stepButton.setDisable(true);
+					/*executeButton.setDisable(false);
+					stepButton.setDisable(true);*/
 				}
 				case PROGRAMMING -> {
 					finishButton.setDisable(false);
-					executeButton.setDisable(true);
-					stepButton.setDisable(true);
+					/*executeButton.setDisable(true);
+					stepButton.setDisable(true);*/
 				}
 				case ACTIVATION -> {
 					finishButton.setDisable(true);
-					executeButton.setDisable(false);
-					stepButton.setDisable(false);
+					/*executeButton.setDisable(false);
+					stepButton.setDisable(false);*/
 				}
 				default -> {
 					finishButton.setDisable(true);
-					executeButton.setDisable(true);
-					stepButton.setDisable(true);
+					/*executeButton.setDisable(true);
+					stepButton.setDisable(true);*/
 				}
 			}
 			if (player.board.getPhase() == Phase.GAME_OVER) {
