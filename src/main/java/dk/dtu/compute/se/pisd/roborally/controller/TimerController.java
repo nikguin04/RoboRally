@@ -59,7 +59,7 @@ public class TimerController {
 	}
 
 	void setTimer(){
-		totalSec = 180;
+		totalSec = 45;
 		Player p = board.getCurrentPlayer();
 		Timer timer = new Timer();
 
