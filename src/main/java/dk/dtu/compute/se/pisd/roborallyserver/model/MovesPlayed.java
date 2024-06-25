@@ -20,7 +20,7 @@ import lombok.Setter;
 public class MovesPlayed {
 
 	@Id
-	private Long rounds;
+	private Long round;
 
 	private Command move1;
 	private Command move2;
@@ -52,7 +52,7 @@ public class MovesPlayed {
 
 	@Embeddable
 	public static class MovesPlayedKey implements Serializable {
-		private Long rounds;
+		private Long round;
 		@ManyToOne private ServerPlayer player;
 	}
 }

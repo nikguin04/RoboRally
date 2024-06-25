@@ -20,11 +20,11 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@IdClass(InteractionDecisions.InteractionDecisionsKey.class)
-public class InteractionDecisions {
+@IdClass(InteractionDecision.InteractionDecisionKey.class)
+public class InteractionDecision {
 
 	@Id
-	private Long rounds;
+	private Long round;
 
 	@Id
 	private int step;
@@ -43,8 +43,8 @@ public class InteractionDecisions {
 
 
 	@Embeddable
-	public static class InteractionDecisionsKey implements Serializable {
-		private Long rounds;
+	public static class InteractionDecisionKey implements Serializable {
+		private Long round;
 		private int step;
 		@ManyToOne
 		private Lobby lobby;

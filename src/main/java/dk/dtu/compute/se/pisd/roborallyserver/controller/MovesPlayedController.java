@@ -52,7 +52,7 @@ public class MovesPlayedController {
 		movesPlayedRepository.saveAndFlush(played);
 		// Check if all moves are submitted now, then increment round id
 		int countPlayers = playerRepository.countPlayersByLobby_Id(lobby.getId());
-		int movesPlayed = movesPlayedRepository.countMovesPlayedByLobby_IdAndRounds(lobby.getId(), lobby.getRounds());
+		int movesPlayed = movesPlayedRepository.countMovesPlayedByLobby_IdAndRound(lobby.getId(), lobby.getRounds());
 		if (countPlayers == movesPlayed) {
 			lobby.setRounds(lobby.getRounds() + 1);
 			lobbyRepository.saveAndFlush(lobby);
@@ -67,7 +67,7 @@ public class MovesPlayedController {
 		Lobby lobby = lobbyRepository.getLobbyById(lobbyid);
 		int playerCount = playerRepository.countPlayersByLobby_Id(lobbyid);
 
-		List<MovesPlayed> movesplayed = movesPlayedRepository.getMovesPlayedByLobby_IdAndRounds(lobbyid, round);
+		List<MovesPlayed> movesplayed = movesPlayedRepository.getMovesPlayedByLobby_IdAndRound(lobbyid, round);
 		if (playerCount == movesplayed.size()) {
 			return ResponseEntity.ok(movesplayed);
 		} else {
@@ -82,12 +82,12 @@ public class MovesPlayedController {
 		Lobby lobby = lobbyRepository.getLobbyById(lobbyid);
 
 		List<ServerPlayer> playersDone = new ArrayList<ServerPlayer>();
-		List<MovesPlayed> moves = movesPlayedRepository.getMovesPlayedByLobby_IdAndRounds(lobbyid, round);
+		List<MovesPlayed> moves = movesPlayedRepository.getMovesPlayedByLobby_IdAndRound(lobbyid, round);
 		for (MovesPlayed move : moves) {
 			playersDone.add(move.getPlayer());
 		}
 		return ResponseEntity.ok(playersDone);
 	}
 
-	public static record NewMovesPlayBody (Long rounds, Command move1, Command move2, Command move3, Command move4, Command move5, Long lobby_id, long player_id) {};
+	public static record NewMovesPlayBody (Long round, Command move1, Command move2, Command move3, Command move4, Command move5, Long lobby_id, long player_id) {};
 }

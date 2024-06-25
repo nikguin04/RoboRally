@@ -35,7 +35,7 @@ import dk.dtu.compute.se.pisd.roborally.model.Phase;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.model.Player.PlayerStatus;
 import dk.dtu.compute.se.pisd.roborally.net.InteractionDecisionRest;
-import dk.dtu.compute.se.pisd.roborallyserver.controller.InteractionDecisionsController.NewInteractionDecisionBody;
+import dk.dtu.compute.se.pisd.roborallyserver.controller.InteractionDecisionController.NewInteractionDecisionBody;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;

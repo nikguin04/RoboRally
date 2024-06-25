@@ -10,23 +10,23 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import dk.dtu.compute.se.pisd.roborally.model.Command;
-import dk.dtu.compute.se.pisd.roborallyserver.controller.InteractionDecisionsController.NewInteractionDecisionBody;
+import dk.dtu.compute.se.pisd.roborallyserver.controller.InteractionDecisionController.NewInteractionDecisionBody;
 import dk.dtu.compute.se.pisd.roborallyserver.model.ServerPlayer;
 
 public class InteractionDecisionRest {
 
 	public static final RestTemplate restTemplate = new RestTemplate();
 
-	public static Command requestInteractionDecision(long lobbyid, long playerid, long rounds, int step) {
+	public static Command requestInteractionDecision(long lobbyid, long playerid, long round, int step) {
 
 		Map<String, String> uriVariables = new HashMap<>();
         uriVariables.put("lobbyid", String.valueOf(lobbyid));
         uriVariables.put("playerid", String.valueOf(playerid));
-        uriVariables.put("rounds", String.valueOf(rounds));
+        uriVariables.put("round", String.valueOf(round));
         uriVariables.put("step", String.valueOf(step));
 
 		ResponseEntity<Command> response = restTemplate
-			.getForEntity(SERVER_HTTPURL + "interactiondecisions/get?lobbyid={lobbyid}&playerid={playerid}&rounds={rounds}&step={step}", Command.class, uriVariables);
+			.getForEntity(SERVER_HTTPURL + "interactiondecisions/get?lobbyid={lobbyid}&playerid={playerid}&round={round}&step={step}", Command.class, uriVariables);
 		return response.getBody(); // Should return null on error 400
 	}
 
