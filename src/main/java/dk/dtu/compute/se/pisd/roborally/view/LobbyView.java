@@ -87,7 +87,7 @@ public class LobbyView extends VBox implements ViewObserver {
 
 
 
-        statusLabel = new Label("<no status>");
+        statusLabel = new Label("Current lobby: Lobby " + lns.getLobbyId().toString());
 
         this.getChildren().add(lobbyLabel);
         this.getChildren().add(playerListView);

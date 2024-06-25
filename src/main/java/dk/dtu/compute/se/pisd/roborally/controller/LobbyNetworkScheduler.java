@@ -28,6 +28,10 @@ public class LobbyNetworkScheduler extends ScheduledService<Void> {
         playersFetched = FXCollections.observableArrayList();
 	}
 
+	public Long getLobbyId() {
+		return lobby.getId();
+	}
+
 	@Override
 	protected Task<Void> createTask() {
 		return new Task<Void>() {

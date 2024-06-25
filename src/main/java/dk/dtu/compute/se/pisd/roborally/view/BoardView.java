@@ -98,7 +98,7 @@ public class BoardView extends VBox implements ViewObserver {
 		gameController.getTimer().settTimer(timeLabel);
 
 
-        infoLabel = new Label("Hello from right side");
+        infoLabel = new Label("Welcome to Roborally");
         mapLabel = new Label("Current map: " + gameController.lobby.getMap().getMapName());
         playerStatusLabels = new ArrayList<Label>();
         for (int i = 0; i < gameController.players.length; i++) {
