@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import dk.dtu.compute.se.pisd.roborally.model.Command;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,11 +22,11 @@ public class MovesPlayed {
 	@Id
 	private Long rounds;
 
-	private String move1;
-	private String move2;
-	private String move3;
-	private String move4;
-	private String move5;
+	private Command move1;
+	private Command move2;
+	private Command move3;
+	private Command move4;
+	private Command move5;
 
 	@ManyToOne
 	@JoinColumn(nullable = false)

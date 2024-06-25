@@ -54,6 +54,9 @@ public class CommandCardField extends Subject {
     public String getCardEnumName() {
         return (getCard() != null) ? getCard().command.name() : null;
     }
+    public Command getCommand() {
+        return (getCard() != null) ? getCard().command : null;
+    }
 
     public void setCard(CommandCard card) {
         if (card != this.card) {

@@ -12,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import dk.dtu.compute.se.pisd.roborally.model.Command;
 import dk.dtu.compute.se.pisd.roborallyserver.controller.MovesPlayedController.NewMovesPlayBody;
 import dk.dtu.compute.se.pisd.roborallyserver.controller.PlayerController.NewPlayerBody;
 import dk.dtu.compute.se.pisd.roborallyserver.model.Lobby;
@@ -76,11 +77,11 @@ public class lobbytest {
 		ServerPlayer p1 = playerController.newPlayer(new NewPlayerBody("p1", newLobby.getId())).getBody();
 		ServerPlayer p2 = playerController.newPlayer(new NewPlayerBody("p2", newLobby.getId())).getBody();
 
-		movesPlayedController.newMovesPlayed(new NewMovesPlayBody(0l, "FWD1", "FWD2", "FWD3", "LEFT", "Back", newLobby.getId(), p1.getId()));
+		movesPlayedController.newMovesPlayed(new NewMovesPlayBody(0l, Command.FWD1, Command.FWD2, Command.FWD3, Command.LEFT, Command.Back, newLobby.getId(), p1.getId()));
 
 		assertEquals(HttpStatus.BAD_REQUEST, movesPlayedController.isFinishedProgramming(newLobby.getId(), 0l).getStatusCode());
 
-		movesPlayedController.newMovesPlayed(new NewMovesPlayBody(0l, "FWD1", "FWD2", "FWD3", "LEFT", "Back", newLobby.getId(), p2.getId()));
+		movesPlayedController.newMovesPlayed(new NewMovesPlayBody(0l, Command.FWD1, Command.FWD2, Command.FWD3, Command.LEFT, Command.Back, newLobby.getId(), p2.getId()));
 
 		assertEquals(HttpStatus.OK, movesPlayedController.isFinishedProgramming(newLobby.getId(), 0l).getStatusCode());
 	}

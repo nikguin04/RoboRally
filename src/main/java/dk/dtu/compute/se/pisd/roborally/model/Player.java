@@ -230,11 +230,11 @@ public class Player extends Subject {
     }
 
 	public void parseServerMovesToProgram(MovesPlayed moves) {
-		program[0].setCard(new CommandCard(Command.valueOf(moves.getMove1())));
-		program[1].setCard(new CommandCard(Command.valueOf(moves.getMove2())));
-		program[2].setCard(new CommandCard(Command.valueOf(moves.getMove3())));
-		program[3].setCard(new CommandCard(Command.valueOf(moves.getMove4())));
-		program[4].setCard(new CommandCard(Command.valueOf(moves.getMove5())));
+		program[0].setCard(new CommandCard(moves.getMove1()));
+		program[1].setCard(new CommandCard(moves.getMove2()));
+		program[2].setCard(new CommandCard(moves.getMove3()));
+		program[3].setCard(new CommandCard(moves.getMove4()));
+		program[4].setCard(new CommandCard(moves.getMove5()));
 	}
 
 

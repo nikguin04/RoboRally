@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import dk.dtu.compute.se.pisd.roborally.model.Command;
 import dk.dtu.compute.se.pisd.roborallyserver.model.Lobby;
 import dk.dtu.compute.se.pisd.roborallyserver.model.MovesPlayed;
 import dk.dtu.compute.se.pisd.roborallyserver.model.ServerPlayer;
@@ -88,5 +89,5 @@ public class MovesPlayedController {
 		return ResponseEntity.ok(playersDone);
 	}
 
-	public static record NewMovesPlayBody (Long rounds, String move1, String move2, String move3, String move4, String move5, Long lobby_id, long player_id) {};
+	public static record NewMovesPlayBody (Long rounds, Command move1, Command move2, Command move3, Command move4, Command move5, Long lobby_id, long player_id) {};
 }
