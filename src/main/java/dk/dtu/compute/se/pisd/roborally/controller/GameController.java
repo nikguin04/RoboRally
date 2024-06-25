@@ -157,8 +157,8 @@ public class GameController {
         makeProgramFieldsVisible(0);
         board.setPhase(Phase.ACTIVATION);
 		// When entering activation phase, calculate priority of players.
-		board.getPrioAntenna().updatePlayerPrio();
-        board.setCurrentPlayer(board.getPrioPlayer(0));
+		board.getPriorityAntenna().updatePlayerPriority();
+        board.setCurrentPlayer(board.getPriorityPlayer(0));
         board.setStep(0);
     }
 
@@ -247,38 +247,30 @@ public class GameController {
 		Player currentPlayer = board.getCurrentPlayer();
 		int step = board.getStep();
 
-		// After any player move, check space of all players, if checkpoint, activate checkpoint.
-		for (Player p : board.getPlayers()) {
-			if (p.getSpace().getElement() instanceof CheckPoint cp) {
-				cp.doAction(this, p.getSpace());
-				int numCheckpoints = board.getNumCheckpoints();
-				if (numCheckpoints > 0 && p.getCheckPointCounter() == numCheckpoints) {
-					board.setWinner(p);
-					board.setPhase(Phase.GAME_OVER);
-				}
-			}
-		}
-
-		int nextPlayerNumber = board.getPrioPlayerNumber(currentPlayer) + 1;
+		int nextPlayerNumber = board.getPriorityPlayerNumber(currentPlayer) + 1;
 		if (nextPlayerNumber < board.getPlayersNumber()) {
-			board.setCurrentPlayer(board.getPrioPlayer(nextPlayerNumber));
+			board.setCurrentPlayer(board.getPriorityPlayer(nextPlayerNumber));
 		} else { // else = we have reached the final step
-			// For some reason, we can't just get a list of players???
-			for (int i = 0; i < board.getPlayersNumber(); i++) {
-				Player p = board.getPlayer(i);
-                Space space = p.getSpace();
+			int numCheckpoints = board.getNumCheckpoints();
+			for (Player player : board.getPlayers()) {
+				Space space = player.getSpace();
 				SpaceElement element = space.getElement();
 				if (element == null) continue;
 				// TODO We should probably handle activation order
 				element.doAction(this, space);
+				// Check if the player has won
+				if (numCheckpoints > 0 && player.getCheckPointCounter() == numCheckpoints) {
+					board.setWinner(player);
+					board.setPhase(Phase.GAME_OVER);
+				}
 			}
 			step++;
 			// Each time all players have made a move, recalculate priority
-			board.getPrioAntenna().updatePlayerPrio();
+			board.getPriorityAntenna().updatePlayerPriority();
 			if (step < Player.NO_REGISTERS) {
 				makeProgramFieldsVisible(step);
 				board.setStep(step);
-				board.setCurrentPlayer(board.getPrioPlayer(0));
+				board.setCurrentPlayer(board.getPriorityPlayer(0));
 			} else {
 				StartProgrammingPhase(true);
 			}

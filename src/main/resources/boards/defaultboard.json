@@ -81,7 +81,7 @@
 		{
 			"walls": [],
 			"element": {
-				"CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.PrioAntenna",
+				"CLASSNAME": "dk.dtu.compute.se.pisd.roborally.controller.PriorityAntenna",
 				"INSTANCE": {}
 			},
 			"x": 5,

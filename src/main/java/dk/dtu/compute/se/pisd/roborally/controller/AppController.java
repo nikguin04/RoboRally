@@ -126,8 +126,8 @@ public class AppController implements Observer {
 			board.getSpace(4,5).setElement(new CheckPoint(2));
 			board.setNumCheckpoints(2);
 			// Add the priority antenna to the board
-			PrioAntenna prioAntenna = new PrioAntenna();
-            board.setPrioAntenna(prioAntenna, board.getSpace(5, 5));
+			PriorityAntenna priorityAntenna = new PriorityAntenna();
+            board.setPriorityAntenna(priorityAntenna, board.getSpace(5, 5));
 
             // Set the startTile on the board
             for(int i = 0; i < PLAYER_NUMBER_OPTIONS.get(0); i++){ //TODO Make this so that the number of players is the number of players in the lobbey
@@ -151,7 +151,7 @@ public class AppController implements Observer {
                     if(board.getSpace(g, j).getElement() instanceof StartTile){
                         player = new Player(board, PLAYER_COLORS.get(i), "Player " + (i+1), 0l); // hardcoded 0 for netowork id since this is offline game
                         board.addPlayer(player);
-                        board.addPrioPlayer(player);
+                        board.addPriorityPlayer(player);
                         player.setSpace(board.getSpace(g, j));
                         i += 1;
                     }
@@ -295,7 +295,7 @@ public class AppController implements Observer {
 				if (board.getSpace(x, y).getElement() instanceof StartTile) {
 					player = new Player(board, PLAYER_COLORS.get(i), players[i].getName(), players[i].getId());
 					board.addPlayer(player);
-					board.addPrioPlayer(player);
+					board.addPriorityPlayer(player);
 					player.setSpace(board.getSpace(x, y));
 					i++;
 				}
