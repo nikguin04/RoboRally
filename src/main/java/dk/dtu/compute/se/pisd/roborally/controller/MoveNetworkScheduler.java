@@ -75,25 +75,26 @@ private GameController gameController;
 		});
 	}
 
-
-	public static ServerPlayer[] isFinishedProgramming(long lobbyid, int round) {
+	public static ServerPlayer[] isFinishedProgramming(long lobbyId, int round) {
 		final RestTemplate restTemplate = new RestTemplate();
 		Map<String, String> uriVariables = new HashMap<>();
-		uriVariables.put("lobbyid", String.valueOf(lobbyid));
+		uriVariables.put("lobbyid", String.valueOf(lobbyId));
 		uriVariables.put("round", String.valueOf(round));
 
 		ResponseEntity<ServerPlayer[]> response = restTemplate
-			.getForEntity(SERVER_HTTPURL + "movesplayed/lobbyroundfinished?lobbyid={lobbyid}&round={round}", ServerPlayer[].class, uriVariables);
+			.getForEntity(SERVER_HTTPURL + "movesplayed/finishedplayers?lobbyid={lobbyid}&round={round}", ServerPlayer[].class, uriVariables);
 		return response.getBody();
 	}
-	public  static MovesPlayed[] requestAllPlayerMoves(long lobbyid, int round){
+
+	public static MovesPlayed[] requestAllPlayerMoves(long lobbyId, int round) {
 		final RestTemplate restTemplate = new RestTemplate();
 		Map<String, String> uriVariables = new HashMap<>();
-		uriVariables.put("lobbyid", String.valueOf(lobbyid));
+		uriVariables.put("lobbyid", String.valueOf(lobbyId));
 		uriVariables.put("round", String.valueOf(round));
 
 		ResponseEntity<MovesPlayed[]> response = restTemplate
-			.getForEntity(SERVER_HTTPURL + "movesplayed/getPlayersMoves?lobbyid={lobbyid}&round={round}", MovesPlayed[].class, uriVariables);
+			.getForEntity(SERVER_HTTPURL + "movesplayed/roundmoves?lobbyid={lobbyid}&round={round}", MovesPlayed[].class, uriVariables);
 		return response.getBody();
 	}
+
 }

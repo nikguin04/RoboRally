@@ -3,7 +3,6 @@ package dk.dtu.compute.se.pisd.roborallyserver.model;
 import java.io.Serializable;
 
 import dk.dtu.compute.se.pisd.roborally.model.Command;
-import dk.dtu.compute.se.pisd.roborally.model.Player;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -41,7 +40,6 @@ public class InteractionDecision {
 
 	private Command command;
 
-
 	@Embeddable
 	public static class InteractionDecisionKey implements Serializable {
 		private Long round;
@@ -51,4 +49,5 @@ public class InteractionDecision {
 		@ManyToOne
 		private ServerPlayer player;
 	}
+
 }

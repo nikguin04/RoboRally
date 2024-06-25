@@ -23,7 +23,7 @@ public class LobbyRest {
 		Lobby lobby = new Lobby(null, 0L, map, false, null);
 		HttpEntity<Lobby> request = new HttpEntity<>(lobby);
 		ResponseEntity<Lobby> response = restTemplate
-			.postForEntity(SERVER_HTTPURL + "lobbies/newlobby", request, Lobby.class);
+			.postForEntity(SERVER_HTTPURL + "lobbies", request, Lobby.class);
 		return response.getBody();
 	}
 
@@ -33,7 +33,7 @@ public class LobbyRest {
         uriVariables.put("id", String.valueOf(id));
 
 		ResponseEntity<ServerPlayer[]> response = restTemplate
-			.getForEntity(SERVER_HTTPURL + "lobbies/players?id={id}", ServerPlayer[].class, uriVariables);
+			.getForEntity(SERVER_HTTPURL + "lobbies/{id}/players", ServerPlayer[].class, uriVariables);
 		return response.getBody();
 	}
 
@@ -43,13 +43,12 @@ public class LobbyRest {
 		return response.getBody();
 	}
 
-	public static String requestStartGame(Lobby lobby) { // Dont return success or not, the client should poll itself to find out if game has started
+	// Don't return success or not, the client should poll itself to find out if game has started
+	public static void requestStartGame(Lobby lobby) {
 		Map<String, String> uriVariables = new HashMap<>();
         uriVariables.put("id", String.valueOf(lobby.getId()));
 
-		ResponseEntity<String> response = restTemplate
-			.getForEntity(SERVER_HTTPURL + "lobbies/startgame?id={id}", String.class, uriVariables);
-		return response.getBody();
+		restTemplate.postForEntity(SERVER_HTTPURL + "lobbies/{id}/startgame", null, String.class, uriVariables);
 	}
 
 	public static Lobby requestLobbyById(Long id) {
@@ -57,7 +56,7 @@ public class LobbyRest {
         uriVariables.put("id", String.valueOf(id));
 
 		ResponseEntity<Lobby>response = restTemplate
-			.getForEntity(SERVER_HTTPURL + "lobbies/getlobby?id={id}", Lobby.class, uriVariables);
+			.getForEntity(SERVER_HTTPURL + "lobbies/{id}", Lobby.class, uriVariables);
 		return response.getBody();
 	}
 

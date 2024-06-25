@@ -20,9 +20,8 @@ public class MovePlayedRest {
 	public static MovesPlayed requestNewMove(Long round, Command move1, Command move2, Command move3, Command move4, Command move5, Long lobby_id, Long player_id) {
 		HttpEntity<MovesPlayedController.NewMovesPlayBody> request = new HttpEntity<>(new NewMovesPlayBody(round, move1, move2, move3, move4, move5, lobby_id, player_id));
 		ResponseEntity<MovesPlayed> response = restTemplate
-			.postForEntity(SERVER_HTTPURL + "movesplayed/newmovesplayed", request, MovesPlayed.class);
+			.postForEntity(SERVER_HTTPURL + "movesplayed", request, MovesPlayed.class);
 		return response.getBody();
 	}
-
 
 }

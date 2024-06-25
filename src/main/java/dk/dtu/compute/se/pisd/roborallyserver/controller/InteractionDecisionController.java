@@ -1,7 +1,12 @@
 package dk.dtu.compute.se.pisd.roborallyserver.controller;
 
-
-import java.util.List;
+import dk.dtu.compute.se.pisd.roborally.model.Command;
+import dk.dtu.compute.se.pisd.roborallyserver.model.InteractionDecision;
+import dk.dtu.compute.se.pisd.roborallyserver.model.Lobby;
+import dk.dtu.compute.se.pisd.roborallyserver.model.ServerPlayer;
+import dk.dtu.compute.se.pisd.roborallyserver.repository.InteractionDecisionRepository;
+import dk.dtu.compute.se.pisd.roborallyserver.repository.LobbyRepository;
+import dk.dtu.compute.se.pisd.roborallyserver.repository.PlayerRepository;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,17 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import dk.dtu.compute.se.pisd.roborally.model.Command;
-import dk.dtu.compute.se.pisd.roborallyserver.controller.PlayerController.NewPlayerBody;
-import dk.dtu.compute.se.pisd.roborallyserver.model.InteractionDecision;
-import dk.dtu.compute.se.pisd.roborallyserver.model.Lobby;
-import dk.dtu.compute.se.pisd.roborallyserver.model.ServerPlayer;
-import dk.dtu.compute.se.pisd.roborallyserver.repository.InteractionDecisionRepository;
-import dk.dtu.compute.se.pisd.roborallyserver.repository.LobbyRepository;
-import dk.dtu.compute.se.pisd.roborallyserver.repository.PlayerRepository;
-
 @RestController
-//Base endpoint
 @RequestMapping("/interactiondecisions")
 public class InteractionDecisionController {
 
@@ -35,32 +30,30 @@ public class InteractionDecisionController {
         this.interactionDecisionRepository = interactionDecisionRepository;
     }
 
-    @GetMapping("/get")
+    @GetMapping
     public ResponseEntity<Command> getInteractionDecision(
-        @RequestParam(required = true, value="lobbyid") long lobbyid,
-        @RequestParam(required = true, value="playerid") long playerid,
-        @RequestParam(required = true, value="round") long round,
-        @RequestParam(required = true, value="step") int step
+		@RequestParam("lobbyid") long lobbyid, @RequestParam("playerid") long playerid,
+		@RequestParam("round") long round, @RequestParam("step") int step
     ) {
-        InteractionDecision intdec = interactionDecisionRepository.getInteractionDecisionsByRoundAndStepAndLobby_IdAndPlayer_Id(
-            round, step, lobbyid, playerid);
+        InteractionDecision decision = interactionDecisionRepository
+            .getInteractionDecisionsByRoundAndStepAndLobby_IdAndPlayer_Id(round, step, lobbyid, playerid);
 
-        if (intdec == null) {
-            return ResponseEntity.badRequest().build();
-        }
-        return ResponseEntity.ok(intdec.getCommand());
+        if (decision == null)
+            return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(decision.getCommand());
     }
 
-	@PostMapping("/submit")
-	public ResponseEntity<String> newPlayer(@RequestBody NewInteractionDecisionBody nidb) {
+	@PostMapping
+	public ResponseEntity<Void> newPlayer(@RequestBody NewInteractionDecisionBody nidb) {
         Lobby lobby = lobbyRepository.getLobbyById(nidb.lobbyId);
         ServerPlayer player = playerRepository.getPlayerById(nidb.playerId);
 
-        InteractionDecision intdec = new InteractionDecision(nidb.round, nidb.step, lobby, player, Command.valueOf(nidb.Command));
-        interactionDecisionRepository.saveAndFlush(intdec);
-		return ResponseEntity.ok("");
+        InteractionDecision decision = new InteractionDecision(nidb.round, nidb.step, lobby, player, Command.valueOf(nidb.command));
+        interactionDecisionRepository.saveAndFlush(decision);
+		return ResponseEntity.ok(null);
 
 	}
 
-    public static record NewInteractionDecisionBody (Long round, int step, Long lobbyId, Long playerId, String Command) {};
+    public record NewInteractionDecisionBody(Long round, int step, Long lobbyId, Long playerId, String command) {}
+
 }
