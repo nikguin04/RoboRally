@@ -22,13 +22,18 @@
 package dk.dtu.compute.se.pisd.roborally.model;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
-import dk.dtu.compute.se.pisd.roborally.controller.PrioAntenna;
+import dk.dtu.compute.se.pisd.roborally.controller.PriorityAntenna;
 import dk.dtu.compute.se.pisd.roborally.controller.StartTile;
+import dk.dtu.compute.se.pisd.roborallyserver.model.Lobby;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static dk.dtu.compute.se.pisd.roborally.model.Phase.INITIALISATION;
 
@@ -44,19 +49,28 @@ public class Board extends Subject {
 
     public final int height;
 
+    public final Lobby lobby;
+
     private Integer gameId;
 
     private final Space[][] spaces;
 
-	private PrioAntenna prioAntenna;
+	private PriorityAntenna priorityAntenna;
 
     private StartTile startTile;
 
+	@Getter @Setter
+	private int numCheckpoints;
+	private Map<Long, Player> playerNetworkIdIndex = new HashMap<>();
+
     private List<Player> players = new ArrayList<>();
 
-	private List<Player> priotizedPlayers = new ArrayList<>();
+	private List<Player> prioritisedPlayers = new ArrayList<>();
 
     private Player current;
+
+	@Getter @Setter
+	private Player winner;
 
     private Phase phase = INITIALISATION;
 
@@ -66,9 +80,10 @@ public class Board extends Subject {
 
     private int move_count = 0;
 
-    public Board(int width, int height) {
+    public Board(int width, int height, Lobby lobby) {
 		this.width = width;
         this.height = height;
+        this.lobby = lobby;
         spaces = new Space[width][height];
         for (int x = 0; x < width; x++) {
             for(int y = 0; y < height; y++) {
@@ -79,13 +94,18 @@ public class Board extends Subject {
         this.stepMode = false;
     }
 
+    // Board for patching tests (DO NOT USE FOR NEW DEVELOPING!)
+    public Board(int w, int h) {
+        this(w,h,null);
+    }
+
 	/**
 	 * Gives the priority antenna of the board.
 	 * @author Anders Greve Sørensen, s235093@dtu.dk.
 	 * @return the priority antenna of this board.
 	 */
-	public PrioAntenna getPrioAntenna() {
-		return this.prioAntenna;
+	public PriorityAntenna getPriorityAntenna() {
+		return this.priorityAntenna;
 	}
 
 	/**
@@ -100,11 +120,11 @@ public class Board extends Subject {
 	/**
 	 * Attaches a given priority antenna to this board.
 	 * @author Anders Greve Sørensen, s235093@dtu.dk.
-	 * @param prioAntenna the priority antenna to be attached to this board.
+	 * @param priorityAntenna the priority antenna to be attached to this board.
 	 */
-	public void setPrioAntenna(PrioAntenna prioAntenna) {
-        prioAntenna.attachBoard(this);
-		this.prioAntenna = prioAntenna;
+	public void setPriorityAntenna(PriorityAntenna priorityAntenna, Space space) {
+		priorityAntenna.attachBoard(this, space);
+		this.priorityAntenna = priorityAntenna;
 	}
 
     /**
@@ -126,23 +146,22 @@ public class Board extends Subject {
 		return this.startTile;
 	}
 
-
 	/**
-	 * Retrieve this board's list of prioritized players.
+	 * Retrieve this board's list of prioritised players.
 	 * @author Anders Greve Sørensen, s235093@dtu.dk.
-	 * @return the board's list of prioritized players.
+	 * @return the board's list of prioritised players.
 	 */
-	public List<Player> getPrioritizedPlayers() {
-		return priotizedPlayers;
+	public List<Player> getPrioritisedPlayers() {
+		return prioritisedPlayers;
 	}
 
 	/**
-	 * Set this boards prioritized players list to the given list of players.
+	 * Set this boards prioritised players list to the given list of players.
 	 * @author Anders Greve Sørensen, s235093@dtu.dk.
-	 * @param prioPlayerList The player list to set this boards prioritized players list to.
+	 * @param prioritisedPlayerList The player list to set this boards prioritised players list to.
 	 */
-	public void setPrioritizedPlayers(List<Player> prioPlayerList) {
-		this.priotizedPlayers = prioPlayerList;
+	public void setPrioritisedPlayers(List<Player> prioritisedPlayerList) {
+		this.prioritisedPlayers = prioritisedPlayerList;
 	}
 
 
@@ -160,10 +179,8 @@ public class Board extends Subject {
         }
     }
 
-
     public Space getSpace(int x, int y) {
-        if (x >= 0 && x < width &&
-                y >= 0 && y < height) {
+        if (x >= 0 && x < width && y >= 0 && y < height) {
             return spaces[x][y];
         } else {
             return null;
@@ -176,32 +193,33 @@ public class Board extends Subject {
 
     public void addPlayer(@NotNull Player player) {
         if (player.board == this && !players.contains(player)) {
+            playerNetworkIdIndex.put(player.getNetworkId(), player);
             players.add(player);
             notifyChange();
         }
     }
 
 	/**
-	 * Add a player to this board's prioritized players list.
+	 * Add a player to this board's prioritised players list.
 	 * @author Anders Greve Sørensen, s235093@dtu.dk.
-	 * @param player the player to be added to the prioritized players list.
+	 * @param player the player to be added to the prioritised players list.
 	 */
-	public void addPrioPlayer(@NotNull Player player) {
-		if (player.board == this && !priotizedPlayers.contains(player)) {
-			priotizedPlayers.add(player);
+	public void addPriorityPlayer(@NotNull Player player) {
+		if (player.board == this && !prioritisedPlayers.contains(player)) {
+			prioritisedPlayers.add(player);
 			notifyChange();
 		}
 	}
 
 	/**
-	 * Get a player from the prioritized player list, given its index.
+	 * Get a player from the prioritised player list, given its index.
 	 * @author Anders Greve Sørensen, s235093@dtu.dk.
-	 * @param i the index of the player in the prioritized player list.
-	 * @return the player with index i in this board's prioritized player list, null if index is out of range.
+	 * @param i the index of the player in the prioritised player list.
+	 * @return the player with index i in this board's prioritised player list, null if index is out of range.
 	 */
-	public Player getPrioPlayer(int i) {
-		if (i >= 0 && i < priotizedPlayers.size()) {
-			return priotizedPlayers.get(i);
+	public Player getPriorityPlayer(int i) {
+		if (i >= 0 && i < prioritisedPlayers.size()) {
+			return prioritisedPlayers.get(i);
 		}
 		else {return null;}
 	}
@@ -212,6 +230,10 @@ public class Board extends Subject {
         } else {
             return null;
         }
+    }
+
+    public Player getPlayerByNetworkId(Long id) {
+        return playerNetworkIdIndex.get(id);
     }
 
     public Player getCurrentPlayer() {
@@ -267,14 +289,14 @@ public class Board extends Subject {
     }
 
 	/**
-	 * Gets the index of the given player in the prioritized player list of this board.
+	 * Gets the index of the given player in the prioritised player list of this board.
 	 * @author Anders Greve Sørensen, s235093@dtu.dk.
 	 * @param player The player the find the index of.
-	 * @return the index of the given player in the boards prioritized players list.
+	 * @return the index of the given player in the boards prioritised players list.
 	 */
-	public int getPrioPlayerNumber(@NotNull Player player) {
+	public int getPriorityPlayerNumber(@NotNull Player player) {
 		if (player.board == this) {
-			return priotizedPlayers.indexOf(player);
+			return prioritisedPlayers.indexOf(player);
 		} else {
 			return -1;
 		}
@@ -296,43 +318,26 @@ public class Board extends Subject {
 		return this.getPlayer((this.getPlayerNumber(this.getCurrentPlayer()) + 1) % this.getPlayersNumber());
 	}
 
-    /**
-     * Returns the neighbour of the given space of the board in the given heading.
-     * The neighbour is returned only, if it can be reached from the given space
-     * (no walls or obstacles in either of the involved spaces); otherwise,
-     * null will be returned.
-     *
-     * @param space the space for which the neighbour should be computed
-     * @param heading the heading of the neighbour
-     * @return the space in the given direction; null if there is no (reachable) neighbour
-     */
-    public Space getNeighbour(@NotNull Space space, @NotNull Heading heading) {
-        // TODO needs to be implemented based on the actual spaces
-        //      and obstacles and walls placed there. For now it,
-        //      just calculates the next space in the respective
-        //      direction in a cyclic way.
-
-        // XXX another option (not for now) would be that null represents a hole
-        //     or the edge of the board in which the players can fall
-
-        int x = space.x;
-        int y = space.y;
-        switch (heading) {
-            case SOUTH:
-                y = (y + 1) % height;
-                break;
-            case WEST:
-                x = (x + width - 1) % width;
-                break;
-            case NORTH:
-                y = (y + height - 1) % height;
-                break;
-            case EAST:
-                x = (x + 1) % width;
-                break;
-        }
-	    return getSpace(x, y);
-    }
+	/**
+	 * Returns the neighbour of the given space of the board in the given heading.
+	 * If there is no space in the given direction because the given space is at the
+	 * edge of the board, null is returned.
+	 *
+	 * @param space   the space for which the neighbour should be computed
+	 * @param heading the heading of the neighbour
+	 * @return the space in the given direction; null if there is no neighbour
+	 */
+	public Space getNeighbour(@NotNull Space space, @NotNull Heading heading) {
+		int x = space.x;
+		int y = space.y;
+		switch (heading) {
+			case SOUTH -> y++;
+			case WEST  -> x--;
+			case NORTH -> y--;
+			case EAST  -> x++;
+		}
+		return getSpace(x, y);
+	}
 
 	public boolean isObstructed(@NotNull Space space, @NotNull Heading heading) {
 		if (space.getWalls().contains(heading))
@@ -341,7 +346,7 @@ public class Board extends Subject {
 		if (nextSpace == null)
 			return false;
 		return nextSpace.getWalls().contains(heading.opposite())
-			|| nextSpace.getElement() instanceof PrioAntenna;
+			|| nextSpace.getElement() instanceof PriorityAntenna;
 	}
 
     public String getStatusMessage() {

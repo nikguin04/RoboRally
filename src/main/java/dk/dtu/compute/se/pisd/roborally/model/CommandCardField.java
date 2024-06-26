@@ -47,6 +47,19 @@ public class CommandCardField extends Subject {
         return card;
     }
 
+    // Returns card name if available, else returns null
+    public String getCardName() {
+        return (getCard() != null) ? getCard().getName() : null;
+    }
+
+    public String getCardEnumName() {
+        return (getCard() != null) ? getCard().command.name() : null;
+    }
+
+    public Command getCommand() {
+        return (getCard() != null) ? getCard().command : null;
+    }
+
     public void setCard(CommandCard card) {
         if (card != this.card) {
             this.card = card;
@@ -74,4 +87,5 @@ public class CommandCardField extends Subject {
         }
         return false;
     }
+
 }

@@ -1,0 +1,39 @@
+@startuml
+
+cloud Network
+
+node Server
+
+database ServerDatabase
+
+collections lobbies
+
+component ExampleLobby
+
+actor Player1
+actor Player2
+actor Player..
+
+collections GameMoves
+note top of GameMoves: Contains all cards/moves\nplayed by all players
+
+collections Maps
+
+ServerDatabase -- Maps
+Maps -- lobbies: Provides playable maps
+
+Network -- Server: Server communicates\nto network with REST
+
+Server -- ServerDatabase
+
+ServerDatabase == lobbies
+lobbies -- ExampleLobby: Example of hosted lobby
+
+Player1 -- ExampleLobby
+Player2 -- ExampleLobby
+Player.. -- ExampleLobby
+
+Player1 -up- GameMoves
+Player2 -up- GameMoves
+Player.. -up- GameMoves
+@enduml

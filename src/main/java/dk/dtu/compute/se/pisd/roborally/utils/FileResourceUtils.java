@@ -8,10 +8,10 @@ import java.nio.file.Files;
 import java.util.List;
 
 public class FileResourceUtils {
-    // get a file from the resources folder
-    // works everywhere, IDEA, unit test and JAR file.
-    public InputStream getFileFromResourceAsStream(String fileName) {
 
+    // Get a file from the resources.
+    // Works everywhere, IDEA, unit tests, and JAR file
+    public InputStream getFileFromResourceAsStream(String fileName) {
         // The class loader that loaded the class
         ClassLoader classLoader = getClass().getClassLoader();
         InputStream inputStream = classLoader.getResourceAsStream(fileName);
@@ -22,53 +22,40 @@ public class FileResourceUtils {
         } else {
             return inputStream;
         }
-
     }
 
     /*
-        The resource URL is not working in the JAR
+        The resource URL doesn't work in the JAR
         If we try to access a file that is inside a JAR,
-        It throws NoSuchFileException (linux), InvalidPathException (Windows)
+        it throws NoSuchFileException (linux), InvalidPathException (Windows)
 
         Resource URL Sample: file:java-io.jar!/json/file1.json
      */
     public File getFileFromResource(String fileName) throws URISyntaxException{
-
         ClassLoader classLoader = getClass().getClassLoader();
         URL resource = classLoader.getResource(fileName);
         if (resource == null) {
             throw new IllegalArgumentException("file not found! " + fileName);
         } else {
-
             // failed if files have whitespaces or special characters
-            //return new File(resource.getFile());
-
             return new File(resource.toURI());
         }
-
     }
 
-    // print input stream
     public static void printInputStream(InputStream is) {
-
-        try (InputStreamReader streamReader =
-                    new InputStreamReader(is, StandardCharsets.UTF_8);
-             BufferedReader reader = new BufferedReader(streamReader)) {
+        try (InputStreamReader streamReader = new InputStreamReader(is, StandardCharsets.UTF_8);
+            BufferedReader reader = new BufferedReader(streamReader)) {
 
             String line;
             while ((line = reader.readLine()) != null) {
                 System.out.println(line);
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
-    // print a file
     public static void printFile(File file) {
-
         List<String> lines;
         try {
             lines = Files.readAllLines(file.toPath(), StandardCharsets.UTF_8);
@@ -76,7 +63,6 @@ public class FileResourceUtils {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
 }

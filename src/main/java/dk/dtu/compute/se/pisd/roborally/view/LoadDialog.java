@@ -62,7 +62,6 @@ public class LoadDialog<T> extends Dialog<Board> {
 	Board current_board;
 	private Label board_info_label = new Label("placeholder");
 
-
 	/**
 	 * Opens a dialog in which the user can pick a save file from the gamedata folder
 	 * On selection of game save file, display data about the saved game on label in windows
@@ -121,8 +120,6 @@ public class LoadDialog<T> extends Dialog<Board> {
         dialogPane.getStyleClass().add("choice-dialog");
         dialogPane.getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 
-
-
         final double MIN_WIDTH = 150;
 
         comboBox = new ComboBox<String>();
@@ -146,7 +143,6 @@ public class LoadDialog<T> extends Dialog<Board> {
         } else {
             comboBox.getSelectionModel().select(defaultChoice);
         }
-
 
         setResultConverter((dialogButton) -> {
             ButtonData data = dialogButton == null ? null : dialogButton.getButtonData();
@@ -226,16 +222,13 @@ public class LoadDialog<T> extends Dialog<Board> {
     private void updateGrid() {
         grid.getChildren().clear();
 
-
 		String fileName = "gamedata/" + getSelectedItem() + ".json";
-        LoadBoardFromFile(fileName);
-
+        loadBoardFromFile(fileName);
 
         grid.add(label, 0, 0);
         grid.add(comboBox, 0, 1);
 		grid.add(board_info_label, 0, 2);
         getDialogPane().setContent(grid);
-
 
         Platform.runLater(comboBox::requestFocus);
     }
@@ -244,18 +237,17 @@ public class LoadDialog<T> extends Dialog<Board> {
      * Loads a save game from a file into the {@link #current_board} variable
      * @param fileName File to load from resources
      */
-    public void LoadBoardFromFile(String fileName) {
+    public void loadBoardFromFile(String fileName) {
         FileResourceUtils fileutil = new FileResourceUtils();
         System.out.println("\ngetResource : " + fileName);
 		InputStream file;
 		try {
-        	file = fileutil.getFileFromResourceAsStream(fileName);
-			//FileResourceUtils.printFile(file);
+			file = fileutil.getFileFromResourceAsStream(fileName);
 			GsonBuilder gsonBuilder = new GsonBuilder();
 			gsonBuilder.registerTypeAdapter(Board.class, new Deserializer.BoardDeserializer());
 			gsonBuilder.registerTypeAdapter(Player.class, new Deserializer.PlayerDeserializer());
 			gsonBuilder.registerTypeAdapter(Command.class, new Deserializer.CommandDeserializer());
-            gsonBuilder.registerTypeAdapter(Space.class, new Deserializer.SpaceDeserializer());
+			gsonBuilder.registerTypeAdapter(Space.class, new Deserializer.SpaceDeserializer());
 			Gson gson = gsonBuilder.setPrettyPrinting().create();
 
 			Reader targetReader = new InputStreamReader(file);
@@ -275,7 +267,6 @@ public class LoadDialog<T> extends Dialog<Board> {
      * Displays data such as players names and board size
 	 */
 	private void updateLabel() {
-
 		String info = "";
 		info += String.format("Board Size: %d,%d\n", current_board.height, current_board.width);
 		info += "Players:\n";
@@ -288,4 +279,5 @@ public class LoadDialog<T> extends Dialog<Board> {
         board_info_label.setWrapText(true);
         board_info_label.setMinHeight(200); // Hardcoded size because we are unsure how big it will be
 	}
+
 }

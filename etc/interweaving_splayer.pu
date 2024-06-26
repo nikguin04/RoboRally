@@ -1,0 +1,32 @@
+@startuml
+
+class ServerPlayer <<RECORD>> {
+	Long id
+	String name
+	Lobby lobby
+
+
+}
+
+class AppController <<GAME>> {
+	ServerPlayer splayer
+
+	void PushPlayerToLobby(Long lobbyid, String name)
+}
+
+class PlayerRest <<GAME>> {
+	<T> HandleRequest(...)
+}
+
+class PlayerController <<SERVER>> {
+	ServerPlayer NewPlayer(Long lobbyid, String name)
+}
+
+ServerPlayer o-- AppController : Stores players network\ninformation locally
+
+ServerPlayer o-- PlayerController : Creates new player and\nstores player information to lobby
+
+AppController --> PlayerRest : Requests for player\nto join lobby
+PlayerRest --> PlayerController : Sends network\nrequest
+
+@enduml

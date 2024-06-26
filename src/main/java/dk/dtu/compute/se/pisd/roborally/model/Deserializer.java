@@ -7,13 +7,15 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
-import dk.dtu.compute.se.pisd.roborally.controller.PrioAntenna;
+import dk.dtu.compute.se.pisd.roborally.controller.PriorityAntenna;
 import dk.dtu.compute.se.pisd.roborally.controller.SpaceElement;
 import dk.dtu.compute.se.pisd.roborally.controller.StartTile;
+import dk.dtu.compute.se.pisd.roborallyserver.model.Lobby;
 
 import java.lang.reflect.Type;
 
 public class Deserializer {
+
 	/**
 	 * <p>JSON deserializer for type {@link Board}</p>
 	 * <p>DESERIALIZING VARIABLES:</p>
@@ -34,7 +36,8 @@ public class Deserializer {
 			JsonArray spaces = obj.get("spaces").getAsJsonArray();
 
 			int x = spaces.size(), y = spaces.get(0).getAsJsonArray().size();
-            Board b = new Board(x, y);
+            // TODO: Not a real lobby, but this code might not be useful anymore anyway?
+            Board b = new Board(x, y, new Lobby());
 
 			for (int ix = 0; ix < spaces.size(); ix++) {
 				JsonArray xarr = spaces.get(ix).getAsJsonArray();
@@ -42,9 +45,9 @@ public class Deserializer {
 					Space new_s = context.deserialize(xarr.get(iy), Space.class);
 					b.getSpace(ix, iy).copyAttributesFrom(new_s);
 
-					// Special case for prio antenna
-					if (new_s.getElement() != null && new_s.getElement().getClass().equals(PrioAntenna.class)) {
-						b.setPrioAntenna((PrioAntenna) new_s.getElement());
+					// Special case for priority antenna
+					if (new_s.getElement() != null && new_s.getElement().getClass().equals(PriorityAntenna.class)) {
+						b.setPriorityAntenna((PriorityAntenna) new_s.getElement(), new_s);
 					} else if (new_s.getElement() != null && new_s.getElement().getClass().equals(StartTile.class)) {
 						b.setStartTile((StartTile) new_s.getElement());
 					}
@@ -63,7 +66,7 @@ public class Deserializer {
 				PlayerDeserializer.player_index = i;
 				Player p = context.deserialize(players.get(i), Player.class);
 				b.addPlayer(p);
-				b.addPrioPlayer(p);
+				b.addPriorityPlayer(p);
 			}
 			b.setCurrentPlayer(b.getPlayer(obj.get("current_playerindex").getAsInt()));
 
@@ -116,7 +119,7 @@ public class Deserializer {
 				commands[cmdindex++] = context.deserialize(card, Command.class);
 			}
 
-			Player p = new Player(board, color, name, commands);
+			Player p = new Player(board, color, name, commands, 0l); // hardcoded 0 for long currently
 			p.setSpace(board.getSpace(Integer.parseInt(space[0]), Integer.parseInt(space[1])));
 			p.setHeading(Heading.valueOf(obj.get("heading").getAsString()));
 
@@ -179,6 +182,5 @@ public class Deserializer {
 			return s;
 		}
 	}
-
 
 }

@@ -41,32 +41,29 @@ import com.google.gson.JsonSerializer;
  * the class hierarchy resp. to the static type, which is dynamically sub-typed
  * in the structure. Note that this solution does not work if instances of
  * E itself need to be serialized (typically E would be abstract).
- * 
+ *
  * @author Menelaos Perdikeas, https://github.com/mperdikeas
  * @author Ekkart Kindler, ekki@dtu.dk
  *
  * @param <E> The top of the class hierarchy
  */
-public class Adapter<E> implements JsonSerializer<E>, JsonDeserializer<E>{
+public class Adapter<E> implements JsonSerializer<E>, JsonDeserializer<E> {
 
     private static final String CLASSNAME = "CLASSNAME";
     private static final String INSTANCE  = "INSTANCE";
 
     @Override
-    public JsonElement serialize(E src, Type typeOfSrc,
-            JsonSerializationContext context) {
-
+    public JsonElement serialize(E src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject retValue = new JsonObject();
         String className = src.getClass().getName();
         retValue.addProperty(CLASSNAME, className);
-        JsonElement elem = context.serialize(src); 
+        JsonElement elem = context.serialize(src);
         retValue.add(INSTANCE, elem);
         return retValue;
     }
 
     @Override
-    public E deserialize(JsonElement json, Type typeOfT,
-            JsonDeserializationContext context) throws JsonParseException  {
+    public E deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
         JsonObject jsonObject = json.getAsJsonObject();
         JsonPrimitive prim = (JsonPrimitive) jsonObject.get(CLASSNAME);
         String className = prim.getAsString();
@@ -74,10 +71,11 @@ public class Adapter<E> implements JsonSerializer<E>, JsonDeserializer<E>{
         Class<?> klass;
         try {
             klass = Class.forName(className);
+            return context.deserialize(jsonObject.get(INSTANCE), klass);
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            throw new JsonParseException(e.getMessage());
+            System.err.println("Ignoring unknown class " + className);
+            return null;
         }
-        return context.deserialize(jsonObject.get(INSTANCE), klass);
     }
+
 }

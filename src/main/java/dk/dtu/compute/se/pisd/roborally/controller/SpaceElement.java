@@ -33,10 +33,6 @@ public abstract class SpaceElement {
 
     public abstract boolean doAction(GameController gameController, Space space);
 
-    public String getArgument() {
-        return "";
-    }
-
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof SpaceElement comp) {

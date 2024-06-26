@@ -5,14 +5,13 @@ import java.lang.reflect.Field;
 import static dk.dtu.compute.se.pisd.roborally.utils.ArrayCompare.compareArray;
 
 public class FieldsCompare<T> {
-	public boolean CompareFields (T t_one, T t_two, List<String> ignoreVariables) throws CompareException {
+	public boolean compareFields(T t_one, T t_two, List<String> ignoreVariables) throws CompareException {
  		Field[] board_fields = t_one.getClass().getDeclaredFields();
 		if ((t_one == null || t_two == null)) return (t_one == null && t_two == null);
 
 		for (int i = 0; i < board_fields.length; i++) {
 			if (ignoreVariables.contains(board_fields[i].getName())) { continue; }
 			if (board_fields[i].getName().startsWith("$SWITCH_TABLE")) { continue; } // ignore switch tables which is counted with fields
-			System.out.println("Checking: " + board_fields[i].getName());
 			try {
  				board_fields[i].setAccessible(true);
 				Object comp = board_fields[i].get(t_one);
@@ -30,7 +29,6 @@ public class FieldsCompare<T> {
 					}
 				}
 			} catch (IllegalAccessException e) {
-				System.out.println("Debug: " + board_fields[i].getName() + " Error: " + e.getMessage());
 				throw new CompareException("IllegalAccessException - " + board_fields[i].getName() + " Error: " + e.getMessage());
 			}
 		}

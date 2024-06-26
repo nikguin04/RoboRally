@@ -21,15 +21,20 @@
  */
 package dk.dtu.compute.se.pisd.roborally;
 
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableScheduling;
+
 /**
  * This is a class for starting up the RoboRally application. This is a
  * workaround for a strange quirk in the Open JavaFX project launcher,
  * which prevents starting a JavaFX application in IntelliJ directly:
  *
- *   https://stackoverflow.com/questions/52569724/javafx-11-create-a-jar-file-with-gradle/52571719#52571719
+ * https://stackoverflow.com/questions/52569724/javafx-11-create-a-jar-file-with-gradle/52571719#52571719
  *
  * @author Ekkart Kindler, ekki@dtu.dk
  */
+@SpringBootApplication
+@EnableScheduling
 public class StartRoboRally {
 
     public static void main(String[] args) {

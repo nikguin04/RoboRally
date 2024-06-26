@@ -14,8 +14,8 @@ public class WallTest {
 	public void testWall() {
 		// Setup
 		Board board = new Board(3, 3);
-		GameController gameController = new GameController(board);
-		Player player = new Player(board, "red", "Test Player");
+		GameController gameController = new GameController(board, null, null, null);
+		Player player = new Player(board, "red", "Test Player", 0l);
 		board.addPlayer(player);
 		player.setSpace(board.getSpace(1, 1));
 		// Testing

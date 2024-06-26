@@ -1,7 +1,7 @@
 package dk.dtu.compute.se.pisd.roborally.utils;
 
 public class StringUtils {
-	public static int[] intarrFromCommaStr(String str) {
+	public static int[] intArrayFromCommaString(String str) {
 		String[] arr = str.split(",");
 		int[] iarr = new int[arr.length];
 		for (int i = 0; i < arr.length; i++) {

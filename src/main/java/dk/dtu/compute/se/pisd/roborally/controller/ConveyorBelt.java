@@ -22,6 +22,7 @@
 package dk.dtu.compute.se.pisd.roborally.controller;
 
 import dk.dtu.compute.se.pisd.roborally.model.Heading;
+import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
 import org.jetbrains.annotations.NotNull;
 
@@ -32,49 +33,60 @@ import org.jetbrains.annotations.NotNull;
  *
  */
 public class ConveyorBelt extends SpaceElement {
-    // TODO: NIKLAS SAVE AND LOAD HEADING
-    private final Heading heading;
+
+    public final Heading heading;
+    public final boolean fast;
+
     /**
-     * Initialize ConveyorBelt with a default heading of north
+     * Instantiate a slow ConveyorBelt with a default heading of north
      */
     public ConveyorBelt() {
         this.heading = Heading.NORTH;
+        this.fast = false;
     }
+
     /**
-     * Initialize ConveyorBelt with a specific heading
-     * @param heading enum Heading given as string
-     */
-    public ConveyorBelt(String heading) {
-        this.heading = Heading.valueOf(heading);
-    }
-    /**
-     * Initialize ConveyorBelt with a specific heading
+     * Instantiate a slow ConveyorBelt with a specific heading
      * @param heading enum Heading
      */
     public ConveyorBelt(Heading heading) {
         this.heading = heading;
+        this.fast = false;
     }
 
-    public Heading getHeading() {
-        return heading;
+    /**
+     * Instantiate a ConveyorBelt with a specific heading and whether it should be fast
+     * @param heading enum Heading
+     */
+    public ConveyorBelt(Heading heading, boolean fast) {
+        this.heading = heading;
+        this.fast = fast;
     }
 
-
-	@Override
-	public boolean doAction(@NotNull GameController gameController, @NotNull Space space) {
+	private static boolean movePlayer(@NotNull GameController gameController, @NotNull Player player, @NotNull ConveyorBelt belt) {
 		// TODO: Should pushing other players be allowed?
 		try {
-			gameController.moveToSpace(space.getPlayer(), heading);
+			gameController.moveToSpace(player, belt.heading);
+			if (player.getSpace().getElement() instanceof ConveyorBelt second) {
+				if (belt.heading.next() == second.heading) {
+					gameController.turnRight(player);
+				} else if (belt.heading.prev() == second.heading) {
+					gameController.turnLeft(player);
+				}
+			}
 			return true;
 		} catch (GameController.ImpossibleMoveException e) {
 			return false;
 		}
 	}
 
-    @Override
-	public String getArgument() {
-        return String.valueOf(heading.toString());
-    }
-
+	@Override
+	public boolean doAction(@NotNull GameController gameController, @NotNull Space space) {
+		Player player = space.getPlayer();
+		boolean success = movePlayer(gameController, player, this);
+		if (fast && player.getSpace().getElement() instanceof ConveyorBelt second)
+			success |= movePlayer(gameController, player, second);
+		return success;
+	}
 
 }

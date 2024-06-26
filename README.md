@@ -42,3 +42,17 @@ To run a JavaFX program, navigate to your project directory and run the followin
 ```bash
 mvn javafx:run
 ```
+
+## Running the server
+
+To run the Server for our Roborally Project, run the following command (cmd):
+```bash
+mvn exec:java -Dexec.mainClass="dk.dtu.compute.se.pisd.roborallyserver.Server"
+```
+
+## Compiling
+
+To compile the game and server together, run the following command (powershell):
+```bash
+mvn clean package -Pgame; mvn package -Pserver
+```

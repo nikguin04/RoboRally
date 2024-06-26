@@ -21,14 +21,16 @@
  */
 package dk.dtu.compute.se.pisd.roborally.model;
 
+import java.util.List;
+
+import dk.dtu.compute.se.pisd.roborallyserver.model.MovesPlayed;
+import org.jetbrains.annotations.NotNull;
+
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.utils.CompareException;
 import dk.dtu.compute.se.pisd.roborally.utils.FieldsCompare;
-
-import org.jetbrains.annotations.NotNull;
-import java.util.List;
-
-import static dk.dtu.compute.se.pisd.roborally.model.Heading.SOUTH;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 
 /**
  * ...
@@ -47,12 +49,15 @@ public class Player extends Subject {
     private String color;
 
     private Space space;
-    private Heading heading = SOUTH;
+    private Heading heading = Heading.SOUTH;
 
     private CommandCardField[] program;
     private CommandCardField[] cards;
 	private int checkPointCounter;
-	private CommandCard lastCardPlayed;
+	private Command lastCommandPlayed;
+
+    private Long playerNetworkID;
+    public ObjectProperty<PlayerStatus> playerStatus;
 
     /**
      * {@inheritDoc}
@@ -62,12 +67,11 @@ public class Player extends Subject {
      *
      * @see Player#Player(Board, String, String, Command[])  Player() - For creating a player with predefined commands
      */
-    public Player(@NotNull Board board, String color, @NotNull String name) {
-        this(board, color, name, null);
+    public Player(@NotNull Board board, String color, @NotNull String name, @NotNull Long playerNetworkID) {
+        this(board, color, name, null, playerNetworkID);
         for (int i = 0; i < this.cards.length; i++) {
             this.cards[i] = new CommandCardField(this);
         }
-
     }
 
     /**
@@ -79,17 +83,19 @@ public class Player extends Subject {
      *
      * @see Player#Player(Board, String, String)  Player() - For creating a player with blank commands
      */
-    public Player(@NotNull Board board, String color, @NotNull String name, Command[] Commands) {
+    public Player(@NotNull Board board, String color, @NotNull String name, Command[] Commands, @NotNull Long playerNetworkID) {
         this.board = board;
         this.name = name;
         this.color = color;
+        this.playerNetworkID = playerNetworkID;
 
         this.space = null;
 		checkPointCounter = 0;
+        playerStatus = new SimpleObjectProperty<PlayerStatus>(PlayerStatus.WAITING);
 
-        program = new CommandCardField[NO_REGISTERS];
-        for (int i = 0; i < program.length; i++) {
-            program[i] = new CommandCardField(this);
+        this.program = new CommandCardField[NO_REGISTERS];
+        for (int i = 0; i < this.program.length; i++) {
+            this.program[i] = new CommandCardField(this);
         }
         this.cards = new CommandCardField[NO_CARDS];
         if (Commands != null) {
@@ -98,8 +104,6 @@ public class Player extends Subject {
                 this.cards[i].setCard(new CommandCard(Commands[i]));
             }
         }
-
-        //this.cards = cards;
     }
 
 	/**
@@ -120,6 +124,7 @@ public class Player extends Subject {
 	public void setCheckPointCounter(int checkPointCounter) {
 		this.checkPointCounter = checkPointCounter;
 	}
+
 	public String getName() {
         return name;
     }
@@ -187,14 +192,37 @@ public class Player extends Subject {
         return cards[i];
     }
 
-    public CommandCard getLastCardPlayed() {
-        return lastCardPlayed;
+    public Command getLastCommandPlayed() {
+        return lastCommandPlayed;
     }
 
-    public void setLastCardPlayed(CommandCard card) {
-        this.lastCardPlayed = card;
+    public void setLastCommandPlayed(Command command) {
+        this.lastCommandPlayed = command;
     }
 
+    public Long getNetworkId() {
+        return this.playerNetworkID;
+    }
+
+    public enum PlayerStatus {
+        READY("Ready"),
+        WAITING("Waiting"),
+        IDLE("Idle");
+
+        final public String displayName;
+
+        PlayerStatus(String displayName) {
+            this.displayName = displayName;
+        }
+    }
+
+	public void parseServerMovesToProgram(MovesPlayed moves) {
+		program[0].setCard(new CommandCard(moves.getMove1()));
+		program[1].setCard(new CommandCard(moves.getMove2()));
+		program[2].setCard(new CommandCard(moves.getMove3()));
+		program[3].setCard(new CommandCard(moves.getMove4()));
+		program[4].setCard(new CommandCard(moves.getMove5()));
+	}
 
     @Override
     public boolean equals(Object obj) { // TODO: This should be made as the board, where all variables are checked
@@ -202,7 +230,7 @@ public class Player extends Subject {
             try {
                 FieldsCompare<Player> fc = new FieldsCompare<Player>();
                 // Don't test player for an equal board, since the player can be identical but on another board.
-                fc.CompareFields(this, comp, List.of("board"));
+                fc.compareFields(this, comp, List.of("board"));
                 return true;
             } catch (CompareException e) {
                 return false;
@@ -210,4 +238,5 @@ public class Player extends Subject {
         }
         return false;
     }
+
 }
