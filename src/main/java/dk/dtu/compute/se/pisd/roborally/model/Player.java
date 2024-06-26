@@ -54,7 +54,7 @@ public class Player extends Subject {
     private CommandCardField[] program;
     private CommandCardField[] cards;
 	private int checkPointCounter;
-	private CommandCard lastCardPlayed;
+	private Command lastCommandPlayed;
 
     private Long playerNetworkID;
     public ObjectProperty<PlayerStatus> playerStatus;
@@ -192,12 +192,12 @@ public class Player extends Subject {
         return cards[i];
     }
 
-    public CommandCard getLastCardPlayed() {
-        return lastCardPlayed;
+    public Command getLastCommandPlayed() {
+        return lastCommandPlayed;
     }
 
-    public void setLastCardPlayed(CommandCard card) {
-        this.lastCardPlayed = card;
+    public void setLastCommandPlayed(Command command) {
+        this.lastCommandPlayed = command;
     }
 
     public Long getNetworkId() {

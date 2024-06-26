@@ -215,7 +215,6 @@ public class GameController {
 				return;
 			}
 			executeCommand(currentPlayer, command);
-			currentPlayer.setLastCardPlayed(card);
 		}
 
 		handleAfterStep();
@@ -299,13 +298,15 @@ public class GameController {
 				board.setPhase(Phase.PLAYER_INTERACTION);
 			}
 			case AGAN -> {
-				CommandCard lastCard = player.getLastCardPlayed();
-				if (lastCard != null && lastCard.command != Command.AGAN) {
-					executeCommand(player, lastCard.command);
+				Command lastCommand = player.getLastCommandPlayed();
+				if (lastCommand != null && lastCommand != Command.AGAN) {
+					executeCommand(player, lastCommand);
 				}
 			}
 			default -> {}
 		}
+
+		player.setLastCommandPlayed(command);
 	}
 
     public boolean moveCards(@NotNull CommandCardField source, @NotNull CommandCardField target) {
