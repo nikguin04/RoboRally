@@ -3,8 +3,6 @@ package dk.dtu.compute.se.pisd.roborally.controller;
 import dk.dtu.compute.se.pisd.roborally.model.Board;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
 
-import static dk.dtu.compute.se.pisd.roborally.utils.StringUtils.intarrFromCommaStr;
-
 public class StartTile extends SpaceElement {
 
 	// All these variables are only initialised when a board uses a StartTile.
@@ -35,8 +33,7 @@ public class StartTile extends SpaceElement {
 
 	@Override
 	public boolean doAction(GameController gameController, Space space) {
-		// TODO Auto-generated method stub
-		// throw new UnsupportedOperationException("Unimplemented method 'doAction'");
+		// Start tiles don't do anything when you land on them
 		return false;
 	}
 

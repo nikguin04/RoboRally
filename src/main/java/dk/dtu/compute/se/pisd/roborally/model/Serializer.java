@@ -25,8 +25,6 @@ public class Serializer {
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("gameId", board.getGameId());
 
-
-
 			JsonArray players = new JsonArray();
 			for (int i = 0; i < board.getPlayersNumber(); i++) {
 				players.add(context.serialize(board.getPlayer(i)));
@@ -55,8 +53,8 @@ public class Serializer {
             return jsonObject;
         }
     }
+
 	/**
-	 *
 	 * <p>JSON serializer for type {@link Player}</p>
 	 * <p>SERIALIZING VARIABLES:</p>
 	 * <p>Serializes {@link Player#name}, {@link Player#color}, {@link Player#heading}</p>

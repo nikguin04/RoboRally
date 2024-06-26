@@ -82,7 +82,6 @@ public class RoboRally extends Application {
         VBox vbox = new VBox(menuBar, boardRoot);
         vbox.setMinWidth(MIN_APP_WIDTH);
 
-
         boardRoot.setCenter(startMenuView(appController));
 
         Scene primaryScene = new Scene(vbox);
@@ -100,7 +99,7 @@ public class RoboRally extends Application {
     public void createBoardView(GameController gameController, NetworkController networkController) {
         // if present, remove old BoardView
         boardRoot.getChildren().clear();
-//		this.network = networkController;
+        //this.network = networkController;
         if (gameController != null) {
             // create and add view for new board
             BoardView boardView = new BoardView(gameController, networkController);
@@ -137,14 +136,12 @@ public class RoboRally extends Application {
         exitButoon.setPrefWidth(MIN_APP_WIDTH/2);
         exitButoon.setOnAction( e -> appController.exit());
 
-
         vbox.setSpacing(30);
         vbox.setPadding(new Insets(50));
         vbox.setAlignment(Pos.CENTER);
         vbox.getChildren().addAll(newLobbyButoon, joinButoon, exitButoon);
         return vbox;
     }
-
 
     @Override
     public void stop() throws Exception {

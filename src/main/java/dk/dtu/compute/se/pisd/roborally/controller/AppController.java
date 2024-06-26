@@ -164,7 +164,7 @@ public class AppController implements Observer {
 			network = new NetworkController(gameController);
             // XXX: V2
             // board.setCurrentPlayer(board.getPlayer(0));
-            gameController.StartProgrammingPhase(true);
+            gameController.startProgrammingPhase(true);
 
             roboRally.createBoardView(gameController, network);
         }
@@ -206,7 +206,7 @@ public class AppController implements Observer {
 
 		Lobby lobby = LobbyRest.requestNewLobby(map);
 
-		ServerPlayer splayer = PlayerRest.PushPlayerToLobby(lobby.getId(), playerName);
+		ServerPlayer splayer = PlayerRest.pushPlayerToLobby(lobby.getId(), playerName);
 
 		roboRally.createLobbyView(this, lobby, splayer);
 	}
@@ -266,7 +266,7 @@ public class AppController implements Observer {
 			if (result == null || result.isEmpty()) return;
 			try {
 				Lobby lobby = new Lobby(Long.valueOf(textField.getText()), 0L, null, false, null); // TODO: TEMP VARIABLE, add actual lobby fetching
-				ServerPlayer splayer = PlayerRest.PushPlayerToLobby(lobby.getId(), playerName);
+				ServerPlayer splayer = PlayerRest.pushPlayerToLobby(lobby.getId(), playerName);
 				roboRally.createLobbyView(this, lobby, splayer);
 			} catch (HttpStatusCodeException e) {
 				Alert alert = new Alert(AlertType.ERROR, "The lobby might already have been started, or some other error occured.", ButtonType.OK);
@@ -303,7 +303,7 @@ public class AppController implements Observer {
 		}
 		assert i == playerCount : "There wasn't enough start tiles for all the players";
 		this.network = new NetworkController(gameController);
-		gameController.StartProgrammingPhase(true);
+		gameController.startProgrammingPhase(true);
 
 		roboRally.createBoardView(gameController, network);
 	}
@@ -399,10 +399,8 @@ public class AppController implements Observer {
     }
 
     private void loadBoardIntoGame(Board board) {
-
-        gameController = new GameController(board, new ServerPlayer(0l, "", null), null, null);
-
-        gameController.StartProgrammingPhase(false); // TODO: Make sure to load the correct phase here
+        gameController = new GameController(board, new ServerPlayer(0L, "", null), null, null);
+        gameController.startProgrammingPhase(false); // TODO: Make sure to load the correct phase here
         roboRally.createBoardView(gameController, network);
     }
 
@@ -450,7 +448,6 @@ public class AppController implements Observer {
     public boolean isGameRunning() {
         return gameController != null;
     }
-
 
     @Override
     public void update(Subject subject) {

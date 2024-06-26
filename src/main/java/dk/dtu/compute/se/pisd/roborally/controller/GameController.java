@@ -158,8 +158,7 @@ public class GameController {
         board.setStep(0);
     }
 
-
-	public void AutoSelectCard(Player player){
+	public void autoSelectCards(Player player){
 		for (int i = 0; i < 5; i++){
 			if(player.getProgramField(i).getCard() == null) {
 				while (true) {
@@ -174,7 +173,6 @@ public class GameController {
 			}
 		}
 	}
-
 
 	public void executePrograms() {
         board.setStepMode(false);
@@ -268,7 +266,7 @@ public class GameController {
 				board.setStep(step);
 				board.setCurrentPlayer(board.getPriorityPlayer(0));
 			} else {
-				StartProgrammingPhase(true);
+				startProgrammingPhase(true);
 			}
 		}
 	}
@@ -306,9 +304,7 @@ public class GameController {
 					executeCommand(player, lastCard.command);
 				}
 			}
-			default -> {
-
-			}
+			default -> {}
 		}
 	}
 
@@ -322,19 +318,14 @@ public class GameController {
         return true;
     }
 
-
-
     /**
      * <p>Starts the {@link Phase#PROGRAMMING} Phase</p>
      * <p>If cards are NOT randomized, they have to be provided to the player before calling this function, since no cards will be loaded into the {@link Player} otherwise</p>
      * <p>TODO: Make current player to start align with priority antenna (currently always picking player 0 to begin)</p>
-     * @param RandomizeCards    Determines whether or not to randomize cards
+     * @param randomizeCards    Determines whether or not to randomize cards
      * @see CommandCardField
      */
-    public void StartProgrammingPhase(Boolean RandomizeCards) {
-
-
-
+    public void startProgrammingPhase(Boolean randomizeCards) {
         board.setPhase(Phase.PROGRAMMING);
         board.setCurrentPlayer(board.getPlayerByNetworkId(splayer.getId()));
         board.setStep(0);
@@ -349,7 +340,7 @@ public class GameController {
             }
             for (int j = 0; j < Player.NO_CARDS; j++) {
                 CommandCardField field = player.getCardField(j);
-                if (RandomizeCards) field.setCard(generateRandomCommandCard());
+                if (randomizeCards) field.setCard(generateRandomCommandCard());
                 field.setVisible(true);
             }
         }
@@ -358,9 +349,6 @@ public class GameController {
 		timer.startTimer();
 		mns.start();
     }
-
-
-
 
     private CommandCard generateRandomCommandCard() {
         Command[] commands = Command.values();
@@ -376,7 +364,6 @@ public class GameController {
         // XXX just for now to indicate that the actual method is not yet implemented
         assert false;
     }
-
 
     class ImpossibleMoveException extends Exception {
 

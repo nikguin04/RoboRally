@@ -16,8 +16,8 @@ public class ProgramPhaseScheduler extends ScheduledService<Void> {
 	@Override
 	protected Task<Void> createTask() {
 		return new Task<Void>() {
-            @Override
-            protected Void call() throws Exception {
+			@Override
+			protected Void call() throws Exception {
 				if (gameController.board.getPhase().equals(Phase.ACTIVATION)) {
 					Platform.runLater(() -> {
 						gameController.executeStep();
@@ -26,7 +26,7 @@ public class ProgramPhaseScheduler extends ScheduledService<Void> {
 					cancel(); // Cancel the step task
 				}
 				return null;
-            }
-        };
+			}
+		};
 	}
 }

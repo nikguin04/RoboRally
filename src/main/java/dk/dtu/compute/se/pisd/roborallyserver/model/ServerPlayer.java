@@ -40,4 +40,5 @@ public class ServerPlayer implements Serializable {
 		ServerPlayer p = (ServerPlayer) other;
 		return p.getId().equals(getId());
 	}
+
 }

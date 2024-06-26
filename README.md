@@ -47,7 +47,7 @@ mvn javafx:run
 
 To run the Server for our Roborally Project, run the following command (cmd):
 ```bash
-mvn exec:java -Dexec.mainClass="dk.dtu.compute.se.pisd.roborallyserver.server"
+mvn exec:java -Dexec.mainClass="dk.dtu.compute.se.pisd.roborallyserver.Server"
 ```
 
 ## Compiling

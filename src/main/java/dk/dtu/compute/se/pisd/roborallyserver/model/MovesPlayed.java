@@ -55,4 +55,5 @@ public class MovesPlayed {
 		private Long round;
 		@ManyToOne private ServerPlayer player;
 	}
+
 }

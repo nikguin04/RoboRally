@@ -35,4 +35,5 @@ public class InteractionDecisionRest {
 			.postForEntity(SERVER_HTTPURL + "interactiondecisions", request, String.class);
 		return response.getBody();
 	}
+
 }

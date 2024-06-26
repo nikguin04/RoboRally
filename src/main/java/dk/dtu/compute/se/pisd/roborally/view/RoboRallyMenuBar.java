@@ -37,25 +37,16 @@ public class RoboRallyMenuBar extends MenuBar {
     private AppController appController;
 
     private Menu controlMenu;
-
     private MenuItem saveGame;
-
     private MenuItem newGame;
-
     private MenuItem loadGame;
-
     private MenuItem stopGame;
-
     private MenuItem exitApp;
 
     private Menu networkMenu;
     private MenuItem newLobby;
     private MenuItem joinLobby;
     private MenuItem changeName;
-
-
-
-
 
     public RoboRallyMenuBar(AppController appController) {
         this.appController = appController;

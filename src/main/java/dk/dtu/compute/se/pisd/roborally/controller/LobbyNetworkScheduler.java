@@ -14,7 +14,6 @@ import javafx.concurrent.Task;
 
 public class LobbyNetworkScheduler extends ScheduledService<Void> {
 
-
     public final ObservableList<ServerPlayer> playersFetched;
 
 	private AppController appController;

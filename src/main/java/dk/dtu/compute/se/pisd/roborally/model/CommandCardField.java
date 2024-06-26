@@ -51,9 +51,11 @@ public class CommandCardField extends Subject {
     public String getCardName() {
         return (getCard() != null) ? getCard().getName() : null;
     }
+
     public String getCardEnumName() {
         return (getCard() != null) ? getCard().command.name() : null;
     }
+
     public Command getCommand() {
         return (getCard() != null) ? getCard().command : null;
     }
@@ -85,4 +87,5 @@ public class CommandCardField extends Subject {
         }
         return false;
     }
+
 }

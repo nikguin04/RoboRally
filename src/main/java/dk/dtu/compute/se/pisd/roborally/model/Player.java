@@ -21,10 +21,6 @@
  */
 package dk.dtu.compute.se.pisd.roborally.model;
 
-import static dk.dtu.compute.se.pisd.roborally.model.Heading.SOUTH;
-
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import dk.dtu.compute.se.pisd.roborallyserver.model.MovesPlayed;
@@ -53,7 +49,7 @@ public class Player extends Subject {
     private String color;
 
     private Space space;
-    private Heading heading = SOUTH;
+    private Heading heading = Heading.SOUTH;
 
     private CommandCardField[] program;
     private CommandCardField[] cards;
@@ -76,9 +72,7 @@ public class Player extends Subject {
         for (int i = 0; i < this.cards.length; i++) {
             this.cards[i] = new CommandCardField(this);
         }
-
     }
-
 
     /**
      * Creates player
@@ -110,8 +104,6 @@ public class Player extends Subject {
                 this.cards[i].setCard(new CommandCard(Commands[i]));
             }
         }
-
-        //this.cards = cards;
     }
 
 	/**
@@ -132,6 +124,7 @@ public class Player extends Subject {
 	public void setCheckPointCounter(int checkPointCounter) {
 		this.checkPointCounter = checkPointCounter;
 	}
+
 	public String getName() {
         return name;
     }
@@ -211,12 +204,6 @@ public class Player extends Subject {
         return this.playerNetworkID;
     }
 
-    /*public PlayerStatus getStatus() {
-        return playerStatus.get();
-    }
-    public void setStatus(PlayerStatus status) {
-        playerStatus.set(status);;
-    }*/
     public enum PlayerStatus {
         READY("Ready"),
         WAITING("Waiting"),
@@ -237,14 +224,13 @@ public class Player extends Subject {
 		program[4].setCard(new CommandCard(moves.getMove5()));
 	}
 
-
     @Override
     public boolean equals(Object obj) { // TODO: This should be made as the board, where all variables are checked
         if (obj instanceof Player comp) {
             try {
                 FieldsCompare<Player> fc = new FieldsCompare<Player>();
                 // Don't test player for an equal board, since the player can be identical but on another board.
-                fc.CompareFields(this, comp, List.of("board"));
+                fc.compareFields(this, comp, List.of("board"));
                 return true;
             } catch (CompareException e) {
                 return false;

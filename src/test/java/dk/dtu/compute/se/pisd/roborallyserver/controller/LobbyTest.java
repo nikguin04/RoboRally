@@ -10,7 +10,6 @@ import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 
 import dk.dtu.compute.se.pisd.roborally.model.Command;
 import dk.dtu.compute.se.pisd.roborallyserver.controller.MovesPlayedController.NewMovesPlayBody;
@@ -25,7 +24,7 @@ import dk.dtu.compute.se.pisd.roborallyserver.repository.PlayerRepository;
 
 @DataJpaTest
 @TestInstance(Lifecycle.PER_CLASS)
-public class lobbytest {
+public class LobbyTest {
 	@Autowired
 	LobbyRepository lobbyRepository;
 	@Autowired

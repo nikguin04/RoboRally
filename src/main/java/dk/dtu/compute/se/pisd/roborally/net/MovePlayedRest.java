@@ -17,8 +17,9 @@ import static dk.dtu.compute.se.pisd.roborallyserver.controller.PlayerController
 public class MovePlayedRest {
 
 	public static final RestTemplate restTemplate = new RestTemplate();
-	public static MovesPlayed requestNewMove(Long round, Command move1, Command move2, Command move3, Command move4, Command move5, Long lobby_id, Long player_id) {
-		HttpEntity<MovesPlayedController.NewMovesPlayBody> request = new HttpEntity<>(new NewMovesPlayBody(round, move1, move2, move3, move4, move5, lobby_id, player_id));
+
+	public static MovesPlayed requestNewMove(Long round, Command move1, Command move2, Command move3, Command move4, Command move5, Long lobbyId, Long playerId) {
+		HttpEntity<MovesPlayedController.NewMovesPlayBody> request = new HttpEntity<>(new NewMovesPlayBody(round, move1, move2, move3, move4, move5, lobbyId, playerId));
 		ResponseEntity<MovesPlayed> response = restTemplate
 			.postForEntity(SERVER_HTTPURL + "movesplayed", request, MovesPlayed.class);
 		return response.getBody();

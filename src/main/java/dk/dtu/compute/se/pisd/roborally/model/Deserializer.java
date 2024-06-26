@@ -15,6 +15,7 @@ import dk.dtu.compute.se.pisd.roborallyserver.model.Lobby;
 import java.lang.reflect.Type;
 
 public class Deserializer {
+
 	/**
 	 * <p>JSON deserializer for type {@link Board}</p>
 	 * <p>DESERIALIZING VARIABLES:</p>
@@ -181,6 +182,5 @@ public class Deserializer {
 			return s;
 		}
 	}
-
 
 }

@@ -147,7 +147,7 @@
                             <classifier>server</classifier>
                             <archive>
                                 <manifest>
-                                    <mainClass>dk.dtu.compute.se.pisd.roborallyserver.server</mainClass>
+                                    <mainClass>dk.dtu.compute.se.pisd.roborallyserver.Server</mainClass>
                                 </manifest>
                             </archive>
                         </configuration>
@@ -231,7 +231,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>3.2.0</version>
                 <configuration>
-                    <mainClass>dk.dtu.compute.se.pisd.roborallyserver.server</mainClass>
+                    <mainClass>dk.dtu.compute.se.pisd.roborallyserver.Server</mainClass>
                 </configuration>
             </plugin>
 
@@ -271,7 +271,7 @@
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <mainClass>org.springframework.boot.loader.launch.JarLauncher</mainClass>
-                                    <startClass>dk.dtu.compute.se.pisd.roborallyserver.server</startClass>
+                                    <startClass>dk.dtu.compute.se.pisd.roborallyserver.Server</startClass>
                                 </transformer>
                             </transformers>
                             <finalName>${project.artifactId}-serv</finalName>
@@ -321,7 +321,7 @@
                         <artifactId>spring-boot-maven-plugin</artifactId>
                         <version>3.3.0</version>
                         <configuration>
-                            <mainClass>dk.dtu.compute.se.pisd.roborallyserver.server</mainClass>
+                            <mainClass>dk.dtu.compute.se.pisd.roborallyserver.Server</mainClass>
                         </configuration>
                         <executions>
                             <execution>

@@ -5,7 +5,7 @@ import java.lang.reflect.Field;
 import static dk.dtu.compute.se.pisd.roborally.utils.ArrayCompare.compareArray;
 
 public class FieldsCompare<T> {
-	public boolean CompareFields (T t_one, T t_two, List<String> ignoreVariables) throws CompareException {
+	public boolean compareFields(T t_one, T t_two, List<String> ignoreVariables) throws CompareException {
  		Field[] board_fields = t_one.getClass().getDeclaredFields();
 		if ((t_one == null || t_two == null)) return (t_one == null && t_two == null);
 
