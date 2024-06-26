@@ -155,6 +155,9 @@ public class RoboRally extends Application {
 
     public static void main(String[] args) {
         launch(args);
+		// There seems to be some hanging thread(s) after the window is closed
+		// So make sure we actually exit by explicitly shutting down the JVM
+		System.exit(0);
     }
 
 }
