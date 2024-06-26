@@ -1,89 +1,57 @@
 package dk.dtu.compute.se.pisd.roborally.controller;
 
+import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
+import dk.dtu.compute.se.pisd.roborally.model.Board;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
-import javafx.application.Platform;
 
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
 
-import dk.dtu.compute.se.pisd.roborally.model.*;
-import dk.dtu.compute.se.pisd.roborally.model.Player.PlayerStatus;
-import dk.dtu.compute.se.pisd.roborally.view.BoardView;
-import dk.dtu.compute.se.pisd.roborallyserver.model.Lobby;
-import dk.dtu.compute.se.pisd.roborallyserver.model.ServerPlayer;
+public class TimerController extends Subject {
 
-import javafx.application.Platform;
-import javafx.scene.control.Label;
-import javafx.util.Duration;
-import org.jetbrains.annotations.NotNull;
-import dk.dtu.compute.se.pisd.roborally.controller.TimerController;
-
-import java.util.Timer;
-
-public class TimerController {
-	private long min, sec, totalSec = 0;
-	private Label timeLabel;
-	private Timer timer;
+	private long totalSec = 0;
+	private final Timer timer = new Timer();
+	private TimerTask timerTask = null;
 	final private Board board;
 	private final NetworkController network;
 
 	public TimerController(Board board, NetworkController network) {
 		this.board = board;
 		this.network = network;
-
-
 	}
 
-	private String format(long value) {
-		if (value < 10) {
-			return 0 + "" + value;
+	public long getTimeLeft() {
+		return totalSec;
+	}
+
+	public void startTimer() {
+		if (timerTask != null) {
+			timerTask.cancel();
 		}
-		return value + "";
 
-	}
-
-	public void convertTime() {
-
-		totalSec--;
-		min = TimeUnit.SECONDS.toMinutes(totalSec);
-		sec = totalSec - (min * 60);
-		if(timeLabel == null){
-			return;
-		}
-		Platform.runLater(()->{
-
-		timeLabel.setText(format(min) + ":" + format(sec));
-		});
-
-	}
-
-	void setTimer(){
 		totalSec = 45;
-		Player p = board.getCurrentPlayer();
-		Timer timer = new Timer();
+		Player player = board.getCurrentPlayer();
 
-		TimerTask timerTask = new TimerTask() {
+		timerTask = new TimerTask() {
 			@Override
 			public void run() {
-				Platform.runLater(() -> {
-					convertTime();
-					if (totalSec <= 0) {
-
-						network.sendData(p);
-						timer.cancel();
-					}
-
-
-				});
+				totalSec--;
+				notifyChange();
+				if (totalSec <= 0) {
+					network.sendData(player);
+					stopTimer();
+				}
 			}
 		};
 
-		timer.schedule(timerTask, 0, 1000);
-
+		timer.scheduleAtFixedRate(timerTask, 0, 1000);
 	}
-	public void settTimer(Label label){
-		timeLabel = label;
 
+	public void stopTimer() {
+		timerTask.cancel();
+		timerTask = null;
+		totalSec = -1;
+		notifyChange();
 	}
+
 }

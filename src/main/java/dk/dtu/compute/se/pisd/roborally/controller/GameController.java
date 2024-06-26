@@ -23,7 +23,6 @@ package dk.dtu.compute.se.pisd.roborally.controller;
 
 import dk.dtu.compute.se.pisd.roborally.model.*;
 import dk.dtu.compute.se.pisd.roborally.model.Player.PlayerStatus;
-import dk.dtu.compute.se.pisd.roborally.view.BoardView;
 import dk.dtu.compute.se.pisd.roborallyserver.model.Lobby;
 import dk.dtu.compute.se.pisd.roborallyserver.model.ServerPlayer;
 
@@ -31,9 +30,6 @@ import javafx.application.Platform;
 import javafx.util.Duration;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
-import dk.dtu.compute.se.pisd.roborally.controller.TimerController;
-
-import java.util.Timer;
 
 /**
  * ...
@@ -359,7 +355,7 @@ public class GameController {
         }
 		MoveNetworkScheduler mns = new MoveNetworkScheduler(board.lobby, splayer, this);
 		mns.setPeriod(Duration.seconds(POLLING_RATE));
-		timer.setTimer();
+		timer.startTimer();
 		mns.start();
     }
 

@@ -112,8 +112,11 @@ public class PlayerView extends Tab implements ViewObserver {
         //      refactored.
 
         finishButton = new Button("Finish Programming");
-//        finishButton.setOnAction( e -> gameController.finishProgrammingPhase());
-		finishButton.setOnAction( e -> networkController.sendData(player));
+		finishButton.setOnAction( e -> {
+			gameController.getTimer().stopTimer();
+			networkController.sendData(player);
+			finishButton.setDisable(true);
+		});
 
 
         //executeButton = new Button("Execute Program");
